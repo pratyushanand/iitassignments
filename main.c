@@ -58,8 +58,8 @@ int main(int argc, char **argv)
 					pr_err("input Name is too large\n");
 					abort();
 				}
-				grabber.capture = cvCaptureFromFile(optarg);
-				if (!grabber.capture) {
+				grabber->capture = cvCaptureFromFile(optarg);
+				if (!grabber->capture) {
 					pr_err("Error with Video Imgae \
 							Capture\n");
 					return -1;
@@ -67,8 +67,8 @@ int main(int argc, char **argv)
 
 				break;
 			case 'c':
-				grabber.capture = cvCreateCameraCapture(CV_CAP_V4L2);
-				if (!grabber.capture) {
+				grabber->capture = cvCreateCameraCapture(CV_CAP_V4L2);
+				if (!grabber->capture) {
 					pr_err("Could not open Camera to \
 							capture image");
 					return -1;
@@ -83,10 +83,10 @@ int main(int argc, char **argv)
 	} while (next_option != -1);
 
 	/* Initilize synchronizer semaphores */
-	sem_init (&grabber.frame_posted, 0, 0);
-	sem_init (&grabber.frame_executed, 0, 0);
+	sem_init (&grabber->frame_posted, 0, 0);
+	sem_init (&grabber->frame_executed, 0, 0);
 	/* Create Task for Image frame grabbing */
 	pthread_create(&grabber_thread, NULL, image_grabber, (void*)&grabber);
-	cvReleaseCapture(&grabber.capture);
+	cvReleaseCapture(&grabber->capture);
 	free(grabber);
 }
