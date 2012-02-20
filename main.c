@@ -37,6 +37,7 @@ int main(int argc, char **argv)
 	};
 	struct image_grabber *grabber;
 	pthread_t grabber_thread;
+	pthread_t executer_thread;
 
 	grabber = malloc(sizeof(*grabber));
 	if (!grabber) {
@@ -84,9 +85,14 @@ int main(int argc, char **argv)
 
 	/* Initilize synchronizer semaphores */
 	sem_init (&grabber->frame_posted, 0, 0);
-	sem_init (&grabber->frame_executed, 0, 0);
+	sem_init (&grabber->frame_executed, 0, 1);
 	/* Create Task for Image frame grabbing */
-	pthread_create(&grabber_thread, NULL, image_grabber, (void*)&grabber);
+	pthread_create(&grabber_thread, NULL, image_grabber, (void*)grabber);
+	/* Create Task for Image frame execution */
+	pthread_create(&executer_thread, NULL, image_executer, (void*)grabber);
+	/* wait for threads to complete */
+	pthread_join(grabber_thread, NULL);
+	pthread_join(executer_thread, NULL);
 	cvReleaseCapture(&grabber->capture);
 	free(grabber);
 }

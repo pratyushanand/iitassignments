@@ -16,4 +16,5 @@ struct image_grabber {
 };
 
 void *image_grabber(void *data);
+void *image_executer(void *data);
 #endif
