@@ -1,0 +1,46 @@
+\documentclass[a4paper,10pt]{report} %for type of document
+\usepackage[utf8x]{inputenc} %for input technique
+\usepackage[pdftex]{graphicx} %for inserting images
+
+% Title Page
+\title{Software Lab \\Assignment-4}
+\author{Pratyush Anand \\2010EEY7515 \\C.Tech, IITD}
+
+
+\begin{document}
+  \maketitle
+
+  \chapter{Problem Statement}
+    Implementation of Mathematical card spell out trick
+
+\chapter{Assumptions}
+  User will be prompted to select one of the input card.
+
+\chapter{Specifications}
+\begin{enumerate}
+ \item Input of cards will be read from provided input.txt.
+ \item Name of all the input card will be printed on screen.
+ \item Now user will be promted to select one of the card.
+ \item Three consecutive output will be placed in ouput1.txt, output2.txt, ouput3.txt in the same format as input.txt.
+ \item Code Will have comments as per doxygen standard.
+ \item Code will be released with cvs repository having information of all incremental development stages.
+\end{enumerate}
+
+\chapter{Operations}
+\section{General}
+\begin{description}
+  \item First of all an empty cvs repository will be created.
+  \item After developing basic framework, code will be commited. There after each succesive addition will be commited at stages.
+ \end{description}
+\section{Data Structure and Algorithm}
+\begin{enumerate}
+ \item We will use two data structures, stack and queue.
+\item  Each element from the input list will be read and inserted into queue.
+\item Now number of character in the first user input will be read. Lets say this number is n.
+\item n number of element from queue will be removed and will be pushed to a temorary stack.
+\item Now all the n elements from stack will be poped from stack and will be insrted into queue.
+\item Above three steps will be repeated for each input word and all elements of queue will be saved in outputfile.
+\end{enumerate}
+
+
+\end{document}          

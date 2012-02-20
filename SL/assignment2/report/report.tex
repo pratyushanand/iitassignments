@@ -1,0 +1,90 @@
+\documentclass[a4paper,10pt]{report} %for type of document
+\usepackage[utf8x]{inputenc} %for input technique
+\usepackage[pdftex]{graphicx} %for inserting images
+
+% Title Page
+\title{Software Lab \\Assignment-2}
+\author{Pratyush Anand \\2010EEY7515 \\C.Tech, IITD}
+
+
+\begin{document}
+  \maketitle
+
+  \chapter{Problem Statement}
+    Write code for Library Management System.
+
+  \chapter{Specifications}
+    \begin{enumerate}
+      \item When code is run, it will promt for login. A default login
+with name 'admin' and password 'admin' will be created. Admin password can be
+changed by the customer.
+      \newline
+      \item Admin can add an user with two kinds of right, librarian and
+member. Rights for librarian and member will be defined according to the
+problem statement.
+      \newline
+      \item One can also login with 'guest' and will not require a
+password. He/she will have same rights as defined for public in problem
+statement.
+      \newline
+	\item After login one can see menus according to his defined
+rights. Menus would be:
+    \begin{itemize}
+	 \item Log-Out
+	 \item Search Data Base
+	 \item Change Password
+	 \item Borrow Book
+	 \item Add Book
+	 \item Add Members
+    \end{itemize}
+	A guest will see only first 2, member will see first 4 and librarian
+will see all menus.
+	\item Selecting the desired menu respective functionalities will
+be executed. 
+    \end{enumerate}
+
+  \chapter{Operation}
+	Enum for rights will be created:\\
+	enum rights \{\\
+		LIBRARIAN,\\
+		MEMBER,\\
+		GUEST,\\
+	\}\\
+
+	A structure will be created as the info for member.\\
+	struct member\_info \{\\
+		char name[50];\\
+		char password[20];\\
+		enum rights right;\\
+	\}\\
+	There would be a table for the member info.\\
+	When a member logins, his password will be verified and upon
+successful login, allowed menu will be displayed.\\
+	A function for each menu items will be implemented. Just for
+extra precaution, in each function right of the current user will be
+checked. If he/she has the correct right to execute that function, then
+only the function will be executed otherwise would return silently and
+will wait for correct menu choice.
+	Library data base will be created as binary file.\\
+	It will have a table for the structure of following type.\\
+	struct data\_base \{\\
+		char author[50];\\
+		char name[50];\\
+		int copy;\\
+	\};\\
+	A simple search with full name of author or book will be
+implemented.
+
+    \section{Software Tools Required}
+    The following software tools will be used:
+    \begin{itemize}
+    \item pdflatex
+    \item vim editor
+    \item gcc
+    \item ddd
+    \end{itemize}
+    pdflatex will be used to compile the tex file and vim will be used to edit
+    the tex file.
+    gcc will be used to compile c code and ddd will be used to debug.
+    
+\end{document}          

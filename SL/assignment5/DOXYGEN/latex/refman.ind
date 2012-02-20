@@ -1,0 +1,39 @@
+\begin{theindex}
+
+  \item {allocation.c}
+    \subitem {main}, \hyperpage{8}
+    \subitem {MAX\_\discretionary {-}{}{}NAME\_\discretionary {-}{}{}LEN}, 
+		\hyperpage{8}
+
+  \indexspace
+
+  \item {cgpa}, \hyperpage{5}
+    \subitem {dept}, \hyperpage{5}
+    \subitem {marks}, \hyperpage{5}
+    \subitem {name}, \hyperpage{5}
+  \item {choice}, \hyperpage{6}
+    \subitem {choice}, \hyperpage{6}
+    \subitem {name}, \hyperpage{6}
+  \item {code/allocation.c}, \hyperpage{7}
+
+  \indexspace
+
+  \item {dept}
+    \subitem {cgpa}, \hyperpage{5}
+
+  \indexspace
+
+  \item {main}
+    \subitem {allocation.c}, \hyperpage{8}
+  \item {marks}
+    \subitem {cgpa}, \hyperpage{5}
+  \item {MAX\_\discretionary {-}{}{}NAME\_\discretionary {-}{}{}LEN}
+    \subitem {allocation.c}, \hyperpage{8}
+
+  \indexspace
+
+  \item {name}
+    \subitem {cgpa}, \hyperpage{5}
+    \subitem {choice}, \hyperpage{6}
+
+\end{theindex}

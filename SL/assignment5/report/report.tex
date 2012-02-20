@@ -1,0 +1,65 @@
+\documentclass[a4paper,10pt]{report} %for type of document
+\usepackage[utf8x]{inputenc} %for input technique
+\usepackage[pdftex]{graphicx} %for inserting images
+
+% Title Page
+\title{Software Lab \\Assignment-5}
+\author{Pratyush Anand \\2010EEY7515 \\C.Tech, IITD}
+
+
+\begin{document}
+  \maketitle
+
+  \chapter{Problem Statement}
+    Allocation of vacant sheets available in different departments
+\chapter{Assumptions}
+\begin{itemize}
+  \item There would be an input file with name of different departments and total available sheets in the department.
+  \item Dean can add CGPA for a student, but he can not modify the data once entered.
+  \item All the students will  be allowed to enter their choices before round1 allocation happens.
+  \item There would be no login password for simplicity of program.
+  \item Admin will enter correct name and marks. will not be rectified
+  \item Student will npt be allowed to modify his choices.
+  \item Admina and student will only enter one of the displayed menu.
+  once entered.
+\end{itemize}
+\chapter{Specifications}
+
+\begin{itemize}
+ \item Dean can login with admin.
+ \item Dean can enter CGPA against all student ID.
+ \item He can update initial vacancy.
+ \item He can ask for allocation by specifying round number.
+ \item He can publish result.
+ \item Student can login with his ID.
+ \item He can enter his 10 choices along with one extraordinary choice.
+\item Dean can lock the system for entering choice detail (may be after last date)
+
+\end{itemize}
+
+
+\chapter{Operations}
+\begin{itemize}
+
+  \item First of all an empty cvs repository will be created.
+  \item After developing basic framework, code will be committed. There after each successive addition will be committed at stages.
+  \item Admin can load CGPA table from a file. He can add an entry to the table. Added entry will be inserted into the table as per
+descending order of CGPA. He can finally save table to the file. In such process, we always have a list sorted in descending order of CGPA.
+\item A simple linked list will be created to implement it. Link will be traversed lineraly and a node will be added at the appropriate position.
+\item In each node we have following elements.
+\begin{enumerate}
+ \item student id
+ \item his cgpa
+ \item array of his 11 choices
+\end{enumerate}
+\item admin can also update another list with department code and vacancy.
+\item Now when student enters his login id, list will be traversed as per his login ID and will be updated as per choices entered.
+\item Now for each round software will do the allocation as per defined criteria. It will read first entry from the student table and then it will look
+into vacancy table as per his choices. If there is a vacancy matching to his choice, then it will allocate it for him and will update vacancy table.
+\item If allocation happens then he will be marked as allocated.Loop will again start from the first non-allocated node of the list and it will try to
+ allocated for all not marked as allocated.
+\item In case of no allocation, it will just switch to next node.
+\item At the end of allocation for all nodes , it will do one more round for extraordinary preference allocation.
+ \end{itemize}
+
+\end{document}          

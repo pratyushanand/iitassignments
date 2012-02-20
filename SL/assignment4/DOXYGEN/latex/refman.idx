@@ -1,0 +1,66 @@
+\indexentry{node@{node}|hyperpage}{5}
+\indexentry{node@{node}!first@{first}|hyperpage}{5}
+\indexentry{first@{first}!node@{node}|hyperpage}{5}
+\indexentry{node@{node}!name@{name}|hyperpage}{5}
+\indexentry{name@{name}!node@{node}|hyperpage}{5}
+\indexentry{node@{node}!next@{next}|hyperpage}{6}
+\indexentry{next@{next}!node@{node}|hyperpage}{6}
+\indexentry{node@{node}!prev@{prev}|hyperpage}{6}
+\indexentry{prev@{prev}!node@{node}|hyperpage}{6}
+\indexentry{node@{node}!third@{third}|hyperpage}{6}
+\indexentry{third@{third}!node@{node}|hyperpage}{6}
+\indexentry{queue@{queue}|hyperpage}{7}
+\indexentry{queue@{queue}!front@{front}|hyperpage}{7}
+\indexentry{front@{front}!queue@{queue}|hyperpage}{7}
+\indexentry{queue@{queue}!rear@{rear}|hyperpage}{7}
+\indexentry{rear@{rear}!queue@{queue}|hyperpage}{7}
+\indexentry{stack@{stack}|hyperpage}{8}
+\indexentry{stack@{stack}!top@{top}|hyperpage}{8}
+\indexentry{top@{top}!stack@{stack}|hyperpage}{8}
+\indexentry{code/cardtrick.c@{code/cardtrick.c}|hyperpage}{9}
+\indexentry{cardtrick.c@{cardtrick.c}!CHINVAL@{CHINVAL}|hyperpage}{10}
+\indexentry{CHINVAL@{CHINVAL}!cardtrick.c@{cardtrick.c}|hyperpage}{10}
+\indexentry{cardtrick.c@{cardtrick.c}!CLUBS@{CLUBS}|hyperpage}{10}
+\indexentry{CLUBS@{CLUBS}!cardtrick.c@{cardtrick.c}|hyperpage}{10}
+\indexentry{cardtrick.c@{cardtrick.c}!DIAMONDS@{DIAMONDS}|hyperpage}{10}
+\indexentry{DIAMONDS@{DIAMONDS}!cardtrick.c@{cardtrick.c}|hyperpage}{10}
+\indexentry{cardtrick.c@{cardtrick.c}!EIGHT@{EIGHT}|hyperpage}{10}
+\indexentry{EIGHT@{EIGHT}!cardtrick.c@{cardtrick.c}|hyperpage}{10}
+\indexentry{cardtrick.c@{cardtrick.c}!FIVE@{FIVE}|hyperpage}{10}
+\indexentry{FIVE@{FIVE}!cardtrick.c@{cardtrick.c}|hyperpage}{10}
+\indexentry{cardtrick.c@{cardtrick.c}!FOUR@{FOUR}|hyperpage}{10}
+\indexentry{FOUR@{FOUR}!cardtrick.c@{cardtrick.c}|hyperpage}{10}
+\indexentry{cardtrick.c@{cardtrick.c}!HEARTS@{HEARTS}|hyperpage}{10}
+\indexentry{HEARTS@{HEARTS}!cardtrick.c@{cardtrick.c}|hyperpage}{10}
+\indexentry{cardtrick.c@{cardtrick.c}!JACK@{JACK}|hyperpage}{10}
+\indexentry{JACK@{JACK}!cardtrick.c@{cardtrick.c}|hyperpage}{10}
+\indexentry{cardtrick.c@{cardtrick.c}!KING@{KING}|hyperpage}{11}
+\indexentry{KING@{KING}!cardtrick.c@{cardtrick.c}|hyperpage}{11}
+\indexentry{cardtrick.c@{cardtrick.c}!NAME\_\discretionary {-}{}{}SIZE@{NAME\_\discretionary {-}{}{}SIZE}|hyperpage}{11}
+\indexentry{NAME\_\discretionary {-}{}{}SIZE@{NAME\_\discretionary {-}{}{}SIZE}!cardtrick.c@{cardtrick.c}|hyperpage}{11}
+\indexentry{cardtrick.c@{cardtrick.c}!NINE@{NINE}|hyperpage}{11}
+\indexentry{NINE@{NINE}!cardtrick.c@{cardtrick.c}|hyperpage}{11}
+\indexentry{cardtrick.c@{cardtrick.c}!NOMEM@{NOMEM}|hyperpage}{11}
+\indexentry{NOMEM@{NOMEM}!cardtrick.c@{cardtrick.c}|hyperpage}{11}
+\indexentry{cardtrick.c@{cardtrick.c}!ONE@{ONE}|hyperpage}{11}
+\indexentry{ONE@{ONE}!cardtrick.c@{cardtrick.c}|hyperpage}{11}
+\indexentry{cardtrick.c@{cardtrick.c}!pr\_\discretionary {-}{}{}err@{pr\_\discretionary {-}{}{}err}|hyperpage}{11}
+\indexentry{pr\_\discretionary {-}{}{}err@{pr\_\discretionary {-}{}{}err}!cardtrick.c@{cardtrick.c}|hyperpage}{11}
+\indexentry{cardtrick.c@{cardtrick.c}!pr\_\discretionary {-}{}{}info@{pr\_\discretionary {-}{}{}info}|hyperpage}{11}
+\indexentry{pr\_\discretionary {-}{}{}info@{pr\_\discretionary {-}{}{}info}!cardtrick.c@{cardtrick.c}|hyperpage}{11}
+\indexentry{cardtrick.c@{cardtrick.c}!QUEEN@{QUEEN}|hyperpage}{11}
+\indexentry{QUEEN@{QUEEN}!cardtrick.c@{cardtrick.c}|hyperpage}{11}
+\indexentry{cardtrick.c@{cardtrick.c}!SEVEN@{SEVEN}|hyperpage}{11}
+\indexentry{SEVEN@{SEVEN}!cardtrick.c@{cardtrick.c}|hyperpage}{11}
+\indexentry{cardtrick.c@{cardtrick.c}!SIX@{SIX}|hyperpage}{11}
+\indexentry{SIX@{SIX}!cardtrick.c@{cardtrick.c}|hyperpage}{11}
+\indexentry{cardtrick.c@{cardtrick.c}!SPADES@{SPADES}|hyperpage}{11}
+\indexentry{SPADES@{SPADES}!cardtrick.c@{cardtrick.c}|hyperpage}{11}
+\indexentry{cardtrick.c@{cardtrick.c}!TEN@{TEN}|hyperpage}{12}
+\indexentry{TEN@{TEN}!cardtrick.c@{cardtrick.c}|hyperpage}{12}
+\indexentry{cardtrick.c@{cardtrick.c}!THREE@{THREE}|hyperpage}{12}
+\indexentry{THREE@{THREE}!cardtrick.c@{cardtrick.c}|hyperpage}{12}
+\indexentry{cardtrick.c@{cardtrick.c}!TWO@{TWO}|hyperpage}{12}
+\indexentry{TWO@{TWO}!cardtrick.c@{cardtrick.c}|hyperpage}{12}
+\indexentry{cardtrick.c@{cardtrick.c}!main@{main}|hyperpage}{12}
+\indexentry{main@{main}!cardtrick.c@{cardtrick.c}|hyperpage}{12}

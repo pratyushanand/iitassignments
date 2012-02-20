@@ -1,0 +1,144 @@
+\begin{theindex}
+
+  \item {cardtrick.c}
+    \subitem {CHINVAL}, \hyperpage{10}
+    \subitem {CLUBS}, \hyperpage{10}
+    \subitem {DIAMONDS}, \hyperpage{10}
+    \subitem {EIGHT}, \hyperpage{10}
+    \subitem {FIVE}, \hyperpage{10}
+    \subitem {FOUR}, \hyperpage{10}
+    \subitem {HEARTS}, \hyperpage{10}
+    \subitem {JACK}, \hyperpage{10}
+    \subitem {KING}, \hyperpage{11}
+    \subitem {main}, \hyperpage{12}
+    \subitem {NAME\_\discretionary {-}{}{}SIZE}, \hyperpage{11}
+    \subitem {NINE}, \hyperpage{11}
+    \subitem {NOMEM}, \hyperpage{11}
+    \subitem {ONE}, \hyperpage{11}
+    \subitem {pr\_\discretionary {-}{}{}err}, \hyperpage{11}
+    \subitem {pr\_\discretionary {-}{}{}info}, \hyperpage{11}
+    \subitem {QUEEN}, \hyperpage{11}
+    \subitem {SEVEN}, \hyperpage{11}
+    \subitem {SIX}, \hyperpage{11}
+    \subitem {SPADES}, \hyperpage{11}
+    \subitem {TEN}, \hyperpage{12}
+    \subitem {THREE}, \hyperpage{12}
+    \subitem {TWO}, \hyperpage{12}
+  \item {CHINVAL}
+    \subitem {cardtrick.c}, \hyperpage{10}
+  \item {CLUBS}
+    \subitem {cardtrick.c}, \hyperpage{10}
+  \item {code/cardtrick.c}, \hyperpage{9}
+
+  \indexspace
+
+  \item {DIAMONDS}
+    \subitem {cardtrick.c}, \hyperpage{10}
+
+  \indexspace
+
+  \item {EIGHT}
+    \subitem {cardtrick.c}, \hyperpage{10}
+
+  \indexspace
+
+  \item {first}
+    \subitem {node}, \hyperpage{5}
+  \item {FIVE}
+    \subitem {cardtrick.c}, \hyperpage{10}
+  \item {FOUR}
+    \subitem {cardtrick.c}, \hyperpage{10}
+  \item {front}
+    \subitem {queue}, \hyperpage{7}
+
+  \indexspace
+
+  \item {HEARTS}
+    \subitem {cardtrick.c}, \hyperpage{10}
+
+  \indexspace
+
+  \item {JACK}
+    \subitem {cardtrick.c}, \hyperpage{10}
+
+  \indexspace
+
+  \item {KING}
+    \subitem {cardtrick.c}, \hyperpage{11}
+
+  \indexspace
+
+  \item {main}
+    \subitem {cardtrick.c}, \hyperpage{12}
+
+  \indexspace
+
+  \item {name}
+    \subitem {node}, \hyperpage{5}
+  \item {NAME\_\discretionary {-}{}{}SIZE}
+    \subitem {cardtrick.c}, \hyperpage{11}
+  \item {next}
+    \subitem {node}, \hyperpage{6}
+  \item {NINE}
+    \subitem {cardtrick.c}, \hyperpage{11}
+  \item {node}, \hyperpage{5}
+    \subitem {first}, \hyperpage{5}
+    \subitem {name}, \hyperpage{5}
+    \subitem {next}, \hyperpage{6}
+    \subitem {prev}, \hyperpage{6}
+    \subitem {third}, \hyperpage{6}
+  \item {NOMEM}
+    \subitem {cardtrick.c}, \hyperpage{11}
+
+  \indexspace
+
+  \item {ONE}
+    \subitem {cardtrick.c}, \hyperpage{11}
+
+  \indexspace
+
+  \item {pr\_\discretionary {-}{}{}err}
+    \subitem {cardtrick.c}, \hyperpage{11}
+  \item {pr\_\discretionary {-}{}{}info}
+    \subitem {cardtrick.c}, \hyperpage{11}
+  \item {prev}
+    \subitem {node}, \hyperpage{6}
+
+  \indexspace
+
+  \item {QUEEN}
+    \subitem {cardtrick.c}, \hyperpage{11}
+  \item {queue}, \hyperpage{7}
+    \subitem {front}, \hyperpage{7}
+    \subitem {rear}, \hyperpage{7}
+
+  \indexspace
+
+  \item {rear}
+    \subitem {queue}, \hyperpage{7}
+
+  \indexspace
+
+  \item {SEVEN}
+    \subitem {cardtrick.c}, \hyperpage{11}
+  \item {SIX}
+    \subitem {cardtrick.c}, \hyperpage{11}
+  \item {SPADES}
+    \subitem {cardtrick.c}, \hyperpage{11}
+  \item {stack}, \hyperpage{8}
+    \subitem {top}, \hyperpage{8}
+
+  \indexspace
+
+  \item {TEN}
+    \subitem {cardtrick.c}, \hyperpage{12}
+  \item {third}
+    \subitem {node}, \hyperpage{6}
+  \item {THREE}
+    \subitem {cardtrick.c}, \hyperpage{12}
+  \item {top}
+    \subitem {stack}, \hyperpage{8}
+  \item {TWO}
+    \subitem {cardtrick.c}, \hyperpage{12}
+
+\end{theindex}

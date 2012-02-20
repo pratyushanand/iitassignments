@@ -1,0 +1,290 @@
+\hypertarget{cardtrick_8c}{
+\section{code/cardtrick.c File Reference}
+\label{cardtrick_8c}\index{code/cardtrick.c@{code/cardtrick.c}}
+}
+{\ttfamily \#include $<$errno.h$>$}\par
+{\ttfamily \#include $<$getopt.h$>$}\par
+{\ttfamily \#include $<$stdio.h$>$}\par
+{\ttfamily \#include $<$stdlib.h$>$}\par
+{\ttfamily \#include $<$string.h$>$}\par
+Include dependency graph for cardtrick.c:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=176pt]{cardtrick_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structnode}{node}
+\item 
+struct \hyperlink{structqueue}{queue}
+\item 
+struct \hyperlink{structstack}{stack}
+\end{DoxyCompactItemize}
+\subsection*{Defines}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{cardtrick_8c_a76ebf98e05f78e90288d56fb4caf1280}{pr\_\-info}(args...)~fprintf(stdout, \#\#args)
+\item 
+\#define \hyperlink{cardtrick_8c_ab7f9743ece3b8b02877758771a177c7c}{pr\_\-err}(args...)~fprintf(stdout, \#\#args)
+\item 
+\#define \hyperlink{cardtrick_8c_a46ff2bfbf0d44b8466a2251d5bd5e6f8}{NOMEM}~\char`\"{}No memory available$\backslash$n\char`\"{}
+\item 
+\#define \hyperlink{cardtrick_8c_af7a8f58fd33bff0a1ccc65fcfbfbc8b4}{CHINVAL}~\char`\"{}Not a valid choice$\backslash$n\char`\"{}
+\item 
+\#define \hyperlink{cardtrick_8c_a834e9a379307f869a10f4da078be5786}{NAME\_\-SIZE}~3
+\item 
+\#define \hyperlink{cardtrick_8c_a206b6f5362e56b51ca957635350b70b6}{ONE}~\char`\"{}One\char`\"{}
+\item 
+\#define \hyperlink{cardtrick_8c_a888e15353eb3d330c743dbdeb47117e2}{TWO}~\char`\"{}Two\char`\"{}
+\item 
+\#define \hyperlink{cardtrick_8c_a1859c475c0bde19dfc1101e35d71b939}{THREE}~\char`\"{}Three\char`\"{}
+\item 
+\#define \hyperlink{cardtrick_8c_a64a9b58c6a5bcd3724f3b56ad6d006a7}{FOUR}~\char`\"{}Four\char`\"{}
+\item 
+\#define \hyperlink{cardtrick_8c_a18ced145d1fdc806b5006bd4c2857026}{FIVE}~\char`\"{}Five\char`\"{}
+\item 
+\#define \hyperlink{cardtrick_8c_afad3d8b3d66fceadb1732af784734c75}{SIX}~\char`\"{}Six\char`\"{}
+\item 
+\#define \hyperlink{cardtrick_8c_ac537e6e7dad3ecef73fc3fc4f14fe020}{SEVEN}~\char`\"{}Seven\char`\"{}
+\item 
+\#define \hyperlink{cardtrick_8c_aaf6cfeda610d5092df7deb18fd5d63c2}{EIGHT}~\char`\"{}Eight\char`\"{}
+\item 
+\#define \hyperlink{cardtrick_8c_aef08329d0c1db97d7b269330ae9a70af}{NINE}~\char`\"{}Nine\char`\"{}
+\item 
+\#define \hyperlink{cardtrick_8c_aabc53aa7e6353d8f58b8ae93fd015fab}{TEN}~\char`\"{}Ten\char`\"{}
+\item 
+\#define \hyperlink{cardtrick_8c_aa941833decb7feaf364825bca39896b7}{JACK}~\char`\"{}Jack\char`\"{}
+\item 
+\#define \hyperlink{cardtrick_8c_a64648880b0877cbf45dd176839aff27e}{QUEEN}~\char`\"{}Queen\char`\"{}
+\item 
+\#define \hyperlink{cardtrick_8c_a4053d9a782c54549f5faf06c3c95262b}{KING}~\char`\"{}King\char`\"{}
+\item 
+\#define \hyperlink{cardtrick_8c_aa5c6b846f4b3de021da5d2873667bbba}{HEARTS}~\char`\"{}Hearts\char`\"{}
+\item 
+\#define \hyperlink{cardtrick_8c_a76648664c0dd95e4fc8fd2e8b886ff6b}{DIAMONDS}~\char`\"{}Diamonds\char`\"{}
+\item 
+\#define \hyperlink{cardtrick_8c_a1a956774e7c7633cfe6a47a8f0af772e}{SPADES}~\char`\"{}Spades\char`\"{}
+\item 
+\#define \hyperlink{cardtrick_8c_ab701fc080416630326132e29bce2f419}{CLUBS}~\char`\"{}Clubs\char`\"{}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{cardtrick_8c_a3c04138a5bfe5d72780bb7e82a18e627}{main} (int argc, char $\ast$$\ast$argv)
+\end{DoxyCompactItemize}
+
+
+\subsection{Define Documentation}
+\hypertarget{cardtrick_8c_af7a8f58fd33bff0a1ccc65fcfbfbc8b4}{
+\index{cardtrick.c@{cardtrick.c}!CHINVAL@{CHINVAL}}
+\index{CHINVAL@{CHINVAL}!cardtrick.c@{cardtrick.c}}
+\subsubsection[{CHINVAL}]{\setlength{\rightskip}{0pt plus 5cm}\#define CHINVAL~\char`\"{}Not a valid choice$\backslash$n\char`\"{}}}
+\label{cardtrick_8c_af7a8f58fd33bff0a1ccc65fcfbfbc8b4}
+
+
+Definition at line 15 of file cardtrick.c.
+
+\hypertarget{cardtrick_8c_ab701fc080416630326132e29bce2f419}{
+\index{cardtrick.c@{cardtrick.c}!CLUBS@{CLUBS}}
+\index{CLUBS@{CLUBS}!cardtrick.c@{cardtrick.c}}
+\subsubsection[{CLUBS}]{\setlength{\rightskip}{0pt plus 5cm}\#define CLUBS~\char`\"{}Clubs\char`\"{}}}
+\label{cardtrick_8c_ab701fc080416630326132e29bce2f419}
+
+
+Definition at line 33 of file cardtrick.c.
+
+\hypertarget{cardtrick_8c_a76648664c0dd95e4fc8fd2e8b886ff6b}{
+\index{cardtrick.c@{cardtrick.c}!DIAMONDS@{DIAMONDS}}
+\index{DIAMONDS@{DIAMONDS}!cardtrick.c@{cardtrick.c}}
+\subsubsection[{DIAMONDS}]{\setlength{\rightskip}{0pt plus 5cm}\#define DIAMONDS~\char`\"{}Diamonds\char`\"{}}}
+\label{cardtrick_8c_a76648664c0dd95e4fc8fd2e8b886ff6b}
+
+
+Definition at line 31 of file cardtrick.c.
+
+\hypertarget{cardtrick_8c_aaf6cfeda610d5092df7deb18fd5d63c2}{
+\index{cardtrick.c@{cardtrick.c}!EIGHT@{EIGHT}}
+\index{EIGHT@{EIGHT}!cardtrick.c@{cardtrick.c}}
+\subsubsection[{EIGHT}]{\setlength{\rightskip}{0pt plus 5cm}\#define EIGHT~\char`\"{}Eight\char`\"{}}}
+\label{cardtrick_8c_aaf6cfeda610d5092df7deb18fd5d63c2}
+
+
+Definition at line 24 of file cardtrick.c.
+
+\hypertarget{cardtrick_8c_a18ced145d1fdc806b5006bd4c2857026}{
+\index{cardtrick.c@{cardtrick.c}!FIVE@{FIVE}}
+\index{FIVE@{FIVE}!cardtrick.c@{cardtrick.c}}
+\subsubsection[{FIVE}]{\setlength{\rightskip}{0pt plus 5cm}\#define FIVE~\char`\"{}Five\char`\"{}}}
+\label{cardtrick_8c_a18ced145d1fdc806b5006bd4c2857026}
+
+
+Definition at line 21 of file cardtrick.c.
+
+\hypertarget{cardtrick_8c_a64a9b58c6a5bcd3724f3b56ad6d006a7}{
+\index{cardtrick.c@{cardtrick.c}!FOUR@{FOUR}}
+\index{FOUR@{FOUR}!cardtrick.c@{cardtrick.c}}
+\subsubsection[{FOUR}]{\setlength{\rightskip}{0pt plus 5cm}\#define FOUR~\char`\"{}Four\char`\"{}}}
+\label{cardtrick_8c_a64a9b58c6a5bcd3724f3b56ad6d006a7}
+
+
+Definition at line 20 of file cardtrick.c.
+
+\hypertarget{cardtrick_8c_aa5c6b846f4b3de021da5d2873667bbba}{
+\index{cardtrick.c@{cardtrick.c}!HEARTS@{HEARTS}}
+\index{HEARTS@{HEARTS}!cardtrick.c@{cardtrick.c}}
+\subsubsection[{HEARTS}]{\setlength{\rightskip}{0pt plus 5cm}\#define HEARTS~\char`\"{}Hearts\char`\"{}}}
+\label{cardtrick_8c_aa5c6b846f4b3de021da5d2873667bbba}
+
+
+Definition at line 30 of file cardtrick.c.
+
+\hypertarget{cardtrick_8c_aa941833decb7feaf364825bca39896b7}{
+\index{cardtrick.c@{cardtrick.c}!JACK@{JACK}}
+\index{JACK@{JACK}!cardtrick.c@{cardtrick.c}}
+\subsubsection[{JACK}]{\setlength{\rightskip}{0pt plus 5cm}\#define JACK~\char`\"{}Jack\char`\"{}}}
+\label{cardtrick_8c_aa941833decb7feaf364825bca39896b7}
+
+
+Definition at line 27 of file cardtrick.c.
+
+\hypertarget{cardtrick_8c_a4053d9a782c54549f5faf06c3c95262b}{
+\index{cardtrick.c@{cardtrick.c}!KING@{KING}}
+\index{KING@{KING}!cardtrick.c@{cardtrick.c}}
+\subsubsection[{KING}]{\setlength{\rightskip}{0pt plus 5cm}\#define KING~\char`\"{}King\char`\"{}}}
+\label{cardtrick_8c_a4053d9a782c54549f5faf06c3c95262b}
+
+
+Definition at line 29 of file cardtrick.c.
+
+\hypertarget{cardtrick_8c_a834e9a379307f869a10f4da078be5786}{
+\index{cardtrick.c@{cardtrick.c}!NAME\_\-SIZE@{NAME\_\-SIZE}}
+\index{NAME\_\-SIZE@{NAME\_\-SIZE}!cardtrick.c@{cardtrick.c}}
+\subsubsection[{NAME\_\-SIZE}]{\setlength{\rightskip}{0pt plus 5cm}\#define NAME\_\-SIZE~3}}
+\label{cardtrick_8c_a834e9a379307f869a10f4da078be5786}
+
+
+Definition at line 16 of file cardtrick.c.
+
+\hypertarget{cardtrick_8c_aef08329d0c1db97d7b269330ae9a70af}{
+\index{cardtrick.c@{cardtrick.c}!NINE@{NINE}}
+\index{NINE@{NINE}!cardtrick.c@{cardtrick.c}}
+\subsubsection[{NINE}]{\setlength{\rightskip}{0pt plus 5cm}\#define NINE~\char`\"{}Nine\char`\"{}}}
+\label{cardtrick_8c_aef08329d0c1db97d7b269330ae9a70af}
+
+
+Definition at line 25 of file cardtrick.c.
+
+\hypertarget{cardtrick_8c_a46ff2bfbf0d44b8466a2251d5bd5e6f8}{
+\index{cardtrick.c@{cardtrick.c}!NOMEM@{NOMEM}}
+\index{NOMEM@{NOMEM}!cardtrick.c@{cardtrick.c}}
+\subsubsection[{NOMEM}]{\setlength{\rightskip}{0pt plus 5cm}\#define NOMEM~\char`\"{}No memory available$\backslash$n\char`\"{}}}
+\label{cardtrick_8c_a46ff2bfbf0d44b8466a2251d5bd5e6f8}
+
+
+Definition at line 14 of file cardtrick.c.
+
+\hypertarget{cardtrick_8c_a206b6f5362e56b51ca957635350b70b6}{
+\index{cardtrick.c@{cardtrick.c}!ONE@{ONE}}
+\index{ONE@{ONE}!cardtrick.c@{cardtrick.c}}
+\subsubsection[{ONE}]{\setlength{\rightskip}{0pt plus 5cm}\#define ONE~\char`\"{}One\char`\"{}}}
+\label{cardtrick_8c_a206b6f5362e56b51ca957635350b70b6}
+
+
+Definition at line 17 of file cardtrick.c.
+
+\hypertarget{cardtrick_8c_ab7f9743ece3b8b02877758771a177c7c}{
+\index{cardtrick.c@{cardtrick.c}!pr\_\-err@{pr\_\-err}}
+\index{pr\_\-err@{pr\_\-err}!cardtrick.c@{cardtrick.c}}
+\subsubsection[{pr\_\-err}]{\setlength{\rightskip}{0pt plus 5cm}\#define pr\_\-err(args...)~fprintf(stdout, \#\#args)}}
+\label{cardtrick_8c_ab7f9743ece3b8b02877758771a177c7c}
+
+
+Definition at line 13 of file cardtrick.c.
+
+\hypertarget{cardtrick_8c_a76ebf98e05f78e90288d56fb4caf1280}{
+\index{cardtrick.c@{cardtrick.c}!pr\_\-info@{pr\_\-info}}
+\index{pr\_\-info@{pr\_\-info}!cardtrick.c@{cardtrick.c}}
+\subsubsection[{pr\_\-info}]{\setlength{\rightskip}{0pt plus 5cm}\#define pr\_\-info(args...)~fprintf(stdout, \#\#args)}}
+\label{cardtrick_8c_a76ebf98e05f78e90288d56fb4caf1280}
+This program will implement a trick of card as stated in the assignment problem. 
+
+Definition at line 12 of file cardtrick.c.
+
+\hypertarget{cardtrick_8c_a64648880b0877cbf45dd176839aff27e}{
+\index{cardtrick.c@{cardtrick.c}!QUEEN@{QUEEN}}
+\index{QUEEN@{QUEEN}!cardtrick.c@{cardtrick.c}}
+\subsubsection[{QUEEN}]{\setlength{\rightskip}{0pt plus 5cm}\#define QUEEN~\char`\"{}Queen\char`\"{}}}
+\label{cardtrick_8c_a64648880b0877cbf45dd176839aff27e}
+
+
+Definition at line 28 of file cardtrick.c.
+
+\hypertarget{cardtrick_8c_ac537e6e7dad3ecef73fc3fc4f14fe020}{
+\index{cardtrick.c@{cardtrick.c}!SEVEN@{SEVEN}}
+\index{SEVEN@{SEVEN}!cardtrick.c@{cardtrick.c}}
+\subsubsection[{SEVEN}]{\setlength{\rightskip}{0pt plus 5cm}\#define SEVEN~\char`\"{}Seven\char`\"{}}}
+\label{cardtrick_8c_ac537e6e7dad3ecef73fc3fc4f14fe020}
+
+
+Definition at line 23 of file cardtrick.c.
+
+\hypertarget{cardtrick_8c_afad3d8b3d66fceadb1732af784734c75}{
+\index{cardtrick.c@{cardtrick.c}!SIX@{SIX}}
+\index{SIX@{SIX}!cardtrick.c@{cardtrick.c}}
+\subsubsection[{SIX}]{\setlength{\rightskip}{0pt plus 5cm}\#define SIX~\char`\"{}Six\char`\"{}}}
+\label{cardtrick_8c_afad3d8b3d66fceadb1732af784734c75}
+
+
+Definition at line 22 of file cardtrick.c.
+
+\hypertarget{cardtrick_8c_a1a956774e7c7633cfe6a47a8f0af772e}{
+\index{cardtrick.c@{cardtrick.c}!SPADES@{SPADES}}
+\index{SPADES@{SPADES}!cardtrick.c@{cardtrick.c}}
+\subsubsection[{SPADES}]{\setlength{\rightskip}{0pt plus 5cm}\#define SPADES~\char`\"{}Spades\char`\"{}}}
+\label{cardtrick_8c_a1a956774e7c7633cfe6a47a8f0af772e}
+
+
+Definition at line 32 of file cardtrick.c.
+
+\hypertarget{cardtrick_8c_aabc53aa7e6353d8f58b8ae93fd015fab}{
+\index{cardtrick.c@{cardtrick.c}!TEN@{TEN}}
+\index{TEN@{TEN}!cardtrick.c@{cardtrick.c}}
+\subsubsection[{TEN}]{\setlength{\rightskip}{0pt plus 5cm}\#define TEN~\char`\"{}Ten\char`\"{}}}
+\label{cardtrick_8c_aabc53aa7e6353d8f58b8ae93fd015fab}
+
+
+Definition at line 26 of file cardtrick.c.
+
+\hypertarget{cardtrick_8c_a1859c475c0bde19dfc1101e35d71b939}{
+\index{cardtrick.c@{cardtrick.c}!THREE@{THREE}}
+\index{THREE@{THREE}!cardtrick.c@{cardtrick.c}}
+\subsubsection[{THREE}]{\setlength{\rightskip}{0pt plus 5cm}\#define THREE~\char`\"{}Three\char`\"{}}}
+\label{cardtrick_8c_a1859c475c0bde19dfc1101e35d71b939}
+
+
+Definition at line 19 of file cardtrick.c.
+
+\hypertarget{cardtrick_8c_a888e15353eb3d330c743dbdeb47117e2}{
+\index{cardtrick.c@{cardtrick.c}!TWO@{TWO}}
+\index{TWO@{TWO}!cardtrick.c@{cardtrick.c}}
+\subsubsection[{TWO}]{\setlength{\rightskip}{0pt plus 5cm}\#define TWO~\char`\"{}Two\char`\"{}}}
+\label{cardtrick_8c_a888e15353eb3d330c743dbdeb47117e2}
+
+
+Definition at line 18 of file cardtrick.c.
+
+
+
+\subsection{Function Documentation}
+\hypertarget{cardtrick_8c_a3c04138a5bfe5d72780bb7e82a18e627}{
+\index{cardtrick.c@{cardtrick.c}!main@{main}}
+\index{main@{main}!cardtrick.c@{cardtrick.c}}
+\subsubsection[{main}]{\setlength{\rightskip}{0pt plus 5cm}int main (int {\em argc}, \/  char $\ast$$\ast$ {\em argv})}}
+\label{cardtrick_8c_a3c04138a5bfe5d72780bb7e82a18e627}
+Main function of program reads input file and then implement the algorithm described in design document. 
+
+Definition at line 236 of file cardtrick.c.
+
