@@ -1,0 +1,8 @@
+this program does mosaicing of multiple images.
+  name of images have been provided in a string.
+  name of last image must be NULL
+  name of final image would be intermediate.jpg
+
+for any assitance type
+#./mosaic --help
+
