@@ -7,18 +7,15 @@
 #include "lib.h"
 
 #define DEBUG 1
-/* various tracking parameters (in seconds) */
-#define	MHI_DURATION		1
-#define MAX_TIME_DELTA 		0.05
 
 /*
- *
+ * get_segmented_seq
  */
 static void get_segmented_seq(struct image_info *info)
 {
 	static last = 0;
 	int i, idx1 = last, idx2;
-	double timestamp = (double)clock()/CLOCKS_PER_SEC;
+	static double timestamp = 0;
 	IplImage *silh;
 
 	cvCvtColor(info->img, info->frame_array[last], CV_BGR2GRAY);
@@ -29,26 +26,36 @@ static void get_segmented_seq(struct image_info *info)
 	cvAbsDiff(info->frame_array[idx1], info->frame_array[idx2], silh);
 
 	cvThreshold(silh, silh, 30, 1, CV_THRESH_BINARY);
-		cvShowImage("TEST1", silh);
 	cvUpdateMotionHistory(silh, info->mhi, timestamp, MHI_DURATION);
 	info->seq = cvSegmentMotion(info->mhi, info->segmask, info->storage,
 			timestamp, MAX_TIME_DELTA);
+	timestamp++;
 }
 
 /*
- *
+ * get_object_code
+ */
+int get_object_code(IplImage *img)
+{
+	/*
+	 * TODO
+	 */
+}
+
+/*
+ * detect_object_from_seq
  */
 static void detect_object_from_seq(struct image_info *info)
 {
 	CvSeq *seq = info->seq;
 	CvRect comp_rect;
-	int i;
+	int i, id;
 	printf("%d\n", seq->total);
 
 	for(i = 0; i < seq->total; i++) {
 		comp_rect = ((CvConnectedComp*)cvGetSeqElem(seq, i))->rect;
-		printf("%d\t%d\t%d\t%d\n", comp_rect.x, comp_rect.y,
-				comp_rect.width, comp_rect.height);
+//		printf("%d\t%d\t%d\t%d\n", comp_rect.x, comp_rect.y,
+//				comp_rect.width, comp_rect.height);
 
 		/* reject improbable components */
 		if(comp_rect.width + comp_rect.height < 100)
@@ -56,8 +63,12 @@ static void detect_object_from_seq(struct image_info *info)
 
 		/* select component ROI */
 		cvSetImageROI(info->img, comp_rect);
-
+		id = get_object_code(info->img);
 		cvShowImage("TEST", info->img);
+		/*
+		 * TODO
+		 * Send Object code, and coordinate over zigbee
+		 */
 		cvResetImageROI(info->img);
 	}
 
@@ -145,7 +156,6 @@ void *image_executer(void *data)
 	}
 #ifdef DEBUG
 	cvNamedWindow("TEST" , 0);
-	cvNamedWindow("TEST1" , 0);
 #endif
 	for(;;) {
 		sem_wait(&info->frame_posted);
@@ -160,7 +170,6 @@ void *image_executer(void *data)
 	}
 #ifdef DEBUG
 	cvDestroyWindow("TEST");
-	cvDestroyWindow("TEST1");
 #endif
 	free_run_time_images(info);
 }
