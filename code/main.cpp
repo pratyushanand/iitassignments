@@ -39,7 +39,7 @@ int main(int argc, char **argv)
 	pthread_t grabber_thread;
 	pthread_t executer_thread;
 
-	info = calloc(sizeof(*info), 1);
+	info = (struct image_info *)calloc(sizeof(*info), 1);
 	if (!info) {
 		pr_err("No dynamic memory available\n");
 		return -ENOMEM;
@@ -84,7 +84,7 @@ int main(int argc, char **argv)
 	} while (next_option != -1);
 
 	if (!info->capture)
-		return;
+		return -EINVAL;
 	/* Initilize synchronizer semaphores */
 	sem_init (&info->frame_posted, 0, 0);
 	sem_init (&info->frame_executed, 0, 1);

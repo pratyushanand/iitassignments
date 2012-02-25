@@ -13,7 +13,7 @@
  */
 static void get_segmented_seq(struct image_info *info)
 {
-	static last = 0;
+	static int last = 0;
 	int i, idx1 = last, idx2;
 	static double timestamp = 0;
 	IplImage *silh;
@@ -145,7 +145,7 @@ static int free_run_time_images(struct image_info *info)
 
 void *image_executer(void *data)
 {
-	struct image_info *info = data;
+	struct image_info *info = (struct image_info *)data;
 	IplImage *img;
 	CvSeq* seq;
 

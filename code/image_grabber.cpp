@@ -7,7 +7,7 @@
 
 void *image_grabber(void *data)
 {
-	struct image_info *info = data;
+	struct image_info *info = (struct image_info *)data;
 
 	for(;;) {
 		sem_wait(&info->frame_executed);
@@ -20,7 +20,7 @@ void *image_grabber(void *data)
 		info->img = cvQueryFrame(info->capture);
 		if (!info->img) {
 			pr_info("Frame is not received\n");
-			return;
+			return NULL;
 			/* TODO
 			 * Ideally should not be a situation when code
 			 * will reach here. Camera should always be able

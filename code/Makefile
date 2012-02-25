@@ -1,5 +1,5 @@
 all:
-	gcc -I/usr/include/opencv main.c image_grabber.c image_executer.c -o ../obj/semantics -lcv -lhighgui -lcvaux -lcxcore
+	g++ -I/usr/include/opencv main.cpp image_grabber.cpp image_executer.cpp -o ../obj/semantics -lcv -lhighgui -lcvaux -lcxcore
 
 clean:
 	rm -rf ../obj/*
