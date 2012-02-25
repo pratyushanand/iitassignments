@@ -7,18 +7,18 @@
 
 void *image_grabber(void *data)
 {
-	struct image_grabber *grabber = data;
+	struct image_info *info = data;
 
 	for(;;) {
-		sem_wait(&grabber->frame_executed);
+		sem_wait(&info->frame_executed);
 		/*
 		 * Also, need to maintain user specified delay
 		 * between reception of two consecutive frmaes.
 		 * Sstem might go into low power mode to save
 		 * power.
 		 * */
-		grabber->img = cvQueryFrame(grabber->capture);
-		if (!grabber->img) {
+		info->img = cvQueryFrame(info->capture);
+		if (!info->img) {
 			pr_info("Frame is not received\n");
 			return;
 			/* TODO
@@ -28,6 +28,6 @@ void *image_grabber(void *data)
 			 * here handle the event coorectly.
 			 */
 		}
-		sem_post(&grabber->frame_posted);
+		sem_post(&info->frame_posted);
 	}
 }

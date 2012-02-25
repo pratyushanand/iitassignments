@@ -35,12 +35,12 @@ int main(int argc, char **argv)
 		{ "input",   1, NULL, 'i' },
 		{ NULL,       0, NULL, 0}
 	};
-	struct image_grabber *grabber;
+	struct image_info *info;
 	pthread_t grabber_thread;
 	pthread_t executer_thread;
 
-	grabber = malloc(sizeof(*grabber));
-	if (!grabber) {
+	info = calloc(sizeof(*info), 1);
+	if (!info) {
 		pr_err("No dynamic memory available\n");
 		return -ENOMEM;
 	}
@@ -59,8 +59,8 @@ int main(int argc, char **argv)
 					pr_err("input Name is too large\n");
 					abort();
 				}
-				grabber->capture = cvCaptureFromFile(optarg);
-				if (!grabber->capture) {
+				info->capture = cvCaptureFromFile(optarg);
+				if (!info->capture) {
 					pr_err("Error with Video Imgae \
 							Capture\n");
 					return -1;
@@ -68,8 +68,8 @@ int main(int argc, char **argv)
 
 				break;
 			case 'c':
-				grabber->capture = cvCreateCameraCapture(CV_CAP_V4L2);
-				if (!grabber->capture) {
+				info->capture = cvCreateCameraCapture(CV_CAP_V4L2);
+				if (!info->capture) {
 					pr_err("Could not open Camera to \
 							capture image");
 					return -1;
@@ -83,16 +83,18 @@ int main(int argc, char **argv)
 		}
 	} while (next_option != -1);
 
+	if (!info->capture)
+		return;
 	/* Initilize synchronizer semaphores */
-	sem_init (&grabber->frame_posted, 0, 0);
-	sem_init (&grabber->frame_executed, 0, 1);
+	sem_init (&info->frame_posted, 0, 0);
+	sem_init (&info->frame_executed, 0, 1);
 	/* Create Task for Image frame grabbing */
-	pthread_create(&grabber_thread, NULL, image_grabber, (void*)grabber);
+	pthread_create(&grabber_thread, NULL, image_grabber, (void*)info);
 	/* Create Task for Image frame execution */
-	pthread_create(&executer_thread, NULL, image_executer, (void*)grabber);
+	pthread_create(&executer_thread, NULL, image_executer, (void*)info);
 	/* wait for threads to complete */
 	pthread_join(grabber_thread, NULL);
 	pthread_join(executer_thread, NULL);
-	cvReleaseCapture(&grabber->capture);
-	free(grabber);
+	cvReleaseCapture(&info->capture);
+	free(info);
 }
