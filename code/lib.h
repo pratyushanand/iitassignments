@@ -30,6 +30,10 @@ struct image_info {
 	sem_t frame_executed;
 };
 
+struct classify_object {
+	int id;
+	char name[100];
+};
 void *image_grabber(void *data);
 void *image_executer(void *data);
 #endif

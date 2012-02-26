@@ -8,6 +8,12 @@
 
 #define DEBUG 1
 
+/* Array of object type to be detected */
+static struct classify_object classifier_array[] = {
+	{1, "../data/haarcascades/haarcascade_fullbody.xml"},
+	/* TODO */
+};
+
 /*
  * get_segmented_seq
  */
@@ -47,10 +53,11 @@ int get_object_code(IplImage *img)
  */
 static void detect_object_from_seq(struct image_info *info)
 {
-	CvSeq *seq = info->seq;
+	CvSeq *seq = info->seq, *objects;
 	CvRect comp_rect;
-	int i, id;
-	printf("%d\n", seq->total);
+        CvHaarClassifierCascade* cascade;
+	int i, j;
+//	printf("%d\n", seq->total);
 
 	for(i = 0; i < seq->total; i++) {
 		comp_rect = ((CvConnectedComp*)cvGetSeqElem(seq, i))->rect;
@@ -58,18 +65,35 @@ static void detect_object_from_seq(struct image_info *info)
 //				comp_rect.width, comp_rect.height);
 
 		/* reject improbable components */
-		if(comp_rect.width + comp_rect.height < 100)
-			continue;
+//		if(comp_rect.width + comp_rect.height < 100)
+//			continue;
+		cvRectangle(info->img, cvPoint(comp_rect.x, comp_rect.y),
+				cvPoint(comp_rect.x + comp_rect.width, comp_rect.y + comp_rect.height),
+                     		CV_RGB(255,0,0), 3 );
+		cvShowImage("TEST", info->img);
 
+#if 0
 		/* select component ROI */
 		cvSetImageROI(info->img, comp_rect);
-		id = get_object_code(info->img);
+//		printf("test %d\n", i);
+		for (j = 0; j < sizeof(classifier_array) / sizeof (struct classify_object); j++) {
+			cascade = (CvHaarClassifierCascade*)cvLoad(classifier_array[j].name);
+			objects = cvHaarDetectObjects(info->img, cascade,
+				       	info->storage, 1.2, 2,
+				       	CV_HAAR_DO_CANNY_PRUNING );
+			cvReleaseHaarClassifierCascade(&cascade);
+			if (objects->total > 0) {
+				pr_info("object detected\n");
+				break;
+			}
+		}
 		cvShowImage("TEST", info->img);
 		/*
 		 * TODO
 		 * Send Object code, and coordinate over zigbee
 		 */
 		cvResetImageROI(info->img);
+#endif
 	}
 
 }
