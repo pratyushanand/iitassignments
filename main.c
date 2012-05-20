@@ -3,7 +3,7 @@
 #include <cxtypes.h>
 #include <highgui.h>
 
-//#define HIGH_BW
+#define HIGH_BW
 
 #define MIN_AREA 1000
 
@@ -75,8 +75,6 @@ int main(int argc, char **argv)
 	/* Allocates memory to store the input images and the segmentation maps */
 	temp1 = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
 	temp2 = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
-	temp3 = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
-	temp4 = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
 
 	/* Acquires your first image */
 	gray = temp2;
@@ -140,29 +138,6 @@ int main(int argc, char **argv)
 				}
 				cvShowImage("SEPRATED_CONTOUR", temp1);
 #else
-				seprated = temp2;
-				cvZero(seprated);
-				cvDrawContours(seprated, c, cvScalar(255, 255, 255, 0), 
-						cvScalar(0, 0, 0, 0), -1,
-						CV_FILLED, 8, cvPoint(0, 0));
-				cvShowImage("SEPRATED_CONTOUR", seprated);
-				/*
-				 * So , now we have completely seprated
-				 * moving objects in temp2
-				 * Now, try to skeltonize it
-				 */
-				eroded = temp1;
-				dilated = temp3;
-				edged = temp3;
-				skel = temp4;
-				cvZero(skel);
-				do {
-					cvErode(seprated, eroded, str_ele, 1);
-					cvDilate(eroded, dilated, str_ele, 1);
-					cvSub(seprated, dilated, edged, NULL);
-					cvOr(skel, edged, skel, NULL);
-					cvCopy(seprated, eroded, NULL);
-				} while (!cvNorm(seprated, NULL, CV_L2, NULL));
 				cvShowImage("SKELTON", skel);
 #endif
 			}
@@ -173,8 +148,6 @@ int main(int argc, char **argv)
 	libvibeModelFree(model);
 	cvReleaseImage(&temp1);
 	cvReleaseImage(&temp2);
-	cvReleaseImage(&temp3);
-	cvReleaseImage(&temp4);
 	cvReleaseMemStorage(&storage);
 	cvReleaseStructuringElement(&str_ele);
 
