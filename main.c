@@ -2,6 +2,9 @@
 #include <cv.h>
 #include <cxtypes.h>
 #include <highgui.h>
+
+//#define HIGH_BW
+
 #define MIN_AREA 1000
 
 static int32_t get_image_width(CvCapture *stream)
@@ -47,8 +50,19 @@ int main(int argc, char **argv)
 	IplConvKernel* str_ele = cvCreateStructuringElementEx(3, 3, 2,
 			2, CV_SHAPE_ELLIPSE, NULL);
 	float area;
+	int frame = 0, object = 0, i;
 
-	cvNamedWindow("TEST", 1);
+	cvNamedWindow("GRAY", 1);
+	cvNamedWindow("FG", 1);
+	cvMoveWindow("FG", width, 0);
+	cvNamedWindow("CLEANED", 1);
+	cvMoveWindow("CLEANED", 2 * width, 0);
+	cvNamedWindow("SEPRATED_CONTOUR", 1);
+	cvMoveWindow("SEPRATED_CONTOUR", 3 * width, 0);
+#ifndef HIGH_BW
+	cvNamedWindow("SKELTON", 1);
+	cvMoveWindow("SKELTON", 0, 2 * height);
+#endif
 	/* Get a model data structure */
 	/*
 	 * Library for background detection from following paper.
@@ -74,10 +88,14 @@ int main(int argc, char **argv)
 	/* Processes all the following frames of your stream:
 		results are stored in "segmentation_map" */
 	while(!acquire_grayscale_image(stream, gray)){
+		frame++;
+		object = 0;
+		cvShowImage("GRAY", gray);
 		/* Get FG image in temp1 */
 		map = temp1;
 		libvibeModelUpdate_8u_C1R(model, gray->imageData,
 				map->imageData);
+		cvShowImage("FG", map);
 		/*
 		 * Clean all small unnecessary FG objects. Get cleaned
 		 * one in temp2
@@ -87,6 +105,7 @@ int main(int argc, char **argv)
 		/* Dilate it to get in proper shape */
 		dilated = temp1;
 		cvDilate(eroded, dilated, NULL, 1);
+		cvShowImage("CLEANED", dilated);
 		/*
 		 * Find out all moving contours , so basically segment
 		 * it out. Create separte image for each moving object.
@@ -102,12 +121,31 @@ int main(int argc, char **argv)
 			 * than MIN_AREA square pixel
 			 */
 			if (area > MIN_AREA) {
+				cvWaitKey(30);
+#ifdef HIGH_BW
+				/*
+				 * If bandwidth is high then send data
+				 * at this stage only. No need to
+				 * skeltonize
+				 */
+				printf("Data points for Frame no %d, Obejct No %d\n",
+						frame, ++object);
+				cvZero(temp1);
+				for (i = 0; i < c->total; i++) {
+					CvPoint* p = CV_GET_SEQ_ELEM(CvPoint, c,
+							i);
+					*((uchar*) (temp1->imageData +
+					p->y * temp1->widthStep) + p->x) = 255;
+//					printf("%d %d\n", p->x, p->y);
+				}
+				cvShowImage("SEPRATED_CONTOUR", temp1);
+#else
 				seprated = temp2;
 				cvZero(seprated);
 				cvDrawContours(seprated, c, cvScalar(255, 255, 255, 0), 
 						cvScalar(0, 0, 0, 0), -1,
 						CV_FILLED, 8, cvPoint(0, 0));
-#if 1
+				cvShowImage("SEPRATED_CONTOUR", seprated);
 				/*
 				 * So , now we have completely seprated
 				 * moving objects in temp2
@@ -124,12 +162,9 @@ int main(int argc, char **argv)
 					cvSub(seprated, dilated, edged, NULL);
 					cvOr(skel, edged, skel, NULL);
 					cvCopy(seprated, eroded, NULL);
-					printf("T");
 				} while (!cvNorm(seprated, NULL, CV_L2, NULL));
+				cvShowImage("SKELTON", skel);
 #endif
-				printf("\n");
-				cvWaitKey(30);
-				cvShowImage("TEST", skel);
 			}
 		}
 				gray = temp2;
