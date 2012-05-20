@@ -3,8 +3,6 @@
 #include <cxtypes.h>
 #include <highgui.h>
 
-#define HIGH_BW
-
 #define MIN_AREA 1000
 
 static int32_t get_image_width(CvCapture *stream)
@@ -43,14 +41,12 @@ int main(int argc, char **argv)
 	int32_t stride = get_image_stride(stream);
 	CvSeq* contours = NULL;
 	CvSeq* c = NULL;
-	int count = 0;
-	int nc = 0;
-	IplImage *gray, *temp1, *temp2, *temp3, *temp4, *map, *skel, *eroded,
-		 *dilated, *seprated, *edged;
-	IplConvKernel* str_ele = cvCreateStructuringElementEx(3, 3, 2,
-			2, CV_SHAPE_ELLIPSE, NULL);
-	float area;
-	int frame = 0, object = 0, i;
+	IplImage *gray, *temp1, *temp2, *map, *skel, *eroded,
+		 *dilated;
+	float area, di, di1, delta, delta1;
+	int frame = 0, object = 0, i, cx, cy;
+	CvMat* mat = cvCreateMat(1, width * height, CV_32FC1);
+	CvMat* smat = cvCreateMat(1, width * height, CV_32FC1);
 
 	cvNamedWindow("GRAY", 1);
 	cvNamedWindow("FG", 1);
@@ -108,7 +104,7 @@ int main(int argc, char **argv)
 		 * Find out all moving contours , so basically segment
 		 * it out. Create separte image for each moving object.
 		 */
-		 nc = cvFindContours(dilated, storage, &contours,
+		 cvFindContours(dilated, storage, &contours,
 				sizeof(CvContour), CV_RETR_EXTERNAL,
 				CV_CHAIN_APPROX_NONE, cvPoint(0, 0));
 		for (c = contours; c != NULL; c = c->h_next) {
@@ -120,26 +116,65 @@ int main(int argc, char **argv)
 			 */
 			if (area > MIN_AREA) {
 				cvWaitKey(30);
-#ifdef HIGH_BW
 				/*
 				 * If bandwidth is high then send data
 				 * at this stage only. No need to
 				 * skeltonize
 				 */
-				printf("Data points for Frame no %d, Obejct No %d\n",
-						frame, ++object);
 				cvZero(temp1);
 				for (i = 0; i < c->total; i++) {
 					CvPoint* p = CV_GET_SEQ_ELEM(CvPoint, c,
 							i);
 					*((uchar*) (temp1->imageData +
 					p->y * temp1->widthStep) + p->x) = 255;
-//					printf("%d %d\n", p->x, p->y);
 				}
 				cvShowImage("SEPRATED_CONTOUR", temp1);
-#else
+				/* calculate centroid */
+				cx = 0;
+				cy = 0;
+				for (i = 0; i < c->total; i++) {
+					CvPoint* p = CV_GET_SEQ_ELEM(CvPoint, c,
+							i);
+					cx += p->x;
+					cy += p->y;
+				}
+				cx /= c->total;
+				cy /= c->total;
+
+				/* calculate distance vector */
+				cvZero(mat);
+				for (i = 0; i < c->total; i++) {
+					CvPoint* p = CV_GET_SEQ_ELEM(CvPoint, c,
+							i);
+					*((float*)CV_MAT_ELEM_PTR(*mat, 0, i)) =
+						sqrt((p->x - cx)^2 +
+								(p->y - cy)^2);
+				}
+				/* Low pass filter it */
+				cvSmooth(mat, smat, CV_BLUR, 3, 0, 0, 0);
+				/* find extream points */
+				skel = temp1;
+				cvZero(skel);
+
+				*((uchar*) (skel->imageData +
+					cy * skel->widthStep) + cx) = 255;
+				di = CV_MAT_ELEM(*mat, float, 0, 0);
+				di1 = CV_MAT_ELEM(*mat, float, 0, 1);
+				delta = di1 - di;
+				for (i = 1; i < c->total; i++) {
+					di = CV_MAT_ELEM(*mat, float, 0, i);
+					di1 = CV_MAT_ELEM(*mat, float, 0,
+							(i + 1) % c->total);
+					delta1 = di1 - di;
+					if (delta >= 0 && delta1 < 0) {
+						CvPoint* p = CV_GET_SEQ_ELEM(
+								CvPoint, c, i);
+						cvLine(skel, *p, cvPoint(cx, cy),
+							cvScalar(255, 255, 255, 0), 1, 8, 0);
+					}
+					delta = delta1;
+				}
 				cvShowImage("SKELTON", skel);
-#endif
 			}
 		}
 				gray = temp2;
@@ -148,8 +183,9 @@ int main(int argc, char **argv)
 	libvibeModelFree(model);
 	cvReleaseImage(&temp1);
 	cvReleaseImage(&temp2);
+	cvReleaseMat(&mat);
+	cvReleaseMat(&smat);
 	cvReleaseMemStorage(&storage);
-	cvReleaseStructuringElement(&str_ele);
 
 	return(0);
 }
