@@ -42,6 +42,11 @@ int main(int argc, char **argv)
 	CvSeq* c = NULL;
 	int count = 0;
 	int nc = 0;
+	IplImage *gray, *temp1, *temp2, *temp3, *temp4, *map, *skel, *eroded,
+		 *dilated, *seprated, *edged;
+	IplConvKernel* str_ele = cvCreateStructuringElementEx(3, 3, 2,
+			2, CV_SHAPE_ELLIPSE, NULL);
+	float area;
 
 	cvNamedWindow("TEST", 1);
 	/* Get a model data structure */
@@ -54,65 +59,89 @@ int main(int argc, char **argv)
 	vibeModel_t *model = libvibeModelNew();
 
 	/* Allocates memory to store the input images and the segmentation maps */
-	IplImage *gray = cvCreateImage(cvSize(width, height),
-			IPL_DEPTH_8U, 1);
-	IplImage *temp1 = cvCreateImage(cvSize(width, height),
-			IPL_DEPTH_8U, 1);
-	IplImage *temp2 = cvCreateImage(cvSize(width, height),
-			IPL_DEPTH_8U, 1);
+	temp1 = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
+	temp2 = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
+	temp3 = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
+	temp4 = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
 
 	/* Acquires your first image */
+	gray = temp2;
 	acquire_grayscale_image(stream, gray);
 
 	/* Allocates the model and initialize it with the first image */
 	libvibeModelAllocInit_8u_C1R(model, gray->imageData, width, height,
 			stride);
-
 	/* Processes all the following frames of your stream:
 		results are stored in "segmentation_map" */
 	while(!acquire_grayscale_image(stream, gray)){
 		/* Get FG image in temp1 */
+		map = temp1;
 		libvibeModelUpdate_8u_C1R(model, gray->imageData,
-				temp1->imageData);
+				map->imageData);
 		/*
 		 * Clean all small unnecessary FG objects. Get cleaned
 		 * one in temp2
 		 */
-		cvErode(temp1, temp2, NULL, 2);
+		eroded = temp2;
+		cvErode(map, eroded, NULL, 2);
 		/* Dilate it to get in proper shape */
-		cvDilate(temp2, temp1, NULL, 1);
+		dilated = temp1;
+		cvDilate(eroded, dilated, NULL, 1);
 		/*
 		 * Find out all moving contours , so basically segment
 		 * it out. Create separte image for each moving object.
 		 */
-		 nc = cvFindContours(temp1, storage, &contours,
+		 nc = cvFindContours(dilated, storage, &contours,
 				sizeof(CvContour), CV_RETR_EXTERNAL,
 				CV_CHAIN_APPROX_NONE, cvPoint(0, 0));
 		for (c = contours; c != NULL; c = c->h_next) {
-			float area = cvContourArea(c, CV_WHOLE_SEQ, 0);
-			char name[30];
+			area = cvContourArea(c, CV_WHOLE_SEQ, 0);
 
 			/*
 			 * choose only if moving object area is greater
 			 * than MIN_AREA square pixel
 			 */
 			if (area > MIN_AREA) {
-				cvZero(temp2);
-				cvDrawContours(temp2, c, cvScalar(255, 255, 255, 0), 
+				seprated = temp2;
+				cvZero(seprated);
+				cvDrawContours(seprated, c, cvScalar(255, 255, 255, 0), 
 						cvScalar(0, 0, 0, 0), -1,
 						CV_FILLED, 8, cvPoint(0, 0));
+#if 1
+				/*
+				 * So , now we have completely seprated
+				 * moving objects in temp2
+				 * Now, try to skeltonize it
+				 */
+				eroded = temp1;
+				dilated = temp3;
+				edged = temp3;
+				skel = temp4;
+				cvZero(skel);
+				do {
+					cvErode(seprated, eroded, str_ele, 1);
+					cvDilate(eroded, dilated, str_ele, 1);
+					cvSub(seprated, dilated, edged, NULL);
+					cvOr(skel, edged, skel, NULL);
+					cvCopy(seprated, eroded, NULL);
+					printf("T");
+				} while (!cvNorm(seprated, NULL, CV_L2, NULL));
+#endif
+				printf("\n");
 				cvWaitKey(30);
-				cvShowImage("TEST", temp2);
+				cvShowImage("TEST", skel);
 			}
 		}
+				gray = temp2;
 	}
-
 	/* Cleanup allocated memory */
 	libvibeModelFree(model);
-	cvReleaseImage(&gray);
 	cvReleaseImage(&temp1);
 	cvReleaseImage(&temp2);
+	cvReleaseImage(&temp3);
+	cvReleaseImage(&temp4);
 	cvReleaseMemStorage(&storage);
+	cvReleaseStructuringElement(&str_ele);
 
 	return(0);
 }
