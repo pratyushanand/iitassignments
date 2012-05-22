@@ -31,7 +31,19 @@ static int32_t acquire_grayscale_image(CvCapture *stream, IplImage *gray)
 	cvCvtColor(img, gray, CV_BGR2GRAY);
 	return 0;
 }
+#if 0
+filter()
+{
+	double a[9]={   1.0/9.0,1.0/9.0,1.0/9.0,
+		1.0/9.0,1.0/9.0,1.0/9.0,
+		1.0/9.0,1.0/9.0,1.0/9.0};
+	CvMat k;
+	cvInitMatHeader(&k, 3, 3, CV_64FC1, a);
 
+	cvFilter2D(img ,dst,
+			&k,cvPoint(-1,-1));
+}
+#endif
 int main(int argc, char **argv)
 {
 	CvCapture* stream = cvCaptureFromFile("../test_video/test.avi");
@@ -42,7 +54,7 @@ int main(int argc, char **argv)
 	CvSeq* contours = NULL;
 	CvSeq* c = NULL;
 	IplImage *gray, *temp1, *temp2, *map, *skel, *eroded,
-		 *dilated;
+		 *dilated, *dii;
 	float area, di, di1, delta, delta1;
 	int frame = 0, object = 0, i, cx, cy;
 	CvMat* mat = cvCreateMat(1, width * height, CV_32FC1);
@@ -55,10 +67,10 @@ int main(int argc, char **argv)
 	cvMoveWindow("CLEANED", 2 * width, 0);
 	cvNamedWindow("SEPRATED_CONTOUR", 1);
 	cvMoveWindow("SEPRATED_CONTOUR", 3 * width, 0);
-#ifndef HIGH_BW
+	cvNamedWindow("DI", 1);
+	cvMoveWindow("DI", width, 2 * height);
 	cvNamedWindow("SKELTON", 1);
 	cvMoveWindow("SKELTON", 0, 2 * height);
-#endif
 	/* Get a model data structure */
 	/*
 	 * Library for background detection from following paper.
@@ -115,7 +127,9 @@ int main(int argc, char **argv)
 			 * than MIN_AREA square pixel
 			 */
 			if (area > MIN_AREA) {
-				cvWaitKey(30);
+				cvWaitKey(0);
+//				if (frame == 200)
+//					while(1);
 				/*
 				 * If bandwidth is high then send data
 				 * at this stage only. No need to
@@ -147,11 +161,20 @@ int main(int argc, char **argv)
 					CvPoint* p = CV_GET_SEQ_ELEM(CvPoint, c,
 							i);
 					*((float*)CV_MAT_ELEM_PTR(*mat, 0, i)) =
-						sqrt((p->x - cx)^2 +
-								(p->y - cy)^2);
+						sqrt(pow((p->x - cx), 2) +
+								pow((p->y - cy), 2));
 				}
+				/*plot disatance vector */
+				dii = temp1;
+				cvZero(dii);
 				/* Low pass filter it */
-				cvSmooth(mat, smat, CV_BLUR, 3, 0, 0, 0);
+				cvSmooth(mat, smat, CV_GAUSSIAN, 3, 0, 0, 0);
+				for (i = 0; i < c->total; i++) {
+					int x = CV_MAT_ELEM(*smat, float, 0, i);
+					*((uchar*) (dii->imageData +
+					(height - x) * dii->widthStep) + i) = 255;
+				}
+				cvShowImage("DI", dii);
 				/* find extream points */
 				skel = temp1;
 				cvZero(skel);
@@ -166,7 +189,8 @@ int main(int argc, char **argv)
 					di1 = CV_MAT_ELEM(*mat, float, 0,
 							(i + 1) % c->total);
 					delta1 = di1 - di;
-					if (delta >= 0 && delta1 < 0) {
+					if ((delta >= 0 && delta1 < 0) ||
+						(delta <= 0 && delta1 > 0)) {
 						CvPoint* p = CV_GET_SEQ_ELEM(
 								CvPoint, c, i);
 						cvLine(skel, *p, cvPoint(cx, cy),
