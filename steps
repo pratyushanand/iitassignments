@@ -1,2 +1,2 @@
-gcc -c main.c -I /usr/include/opencv/
-gcc -o main vibe-background.o main.o -lcv -lcvaux -lhighgui -lcxcore
+g++ -c main.cpp -I /usr/include/opencv/
+g++ -o main vibe-background.o main.o -lcv -lcvaux -lhighgui -lcxcore

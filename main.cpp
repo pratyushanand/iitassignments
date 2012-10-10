@@ -1,7 +1,8 @@
 #include "vibe-background.h"
 #include <cv.h>
 #include <cxtypes.h>
-#include <highgui.h>
+#include "cvaux.h"
+#include "highgui.h"
 
 #define MIN_AREA 1000
 
@@ -60,6 +61,10 @@ int main(int argc, char **argv)
 	CvMat* mat = cvCreateMat(1, width * height, CV_32FC1);
 	CvMat* smat = cvCreateMat(1, width * height, CV_32FC1);
 
+    	cv::HOGDescriptor hog;
+	hog.setSVMDetector(cv::HOGDescriptor::getDefaultPeopleDetector());
+    	cv::vector<cv::Rect> found;
+
 	cvNamedWindow("GRAY", 1);
 	cvNamedWindow("FG", 1);
 	cvMoveWindow("FG", width, 0);
@@ -67,10 +72,12 @@ int main(int argc, char **argv)
 	cvMoveWindow("CLEANED", 2 * width, 0);
 	cvNamedWindow("SEPRATED_CONTOUR", 1);
 	cvMoveWindow("SEPRATED_CONTOUR", 3 * width, 0);
+#if 0
 	cvNamedWindow("DI", 1);
 	cvMoveWindow("DI", width, 2 * height);
 	cvNamedWindow("SKELTON", 1);
 	cvMoveWindow("SKELTON", 0, 2 * height);
+#endif
 	/* Get a model data structure */
 	/*
 	 * Library for background detection from following paper.
@@ -89,7 +96,7 @@ int main(int argc, char **argv)
 	acquire_grayscale_image(stream, gray);
 
 	/* Allocates the model and initialize it with the first image */
-	libvibeModelAllocInit_8u_C1R(model, gray->imageData, width, height,
+	libvibeModelAllocInit_8u_C1R(model, (const uint8_t*)gray->imageData, width, height,
 			stride);
 	/* Processes all the following frames of your stream:
 		results are stored in "segmentation_map" */
@@ -99,8 +106,8 @@ int main(int argc, char **argv)
 		cvShowImage("GRAY", gray);
 		/* Get FG image in temp1 */
 		map = temp1;
-		libvibeModelUpdate_8u_C1R(model, gray->imageData,
-				map->imageData);
+		libvibeModelUpdate_8u_C1R(model, (const uint8_t*)gray->imageData,
+				(uint8_t*)map->imageData);
 		cvShowImage("FG", map);
 		/*
 		 * Clean all small unnecessary FG objects. Get cleaned
@@ -128,6 +135,15 @@ int main(int argc, char **argv)
 			 */
 			if (area > MIN_AREA) {
 				cvWaitKey(0);
+				cvZero(temp1);
+				cvDrawContours(temp1, c, cvScalar(255, 255, 255, 0),
+							cvScalar(0, 0, 0, 0),
+							-1, CV_FILLED, 8,
+							cvPoint(0, 0));
+				cvShowImage("SEPRATED_CONTOUR", temp1);
+    				hog.detectMultiScale(temp1, found, 0, cv::Size(8,8), cv::Size(24,16), 1.05, 2);
+    				printf("%d\n", (int)found.size());
+#if 0
 //				if (frame == 200)
 //					while(1);
 				/*
@@ -199,6 +215,7 @@ int main(int argc, char **argv)
 					delta = delta1;
 				}
 				cvShowImage("SKELTON", skel);
+#endif
 			}
 		}
 				gray = temp2;
