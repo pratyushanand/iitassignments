@@ -5,6 +5,11 @@
 #include "highgui.h"
 
 #define MIN_AREA 1000
+#define DEBUG_GRAY_IMAGE	1
+#define DEBUG_FG_IMAGE		0
+#define DEBUG_CLEANED_IMAGE	0
+#define DEBUG_SEPARATED_IMAGE	0
+#define DEBUG_OUTPUT_IMAGE	1
 
 static int32_t get_image_width(CvCapture *stream)
 {
@@ -40,9 +45,14 @@ int main(int argc, char **argv)
 	IplImage *gray, *temp1, *temp2, *map, *eroded, *dilated;
 	CvSeq *contours = NULL;
 	CvSeq *c = NULL;
-	int32_t width, height, stride;
+	int32_t width, height, stride, cx, cy, i;
 	float area;
 	CvMat *mat, *smat;
+	CvFont font;
+	double hScale=1.0, vScale=1.0;
+	int    lineWidth=1;
+
+
 
 	if (argv[1])
 		stream = cvCaptureFromFile(argv[1]);
@@ -52,6 +62,7 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
+	cvInitFont(&font,CV_FONT_HERSHEY_SIMPLEX|CV_FONT_ITALIC, hScale,vScale,0,lineWidth);
 	storage = cvCreateMemStorage(0);
 	width = get_image_width(stream);
 	height = get_image_height(stream);
@@ -63,13 +74,25 @@ int main(int argc, char **argv)
 	hog.setSVMDetector(cv::HOGDescriptor::getDefaultPeopleDetector());
     	cv::vector<cv::Rect> found;
 
+#if DEBUG_GRAY_IMAGE
 	cvNamedWindow("GRAY", 1);
+#endif
+#if DEBUG_FG_IMAGE
 	cvNamedWindow("FG", 1);
 	cvMoveWindow("FG", width, 0);
+#endif
+#if DEBUG_CLEANED_IMAGE
 	cvNamedWindow("CLEANED", 1);
 	cvMoveWindow("CLEANED", 2 * width, 0);
+#endif
+#if DEBUG_SEPARATED_IMAGE
 	cvNamedWindow("SEPRATED_CONTOUR", 1);
 	cvMoveWindow("SEPRATED_CONTOUR", 3 * width, 0);
+#endif
+#if DEBUG_OUTPUT_IMAGE
+	cvNamedWindow("OUTPUT", 1);
+	cvMoveWindow("OUTPUT", 4 * width, 0);
+#endif
 
 	/* Get a model data structure */
 	/*
@@ -94,12 +117,16 @@ int main(int argc, char **argv)
 	/* Processes all the following frames of your stream:
 		results are stored in "segmentation_map" */
 	while(!acquire_grayscale_image(stream, gray)){
+#if DEBUG_GRAY_IMAGE
 		cvShowImage("GRAY", gray);
+#endif
 		/* Get FG image in temp1 */
 		map = temp1;
 		libvibeModelUpdate_8u_C1R(model, (const uint8_t*)gray->imageData,
 				(uint8_t*)map->imageData);
+#if DEBUG_FG_IMAGE
 		cvShowImage("FG", map);
+#endif
 		/*
 		 * Clean all small unnecessary FG objects. Get cleaned
 		 * one in temp2
@@ -109,7 +136,9 @@ int main(int argc, char **argv)
 		/* Dilate it to get in proper shape */
 		dilated = temp1;
 		cvDilate(eroded, dilated, NULL, 1);
+#if DEBUG_CLEANED_IMAGE
 		cvShowImage("CLEANED", dilated);
+#endif
 		/*
 		 * Find out all moving contours , so basically segment
 		 * it out. Create separte image for each moving object.
@@ -117,8 +146,10 @@ int main(int argc, char **argv)
 		 cvFindContours(dilated, storage, &contours,
 				sizeof(CvContour), CV_RETR_EXTERNAL,
 				CV_CHAIN_APPROX_NONE, cvPoint(0, 0));
+		cvZero(temp2);
 		for (c = contours; c != NULL; c = c->h_next) {
 			area = cvContourArea(c, CV_WHOLE_SEQ, 0);
+			cvZero(temp1);
 
 			/*
 			 * choose only if moving object area is greater
@@ -126,17 +157,34 @@ int main(int argc, char **argv)
 			 */
 			if (area > MIN_AREA) {
 				cvWaitKey(10);
-				cvZero(temp1);
 				cvDrawContours(temp1, c, cvScalar(255, 255, 255, 0),
 							cvScalar(0, 0, 0, 0),
 							-1, CV_FILLED, 8,
 							cvPoint(0, 0));
+#if DEBUG_SEPARATED_IMAGE
 				cvShowImage("SEPRATED_CONTOUR", temp1);
+#endif
     				hog.detectMultiScale(temp1, found, 0, cv::Size(8,8), cv::Size(24,16), 1.05, 2);
-    				printf("%d\n", (int)found.size());
+				if (found.size()) {
+					/* calculate centroid */
+					cx = 0;
+					cy = 0;
+					for (i = 0; i < c->total; i++) {
+						CvPoint* p = CV_GET_SEQ_ELEM(CvPoint, c,
+								i);
+						cx += p->x;
+						cy += p->y;
+					}
+					cx /= c->total;
+					cy /= c->total;
+					cvPutText (temp2,"H",cvPoint(cx, cy), &font, cvScalar(255,255,0));
+				}
 			}
 		}
-				gray = temp2;
+#if DEBUG_OUTPUT_IMAGE
+		cvShowImage("OUTPUT", temp2);
+#endif
+		gray = temp2;
 	}
 	/* Cleanup allocated memory */
 	libvibeModelFree(model);
