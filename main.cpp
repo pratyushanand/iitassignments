@@ -32,34 +32,32 @@ static int32_t acquire_grayscale_image(CvCapture *stream, IplImage *gray)
 	cvCvtColor(img, gray, CV_BGR2GRAY);
 	return 0;
 }
-#if 0
-filter()
-{
-	double a[9]={   1.0/9.0,1.0/9.0,1.0/9.0,
-		1.0/9.0,1.0/9.0,1.0/9.0,
-		1.0/9.0,1.0/9.0,1.0/9.0};
-	CvMat k;
-	cvInitMatHeader(&k, 3, 3, CV_64FC1, a);
 
-	cvFilter2D(img ,dst,
-			&k,cvPoint(-1,-1));
-}
-#endif
 int main(int argc, char **argv)
 {
-	CvCapture* stream = cvCaptureFromFile("../test_video/test.avi");
-	CvMemStorage* storage = cvCreateMemStorage(0);
-	int32_t width = get_image_width(stream);
-	int32_t height = get_image_height(stream);
-	int32_t stride = get_image_stride(stream);
-	CvSeq* contours = NULL;
-	CvSeq* c = NULL;
-	IplImage *gray, *temp1, *temp2, *map, *skel, *eroded,
-		 *dilated, *dii;
-	float area, di, di1, delta, delta1;
-	int frame = 0, object = 0, i, cx, cy;
-	CvMat* mat = cvCreateMat(1, width * height, CV_32FC1);
-	CvMat* smat = cvCreateMat(1, width * height, CV_32FC1);
+	CvCapture *stream = NULL;
+	CvMemStorage *storage;
+	IplImage *gray, *temp1, *temp2, *map, *eroded, *dilated;
+	CvSeq *contours = NULL;
+	CvSeq *c = NULL;
+	int32_t width, height, stride;
+	float area;
+	CvMat *mat, *smat;
+
+	if (argv[1])
+		stream = cvCaptureFromFile(argv[1]);
+
+	if (!stream) {
+		printf("No video stream found\n");
+		return -1;
+	}
+
+	storage = cvCreateMemStorage(0);
+	width = get_image_width(stream);
+	height = get_image_height(stream);
+	stride = get_image_stride(stream);
+	mat = cvCreateMat(1, width * height, CV_32FC1);
+	smat = cvCreateMat(1, width * height, CV_32FC1);
 
     	cv::HOGDescriptor hog;
 	hog.setSVMDetector(cv::HOGDescriptor::getDefaultPeopleDetector());
@@ -72,12 +70,7 @@ int main(int argc, char **argv)
 	cvMoveWindow("CLEANED", 2 * width, 0);
 	cvNamedWindow("SEPRATED_CONTOUR", 1);
 	cvMoveWindow("SEPRATED_CONTOUR", 3 * width, 0);
-#if 0
-	cvNamedWindow("DI", 1);
-	cvMoveWindow("DI", width, 2 * height);
-	cvNamedWindow("SKELTON", 1);
-	cvMoveWindow("SKELTON", 0, 2 * height);
-#endif
+
 	/* Get a model data structure */
 	/*
 	 * Library for background detection from following paper.
@@ -101,8 +94,6 @@ int main(int argc, char **argv)
 	/* Processes all the following frames of your stream:
 		results are stored in "segmentation_map" */
 	while(!acquire_grayscale_image(stream, gray)){
-		frame++;
-		object = 0;
 		cvShowImage("GRAY", gray);
 		/* Get FG image in temp1 */
 		map = temp1;
@@ -134,7 +125,7 @@ int main(int argc, char **argv)
 			 * than MIN_AREA square pixel
 			 */
 			if (area > MIN_AREA) {
-				cvWaitKey(0);
+				cvWaitKey(10);
 				cvZero(temp1);
 				cvDrawContours(temp1, c, cvScalar(255, 255, 255, 0),
 							cvScalar(0, 0, 0, 0),
@@ -143,79 +134,6 @@ int main(int argc, char **argv)
 				cvShowImage("SEPRATED_CONTOUR", temp1);
     				hog.detectMultiScale(temp1, found, 0, cv::Size(8,8), cv::Size(24,16), 1.05, 2);
     				printf("%d\n", (int)found.size());
-#if 0
-//				if (frame == 200)
-//					while(1);
-				/*
-				 * If bandwidth is high then send data
-				 * at this stage only. No need to
-				 * skeltonize
-				 */
-				cvZero(temp1);
-				for (i = 0; i < c->total; i++) {
-					CvPoint* p = CV_GET_SEQ_ELEM(CvPoint, c,
-							i);
-					*((uchar*) (temp1->imageData +
-					p->y * temp1->widthStep) + p->x) = 255;
-				}
-				cvShowImage("SEPRATED_CONTOUR", temp1);
-				/* calculate centroid */
-				cx = 0;
-				cy = 0;
-				for (i = 0; i < c->total; i++) {
-					CvPoint* p = CV_GET_SEQ_ELEM(CvPoint, c,
-							i);
-					cx += p->x;
-					cy += p->y;
-				}
-				cx /= c->total;
-				cy /= c->total;
-
-				/* calculate distance vector */
-				cvZero(mat);
-				for (i = 0; i < c->total; i++) {
-					CvPoint* p = CV_GET_SEQ_ELEM(CvPoint, c,
-							i);
-					*((float*)CV_MAT_ELEM_PTR(*mat, 0, i)) =
-						sqrt(pow((p->x - cx), 2) +
-								pow((p->y - cy), 2));
-				}
-				/*plot disatance vector */
-				dii = temp1;
-				cvZero(dii);
-				/* Low pass filter it */
-				cvSmooth(mat, smat, CV_GAUSSIAN, 3, 0, 0, 0);
-				for (i = 0; i < c->total; i++) {
-					int x = CV_MAT_ELEM(*smat, float, 0, i);
-					*((uchar*) (dii->imageData +
-					(height - x) * dii->widthStep) + i) = 255;
-				}
-				cvShowImage("DI", dii);
-				/* find extream points */
-				skel = temp1;
-				cvZero(skel);
-
-				*((uchar*) (skel->imageData +
-					cy * skel->widthStep) + cx) = 255;
-				di = CV_MAT_ELEM(*mat, float, 0, 0);
-				di1 = CV_MAT_ELEM(*mat, float, 0, 1);
-				delta = di1 - di;
-				for (i = 1; i < c->total; i++) {
-					di = CV_MAT_ELEM(*mat, float, 0, i);
-					di1 = CV_MAT_ELEM(*mat, float, 0,
-							(i + 1) % c->total);
-					delta1 = di1 - di;
-					if ((delta >= 0 && delta1 < 0) ||
-						(delta <= 0 && delta1 > 0)) {
-						CvPoint* p = CV_GET_SEQ_ELEM(
-								CvPoint, c, i);
-						cvLine(skel, *p, cvPoint(cx, cy),
-							cvScalar(255, 255, 255, 0), 1, 8, 0);
-					}
-					delta = delta1;
-				}
-				cvShowImage("SKELTON", skel);
-#endif
 			}
 		}
 				gray = temp2;
