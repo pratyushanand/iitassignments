@@ -1,2 +1,2 @@
-g++ -c main.cpp -I /usr/include/opencv/
-g++ -o main vibe-background.o main.o -lcv -lcvaux -lhighgui -lcxcore
+g++ -c main.cpp -I /usr/include/opencv/ -I /usr/include/python2.7
+g++ -o main vibe-background.o main.o -lcv -lcvaux -lhighgui -lcxcore -lpython2.7
