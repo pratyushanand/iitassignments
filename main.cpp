@@ -10,7 +10,6 @@
 #include <cvaux.h>
 #include "vibe-background.h"
 
-#define MIN_AREA 1000
 #define DEBUG_GRAY_IMAGE	1
 #define DEBUG_FG_IMAGE		0
 #define DEBUG_CLEANED_IMAGE	0
@@ -26,8 +25,8 @@ struct python_query {
 struct python_reply {
 	/* 
 	 * 1 - resolution
-	 * 2 - centroid
-	 * 3 - centroild of last moving object of same frame
+	 * 2 - centroid of first moving object
+	 * 3 - centroild of other moving object
 	 */
 	int type;
 	int x;
@@ -36,6 +35,7 @@ struct python_reply {
 
 struct configuration_params {
 	char video[100];
+	int area;
 	char python[100];
 	PyObject *py_name_obj;
 	PyObject *py_mod_obj;
@@ -57,6 +57,7 @@ static void help_main (char *prog_name)
 	fprintf (stream, "Usage: %s options [ first ... ]\n", prog_name);
 	fprintf (stream,
 			" -v	--video		Path of test video stream\n"
+			" -a	--area		Min area of moving object in square pixel\n"
 			" -p	--python	Name of python client routine\n");
 	exit (0);
 }
@@ -201,6 +202,7 @@ static int start_capture(struct configuration_params *param)
 	vibeModel_t *model;
 	PyObject *pargs;
 	int err = 0;
+	bool first;
 
 	width = get_image_width(param->stream);
 	height = get_image_height(param->stream);
@@ -301,6 +303,7 @@ static int start_capture(struct configuration_params *param)
 				sizeof(CvContour), CV_RETR_EXTERNAL,
 				CV_CHAIN_APPROX_NONE, cvPoint(0, 0));
 		cvZero(temp2);
+		first = true;
 		for (c = contours; c != NULL; c = c->h_next) {
 			area = cvContourArea(c, CV_WHOLE_SEQ, 0);
 
@@ -308,9 +311,9 @@ static int start_capture(struct configuration_params *param)
 			 * choose only if moving object area is greater
 			 * than MIN_AREA square pixel
 			 */
-			if (area > MIN_AREA) {
-
-				cvWaitKey(10);
+			if (area > param->area) {
+				
+				cvWaitKey(50);
 #if DEBUG_SEPARATED_IMAGE
 				cvZero(temp1);
 				cvDrawContours(temp1, c,
@@ -331,7 +334,12 @@ static int start_capture(struct configuration_params *param)
 				}
 				cx /= c->total;
 				cy /= c->total;
-				param->reply.type =2;
+				if (first) {
+					param->reply.type =2;
+					first = false;
+				} else {
+					param->reply.type =3;
+				}
 				param->reply.x =cx;
 				param->reply.y =cy;
 				pargs = Py_BuildValue("(s#)", (char*)&param->reply,
@@ -390,7 +398,7 @@ static int execute(struct configuration_params *param)
 	while (1) {
 		query = PyObject_CallObject(param->receive_query_from_server, NULL);
 		if (!query) {
-			pr_error("Could not Get any query\n");
+			pr_info("could not receive any query\n");
 			break;
 		}
 
@@ -420,10 +428,11 @@ static int execute(struct configuration_params *param)
 int main(int argc, char **argv)
 {
 	int next_option;
-	const char* const short_options = "hv:p:";
+	const char* const short_options = "hv:a:p:";
 	const struct option long_options[] = {
 		{ "help", 	0, 	NULL, 	'h' },
 		{ "video", 	1, 	NULL, 	'v' },
+		{ "area", 	1, 	NULL, 	'a' },
 		{ "python", 	1, 	NULL, 	'p' },
 		{ NULL, 	0, 	NULL, 	0}
 	};
@@ -442,6 +451,9 @@ int main(int argc, char **argv)
 				break;
 			case 'v':
 				strcpy(cfg_param.video, optarg);
+				break;
+			case 'a':
+				cfg_param.area = atoi(optarg);
 				break;
 			case 'p':
 				strcpy(cfg_param.python, optarg);

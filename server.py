@@ -3,7 +3,8 @@
 import socket               # Import socket module
 import markup
 from xml.dom.minidom import parseString
-import Image, ImageDraw, ImageTk, Tkinter
+from Tkinter import *
+from PIL import Image, ImageTk, ImageDraw
 
 server = socket.socket()         # Create a socket object
 host = socket.gethostname() # Get local machine name
@@ -57,39 +58,51 @@ def receive_centroid ():
 	data = receive_reply_from_client()
 	xml = parseString(data)
 	xmlTag = xml.getElementsByTagName('type')[0].toxml()
-	xmlData=xmlTag.replace('<type>','').replace('</type>','')
-	if (xmlData == '2'):
-		xmlTag = xml.getElementsByTagName('x')[0].toxml()
-		cx=xmlTag.replace('<x>','').replace('</x>','')
-		xmlTag = xml.getElementsByTagName('y')[0].toxml()
-		cy=xmlTag.replace('<y>','').replace('</y>','')
-		return (int(cx), int(cy))
+	t = xmlTag.replace('<type>','').replace('</type>','')
+	xmlTag = xml.getElementsByTagName('x')[0].toxml()
+	cx=xmlTag.replace('<x>','').replace('</x>','')
+	xmlTag = xml.getElementsByTagName('y')[0].toxml()
+	cy=xmlTag.replace('<y>','').replace('</y>','')
+	return (int(t), int(cx), int(cy))
 
+
+def start_capture ():
+	send_query_to_client("start_capture");
+	while 1:
+		[t, x, y] = receive_centroid ();
+		if t == 2:
+			canvas.delete(ALL);
+
+		canvas.create_oval(x -5 , y - 5, x + 5, y + 5, outline="red", 
+				            fill="green", width=2)
+		canvas.update_idletasks()
+	return
+	
+def disconnect ():
+	send_query_to_client("disconnect");
+	disconnect_client ()
+	main.destroy()
+	return
+
+main = Tk()
+frame = Frame(main)
+frame.pack()
+label = Label(frame, text="Remote Monitoring Gadget", fg="red")
+label.pack()
 
 connect_client();
 
 send_query_to_client("resolution");
+[w, h] = receive_resolution ();
 
-[width, height] = receive_resolution ();
-img = Image.new("RGB", (width, height))
-draw = ImageDraw.Draw(img)
-root = Tkinter.Tk()
-root.geometry('+%d+%d' % (width,height))
-old_label_image = None
+canvas = Canvas(main, width=h, height=h)
+#canvas.create_rectangle(0 , 0, w, h, outline="yellow", fill="black", width=5)
+canvas.pack()
 
-send_query_to_client("start_capture");
+capture = Button(frame, text="Start Capture",command=start_capture, fg="red")
+capture.pack(side=LEFT)
 
-while 1:
-	[cx, cy] = receive_centroid ();
-	print cx 
-	print cy
-	draw.ellipse((cx - 5, cy - 5, cx + 5, cy + 5), 200, 100);
-	tkpi = ImageTk.PhotoImage(img)
-	label_image = Tkinter.Label(root, image=tkpi)
-	label_image.place(x=0,y=0,width=img.size[0],height=img.size[1])
-	root.title("hello")
-	if old_label_image is not None:
-		old_label_image.destroy()
-	old_label_image = label_image
+disconnect = Button(frame, text="Disconnect",command=disconnect, fg="red")
+disconnect.pack(side=LEFT)
 
-disconnect_client();
+main.mainloop()
