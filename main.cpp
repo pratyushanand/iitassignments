@@ -9,21 +9,27 @@
 #include <highgui.h>
 #include <cvaux.h>
 #include "vibe-background.h"
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
 
 #define DEBUG_GRAY_IMAGE	1
 #define DEBUG_FG_IMAGE		0
 #define DEBUG_CLEANED_IMAGE	0
 #define DEBUG_SEPARATED_IMAGE	0
 #define DEBUG_OUTPUT_IMAGE	0
+#define pr_debug(args...)
 #define pr_info(args...) fprintf(stdout, ##args)
 #define pr_error(args...) fprintf(stdout, ##args)
 
+#define QUERY_XML_SIZE 256
 struct python_query {
-	char type[20];
+	char data[QUERY_XML_SIZE];
 };
 
 struct python_reply {
-	/* 
+	/*
 	 * 1 - resolution
 	 * 2 - centroid of first moving object
 	 * 3 - centroild of other moving object
@@ -36,17 +42,18 @@ struct python_reply {
 struct configuration_params {
 	char video[100];
 	int area;
-	char python[100];
+	char host[50];
+	int port;
+	char xml[100];
+	int sockfd;
 	PyObject *py_name_obj;
 	PyObject *py_mod_obj;
-	PyObject *connect_to_server;
-	PyObject *disconnect_from_server;
-	PyObject *receive_query_from_server;
-	PyObject *send_reply_to_server;
-       	PyObject *xml_pack;
+	PyObject *extract_query_from_xml;
+	PyObject *encode_reply_to_xml;
 	struct python_query query;
 	struct python_reply reply;
 	CvCapture *stream;
+	sem_t start;
 };
 
 /* Prints help for this program */
@@ -58,7 +65,9 @@ static void help_main (char *prog_name)
 	fprintf (stream,
 			" -v	--video		Path of test video stream\n"
 			" -a	--area		Min area of moving object in square pixel\n"
-			" -p	--python	Name of python client routine\n");
+			" -n	--hostname 	hostname to connect\n"
+			" -p	--port		port number to connect\n"
+			" -x	--xml		Python xml routine\n");
 	exit (0);
 }
 
@@ -108,9 +117,9 @@ static int initialize_python(struct configuration_params *param)
 	Py_Initialize();
 
 	/* Build the name object */
-	param->py_name_obj = PyString_FromString(param->python);
+	param->py_name_obj = PyString_FromString(param->xml);
 	if (!param->py_name_obj) {
-		pr_error("Could not build %s object\n", param->python);
+		pr_error("Could not build %s object\n", param->xml);
 		release_python(param);
 		return -1;
 	}
@@ -118,7 +127,7 @@ static int initialize_python(struct configuration_params *param)
 	/* Load the module object */
 	param->py_mod_obj = PyImport_Import(param->py_name_obj);
 	if (!param->py_mod_obj) {
-		pr_error("Could not load %s object\n", param->python);
+		pr_error("Could not load %s object\n", param->xml);
 		release_python(param);
 		return -1;
 	}
@@ -126,73 +135,78 @@ static int initialize_python(struct configuration_params *param)
 	/* dict_obj is a borrowed reference */
 	dict_obj = PyModule_GetDict(param->py_mod_obj);
 
-	/* connect_to_server also a borrowed reference */
-	param->connect_to_server = PyDict_GetItemString(dict_obj, "connect_to_server");
-	if (!param->connect_to_server) {
-		pr_error("Could not load connect_to_server function\n");
+
+	/* extract_query_from_xml also a borrowed reference */
+	param->extract_query_from_xml = PyDict_GetItemString(dict_obj, "extract_query_from_xml");
+	if (!param->extract_query_from_xml) {
+		pr_error("Could not load extract_query_from_xml function\n");
 		release_python(param);
 		return -1;
-	} else if (!PyCallable_Check(param->connect_to_server)) {
-		pr_error("connect_to_server function is not callable\n");
+	} else if (!PyCallable_Check(param->extract_query_from_xml)) {
+		pr_error("extract_query_from_xml function is not callable\n");
 		release_python(param);
 		return -1;
 	}
 
-	/* disconnect_from_server also a borrowed reference */
-	param->disconnect_from_server = PyDict_GetItemString(dict_obj, "disconnect_from_server");
-	if (!param->disconnect_from_server) {
-		pr_error("Could not load disconnect_from_server function\n");
+	/* encode_reply_to_xml also a borrowed reference */
+	param->encode_reply_to_xml = PyDict_GetItemString(dict_obj, "encode_reply_to_xml");
+	if (!param->encode_reply_to_xml) {
+		pr_error("Could not load encode_reply_to_xml function\n");
 		release_python(param);
 		return -1;
-	} else if (!PyCallable_Check(param->disconnect_from_server)) {
-		pr_error("disconnect_from_server function is not callable\n");
-		release_python(param);
-		return -1;
-	}
-
-	/* receive_query_from_server also a borrowed reference */
-	param->receive_query_from_server = PyDict_GetItemString(dict_obj, "receive_query_from_server");
-	if (!param->receive_query_from_server) {
-		pr_error("Could not load receive_query_from_server function\n");
-		release_python(param);
-		return -1;
-	} else if (!PyCallable_Check(param->receive_query_from_server)) {
-		pr_error("receive_query_from_server function is not callable\n");
+	} else if (!PyCallable_Check(param->encode_reply_to_xml)) {
+		pr_error("encode_reply_to_xml function is not callable\n");
 		release_python(param);
 		return -1;
 	}
 
-	/* send_reply_to_server also a borrowed reference */
-	param->send_reply_to_server = PyDict_GetItemString(dict_obj, "send_reply_to_server");
-	if (!param->send_reply_to_server) {
-		pr_error("Could not load send_reply_to_server function\n");
-		release_python(param);
-		return -1;
-	} else if (!PyCallable_Check(param->send_reply_to_server)) {
-		pr_error("send_reply_to_server function is not callable\n");
-		release_python(param);
-		return -1;
-	}
-
-	/* Connect to the sever */
-	while (!PyObject_CallObject(param->connect_to_server, NULL))
-		usleep(10000);
 	return 0;
 }
 
 static unsigned int get_query(char *query) 
 {
-	pr_info("Received Query %s\n", query);
+	pr_debug("Received Query %s\n", query);
 	if (!strcmp(query, "resolution"))
 		return 1;
-	else if (!strcmp(query, "start_capture"))
+	else if (!strcmp(query, "start_cam"))
 		return 2;
+	else if (!strcmp(query, "stop_cam"))
+		return 3;
+	else if (!strcmp(query, "disconnect"))
+		return 4;
 	else
 		return 0;
 }
 
-static int start_capture(struct configuration_params *param)
+static PyObject* receive_query_from_server(struct configuration_params *param)
 {
+	char buffer[QUERY_XML_SIZE];
+	PyObject *pquery;
+
+	memset(&param->query.data[0], 0, strlen(&param->query.data[0]));
+	if (read(param->sockfd, &param->query.data[0], QUERY_XML_SIZE) < 0)
+		return NULL;
+	pquery = Py_BuildValue("(s#)", (char*)&param->query.data[0], strlen(&param->query.data[0]));
+	return PyObject_CallObject(param->extract_query_from_xml, pquery);
+}
+
+static int send_reply_to_server(struct configuration_params *param)
+{
+	char buffer[QUERY_XML_SIZE];
+	PyObject *preply, *pxml;
+	char *xml;
+
+	preply = Py_BuildValue("(s#)", (char*)&param->reply, sizeof(param->reply));
+	pxml = PyObject_CallObject(param->encode_reply_to_xml, preply);
+	xml = PyString_AS_STRING(pxml);
+	if (write(param->sockfd, xml, strlen(xml)) < 0)
+		return -1;
+	return 0;
+}
+
+static void* image_acquisition(void *data)
+{
+	struct configuration_params *param = (struct configuration_params *)data;
 	CvMemStorage *storage;
 	IplImage *gray, *temp1 = NULL, *temp2 = NULL, *map, *eroded, *dilated;
 	CvSeq *contours = NULL;
@@ -201,7 +215,7 @@ static int start_capture(struct configuration_params *param)
 	float area;
 	vibeModel_t *model;
 	PyObject *pargs;
-	int err = 0;
+	void *err = NULL;
 	bool first;
 
 	width = get_image_width(param->stream);
@@ -231,7 +245,7 @@ static int start_capture(struct configuration_params *param)
 	storage = cvCreateMemStorage(0);
 	if (!storage) {
 		pr_error("Could not allocate storage memory\n");
-		err = -1;
+		err = (void *)-1;
 		goto exit;
 	}
 
@@ -239,13 +253,13 @@ static int start_capture(struct configuration_params *param)
 	temp1 = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
 	if (!temp1) {
 		pr_error("Could not allocate memory for temp1 image\n");
-		err = -1;
+		err = (void *)-1;
 		goto exit;
 	}
 	temp2 = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
 	if (!temp2) {
 		pr_error("Could not allocate memory for temp2 image\n");
-		err = -1;
+		err = (void *)-1;
 		goto exit;
 	}
 	/* Get a model data structure */
@@ -254,11 +268,11 @@ static int start_capture(struct configuration_params *param)
 	 * O. Barnich and M. Van Droogenbroeck.
 	 * ViBe: A universal background subtraction algorithm for video sequences.
 	 * In IEEE Transactions on Image Processing, 20(6):1709-1724, June 2011.
-	*/
+	 */
 	model = libvibeModelNew();
 	if (!model) {
 		pr_error("Could not load vibe library\n");
-		err = -1;
+		err = (void *)-1;
 		goto exit;
 	}
 
@@ -271,8 +285,9 @@ static int start_capture(struct configuration_params *param)
 			stride);
 
 	/* Processes all the following frames of your stream:
-		results are stored in "segmentation_map" */
+	   results are stored in "segmentation_map" */
 	while(!acquire_grayscale_image(param->stream, gray)){
+		sem_wait(&param->start);
 #if DEBUG_GRAY_IMAGE
 		cvShowImage("GRAY", gray);
 #endif
@@ -299,7 +314,7 @@ static int start_capture(struct configuration_params *param)
 		 * Find out all moving contours , so basically segment
 		 * it out. Create separte image for each moving object.
 		 */
-		 cvFindContours(dilated, storage, &contours,
+		cvFindContours(dilated, storage, &contours,
 				sizeof(CvContour), CV_RETR_EXTERNAL,
 				CV_CHAIN_APPROX_NONE, cvPoint(0, 0));
 		cvZero(temp2);
@@ -312,7 +327,7 @@ static int start_capture(struct configuration_params *param)
 			 * than MIN_AREA square pixel
 			 */
 			if (area > param->area) {
-				
+
 				cvWaitKey(50);
 #if DEBUG_SEPARATED_IMAGE
 				cvZero(temp1);
@@ -342,15 +357,14 @@ static int start_capture(struct configuration_params *param)
 				}
 				param->reply.x =cx;
 				param->reply.y =cy;
-				pargs = Py_BuildValue("(s#)", (char*)&param->reply,
-						sizeof(param->reply));
-				PyObject_CallObject(param->send_reply_to_server, pargs);
+				send_reply_to_server(param);
 			}
 		}
 #if DEBUG_OUTPUT_IMAGE
 		cvShowImage("OUTPUT", temp2);
 #endif
 		gray = temp2;
+		sem_post(&param->start);
 	}
 
 exit:
@@ -380,65 +394,65 @@ exit:
 	return err;
 }
 
-static int execute(struct configuration_params *param)
+static void* execute(void *data)
 {
-	PyObject *query, *pargs;
+	struct configuration_params *param = (struct configuration_params *)data;
+	PyObject *query;
+	PyObject *pargs;
 
 	initialize_python(param);
 
-	if (param->video)
-		param->stream = cvCaptureFromFile(param->video);
-
-	if (!param->stream) {
-		pr_error("No video stream found\n");
-		return -1;
-	}
-
-
 	while (1) {
-		query = PyObject_CallObject(param->receive_query_from_server, NULL);
+		query = receive_query_from_server(param);
 		if (!query) {
-			pr_info("could not receive any query\n");
-			break;
+			pr_error("Received wrong query\n");
+			return (void *)-1;
 		}
-
 		switch (get_query(PyString_AS_STRING(query))) {
 			case 1:
 				param->reply.type = 1;
 				param->reply.x = get_image_width(param->stream);
 				param->reply.y = get_image_height(param->stream);
-				pargs = Py_BuildValue("(s#)", (char*)&param->reply,
-						sizeof(param->reply));
-				PyObject_CallObject(param->send_reply_to_server, pargs);
+				send_reply_to_server(param);
 				break;
 			case 2:
-				start_capture(param);
+				sem_post(&param->start);
 				break;
+			case 3:
+				sem_wait(&param->start);
+				break;
+			case 4:
+				return NULL;
 			default:
 				pr_error("Could not understand query\n");
 				break;
 		}
 	}
 
-	PyObject_CallObject(param->disconnect_from_server, NULL);
 	cvReleaseCapture(&param->stream);
 	release_python(param);
+	return NULL;
 }
 
 int main(int argc, char **argv)
 {
 	int next_option;
-	const char* const short_options = "hv:a:p:";
+	const char* const short_options = "hv:a:n:p:x:";
 	const struct option long_options[] = {
 		{ "help", 	0, 	NULL, 	'h' },
 		{ "video", 	1, 	NULL, 	'v' },
 		{ "area", 	1, 	NULL, 	'a' },
-		{ "python", 	1, 	NULL, 	'p' },
+		{ "hostname", 	1, 	NULL, 	'n' },
+		{ "port", 	1, 	NULL, 	'p' },
+		{ "xml", 	1, 	NULL, 	'x' },
 		{ NULL, 	0, 	NULL, 	0}
 	};
 	struct configuration_params cfg_param;
+	pthread_t thread1, thread2;
+	struct sockaddr_in serv_addr;
+	struct hostent *server;
 
-		/* get all user input in local variables */
+	/* get all user input in local variables */
 	do {
 		next_option = getopt_long (argc, argv, short_options,
 				long_options, NULL);
@@ -455,13 +469,49 @@ int main(int argc, char **argv)
 			case 'a':
 				cfg_param.area = atoi(optarg);
 				break;
+			case 'n':
+				strcpy(cfg_param.host, optarg);
+				break;
 			case 'p':
-				strcpy(cfg_param.python, optarg);
+				cfg_param.port = atoi(optarg);
+				break;
+			case 'x':
+				strcpy(cfg_param.xml, optarg);
 				break;
 			default:
 				abort ();
 		}
 	} while (next_option != -1);
 
-	execute(&cfg_param);
+	cfg_param.sockfd = socket(AF_INET, SOCK_STREAM, 0);
+	if (cfg_param.sockfd < 0) {
+		pr_error("ERROR opening socket\n");
+		return -1;
+	}
+	server = gethostbyname(cfg_param.host);
+	if (server == NULL) {
+		pr_error("ERROR, no such host\n");
+		return -1;
+	}
+	bzero((char *) &serv_addr, sizeof(serv_addr));
+	serv_addr.sin_family = AF_INET;
+	bcopy((char *)server->h_addr, (char *)&serv_addr.sin_addr.s_addr, server->h_length);
+	serv_addr.sin_port = htons(cfg_param.port);
+	if (connect(cfg_param.sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
+		pr_error("Error in connection\n");
+		return -1;
+	}
+	if (cfg_param.video)
+		cfg_param.stream = cvCaptureFromFile(cfg_param.video);
+
+	if (!cfg_param.stream) {
+		pr_error("No video stream found\n");
+		return -1;
+	}
+
+	sem_init (&cfg_param.start, 0, 0);
+	pthread_create(&thread2, NULL, &execute, (void*)&cfg_param);
+	pthread_create(&thread1, NULL, &image_acquisition, (void*)&cfg_param);
+	pthread_join(thread1, NULL);
+	pthread_join(thread2, NULL);
 }

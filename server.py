@@ -1,7 +1,6 @@
 #!/usr/bin/python           # This is server.py file
 
-import socket               # Import socket module
-import markup
+import socket, markup, time, thread, threading
 from xml.dom.minidom import parseString
 from Tkinter import *
 from PIL import Image, ImageTk, ImageDraw
@@ -9,6 +8,7 @@ from PIL import Image, ImageTk, ImageDraw
 server = socket.socket()         # Create a socket object
 host = socket.gethostname() # Get local machine name
 port = 12345                # Reserve a port for your service.
+cam_started = 0
 
 def connect_client ():
 	global client;
@@ -29,14 +29,6 @@ def send_query_to_client (query):
 	xml.query.close( )
 	data = str(xml)
 	client.send(data)
-
-def receive_reply_from_client1 ():
-	while True:
-   		xml = client.recv(1024)
-		if not xml: break
-		f = open('/var/www/imagetransfer/test.xml', 'w')
-		f.write(xml)
-		f.close()
 
 def receive_reply_from_client ():
 	data = client.recv(1024)
@@ -66,9 +58,9 @@ def receive_centroid ():
 	return (int(t), int(cx), int(cy))
 
 
-def start_capture ():
-	send_query_to_client("start_capture");
+def start_cam_task ():
 	while 1:
+		semaphore.acquire() 
 		[t, x, y] = receive_centroid ();
 		if t == 2:
 			canvas.delete(ALL);
@@ -76,8 +68,27 @@ def start_capture ():
 		canvas.create_oval(x -5 , y - 5, x + 5, y + 5, outline="red", 
 				            fill="green", width=2)
 		canvas.update_idletasks()
+		semaphore.release() 
 	return
-	
+
+
+def start_cam ():
+	global semaphore
+	global cam_started
+	if (cam_started == 0) :
+		semaphore = threading.BoundedSemaphore(2)
+		thread.start_new_thread(start_cam_task, ())
+		cam_started = 1
+	else :
+		semaphore.release() 
+	send_query_to_client("start_cam");
+		
+def stop_cam ():
+	global semaphore
+	send_query_to_client("stop_cam");
+	semaphore.acquire() 
+	return
+
 def disconnect ():
 	send_query_to_client("disconnect");
 	disconnect_client ()
@@ -99,7 +110,10 @@ canvas = Canvas(main, width=h, height=h)
 #canvas.create_rectangle(0 , 0, w, h, outline="yellow", fill="black", width=5)
 canvas.pack()
 
-capture = Button(frame, text="Start Capture",command=start_capture, fg="red")
+capture = Button(frame, text="Start Cam",command=start_cam, fg="red")
+capture.pack(side=LEFT)
+
+capture = Button(frame, text="Stop Cam",command=stop_cam, fg="red")
 capture.pack(side=LEFT)
 
 disconnect = Button(frame, text="Disconnect",command=disconnect, fg="red")
