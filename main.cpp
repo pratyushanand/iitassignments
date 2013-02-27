@@ -19,24 +19,36 @@
 #define DEBUG_CLEANED_IMAGE	0
 #define DEBUG_SEPARATED_IMAGE	0
 #define DEBUG_OUTPUT_IMAGE	0
+//#define pr_debug(args...) fprintf(stdout, ##args)
 #define pr_debug(args...)
 #define pr_info(args...) fprintf(stdout, ##args)
 #define pr_error(args...) fprintf(stdout, ##args)
 
-#define QUERY_XML_SIZE 256
-struct python_query {
-	char data[QUERY_XML_SIZE];
+#define cmd_XML_SIZE 1024
+#define REPLY_SIZE   4096
+
+typedef unsigned char u8;
+typedef unsigned short u16;
+
+#define CMD_TYPE_RESOLUTION 1
+#define CMD_TYPE_START_CAM 2
+#define CMD_TYPE_STOP_CAM 3
+#define CMD_TYPE_DISCONNECT 4
+#define CMD_TYPE_IMAGE_MODE_1 5
+#define CMD_TYPE_IMAGE_MODE_2 6
+#define CMD_TYPE_ACK 7
+
+struct python_cmd {
+	u8 data[cmd_XML_SIZE];
 };
 
+#define REPLY_TYPE_CAM_RESOLUTION 1
+#define REPLY_TYPE_CONTOUR 2
+#define REPLY_TYPE_LAST_CONTOUR	3
+
 struct python_reply {
-	/*
-	 * 1 - resolution
-	 * 2 - centroid of first moving object
-	 * 3 - centroild of other moving object
-	 */
-	int type;
-	int x;
-	int y;
+	/* Max pay load size is expected 2 KB */
+	u8 data[REPLY_SIZE];
 };
 
 struct configuration_params {
@@ -48,13 +60,16 @@ struct configuration_params {
 	int sockfd;
 	PyObject *py_name_obj;
 	PyObject *py_mod_obj;
-	PyObject *extract_query_from_xml;
+	PyObject *extract_cmd_from_xml;
 	PyObject *encode_reply_to_xml;
-	struct python_query query;
+	struct python_cmd cmd;
 	struct python_reply reply;
 	CvCapture *stream;
-	sem_t start;
+	sem_t start_cam;
+	sem_t data_ack;
 };
+
+static int image_mode = CMD_TYPE_IMAGE_MODE_1;
 
 /* Prints help for this program */
 static void help_main (char *prog_name)
@@ -136,14 +151,14 @@ static int initialize_python(struct configuration_params *param)
 	dict_obj = PyModule_GetDict(param->py_mod_obj);
 
 
-	/* extract_query_from_xml also a borrowed reference */
-	param->extract_query_from_xml = PyDict_GetItemString(dict_obj, "extract_query_from_xml");
-	if (!param->extract_query_from_xml) {
-		pr_error("Could not load extract_query_from_xml function\n");
+	/* extract_cmd_from_xml also a borrowed reference */
+	param->extract_cmd_from_xml = PyDict_GetItemString(dict_obj, "extract_cmd_from_xml");
+	if (!param->extract_cmd_from_xml) {
+		pr_error("Could not load extract_cmd_from_xml function\n");
 		release_python(param);
 		return -1;
-	} else if (!PyCallable_Check(param->extract_query_from_xml)) {
-		pr_error("extract_query_from_xml function is not callable\n");
+	} else if (!PyCallable_Check(param->extract_cmd_from_xml)) {
+		pr_error("extract_cmd_from_xml function is not callable\n");
 		release_python(param);
 		return -1;
 	}
@@ -163,42 +178,58 @@ static int initialize_python(struct configuration_params *param)
 	return 0;
 }
 
-static unsigned int get_query(char *query) 
+static unsigned int get_cmd(char *cmd) 
 {
-	pr_debug("Received Query %s\n", query);
-	if (!strcmp(query, "resolution"))
-		return 1;
-	else if (!strcmp(query, "start_cam"))
-		return 2;
-	else if (!strcmp(query, "stop_cam"))
-		return 3;
-	else if (!strcmp(query, "disconnect"))
-		return 4;
+	pr_debug("Received cmd %s\n", cmd);
+	if (!strcmp(cmd, "resolution"))
+		return CMD_TYPE_RESOLUTION;
+	else if (!strcmp(cmd, "start_cam"))
+		return CMD_TYPE_START_CAM;
+	else if (!strcmp(cmd, "stop_cam"))
+		return CMD_TYPE_STOP_CAM;
+	else if (!strcmp(cmd, "disconnect"))
+		return CMD_TYPE_DISCONNECT;
+	else if (!strcmp(cmd, "image_mode_1"))
+		return CMD_TYPE_IMAGE_MODE_1;
+	else if (!strcmp(cmd, "image_mode_2"))
+		return CMD_TYPE_IMAGE_MODE_2;
+	else if (!strcmp(cmd, "ack"))
+		return CMD_TYPE_ACK;
 	else
 		return 0;
 }
 
-static PyObject* receive_query_from_server(struct configuration_params *param)
+static PyObject* receive_cmd_from_server(struct configuration_params *param)
 {
-	char buffer[QUERY_XML_SIZE];
-	PyObject *pquery;
+	PyObject *pcmd;
+	int len;
+	int i;
 
-	memset(&param->query.data[0], 0, strlen(&param->query.data[0]));
-	if (read(param->sockfd, &param->query.data[0], QUERY_XML_SIZE) < 0)
+	memset(&param->cmd.data[0], '\0', cmd_XML_SIZE);
+	pr_debug("waiting for comamnd reception\n");
+	if (len = recv(param->sockfd, param->cmd.data, cmd_XML_SIZE, 0) < 0)
 		return NULL;
-	pquery = Py_BuildValue("(s#)", (char*)&param->query.data[0], strlen(&param->query.data[0]));
-	return PyObject_CallObject(param->extract_query_from_xml, pquery);
+	pcmd = Py_BuildValue("(s#)", (char*)&param->cmd.data, strlen((char *)param->cmd.data));
+	return PyObject_CallObject(param->extract_cmd_from_xml, pcmd);
 }
 
-static int send_reply_to_server(struct configuration_params *param)
+static int send_reply_to_server(struct configuration_params *param, int reply_size)
 {
-	char buffer[QUERY_XML_SIZE];
+	char buffer[cmd_XML_SIZE];
 	PyObject *preply, *pxml;
 	char *xml;
 
-	preply = Py_BuildValue("(s#)", (char*)&param->reply, sizeof(param->reply));
+	preply = Py_BuildValue("(s#)", (char*)&param->reply, reply_size);
+	if (!preply) {
+		pr_error("Error with py string encoding\n");
+		return -1;
+	}
 	pxml = PyObject_CallObject(param->encode_reply_to_xml, preply);
 	xml = PyString_AS_STRING(pxml);
+	if (!pxml) {
+		pr_error("Error with reply encoding\n");
+		return -1;
+	}
 	if (write(param->sockfd, xml, strlen(xml)) < 0)
 		return -1;
 	return 0;
@@ -211,12 +242,11 @@ static void* image_acquisition(void *data)
 	IplImage *gray, *temp1 = NULL, *temp2 = NULL, *map, *eroded, *dilated;
 	CvSeq *contours = NULL;
 	CvSeq *c = NULL;
-	int width, height, stride, cx, cy, i;
+	int width, height, stride, cx, cy, i, data_len, valid_contour;
 	float area;
 	vibeModel_t *model;
 	PyObject *pargs;
 	void *err = NULL;
-	bool first;
 
 	width = get_image_width(param->stream);
 	height = get_image_height(param->stream);
@@ -287,7 +317,9 @@ static void* image_acquisition(void *data)
 	/* Processes all the following frames of your stream:
 	   results are stored in "segmentation_map" */
 	while(!acquire_grayscale_image(param->stream, gray)){
-		sem_wait(&param->start);
+		pr_debug("waiting for start_cam\n");
+		sem_wait(&param->start_cam);
+		pr_debug("Got start_cam\n");
 #if DEBUG_GRAY_IMAGE
 		cvShowImage("GRAY", gray);
 #endif
@@ -318,16 +350,21 @@ static void* image_acquisition(void *data)
 				sizeof(CvContour), CV_RETR_EXTERNAL,
 				CV_CHAIN_APPROX_NONE, cvPoint(0, 0));
 		cvZero(temp2);
-		first = true;
+		valid_contour = 0;
+		for (c = contours; c != NULL; c = c->h_next) {
+			if (cvContourArea(c, CV_WHOLE_SEQ, 0) > param->area)
+				valid_contour++;
+		}
+
 		for (c = contours; c != NULL; c = c->h_next) {
 			area = cvContourArea(c, CV_WHOLE_SEQ, 0);
-
 			/*
 			 * choose only if moving object area is greater
 			 * than MIN_AREA square pixel
 			 */
 			if (area > param->area) {
 
+				valid_contour--;
 				cvWaitKey(50);
 #if DEBUG_SEPARATED_IMAGE
 				cvZero(temp1);
@@ -338,33 +375,53 @@ static void* image_acquisition(void *data)
 						cvPoint(0, 0));
 				cvShowImage("SEPRATED_CONTOUR", temp1);
 #endif
-				/* calculate centroid */
-				cx = 0;
-				cy = 0;
-				for (i = 0; i < c->total; i++) {
-					CvPoint* p = CV_GET_SEQ_ELEM(CvPoint, c,
-							i);
-					cx += p->x;
-					cy += p->y;
+				if (!valid_contour)
+					param->reply.data[0] = REPLY_TYPE_LAST_CONTOUR;
+				else 
+					param->reply.data[0] =REPLY_TYPE_CONTOUR;
+				if (image_mode == CMD_TYPE_IMAGE_MODE_1) {
+					/* calculate centroid */
+					cx = 0;
+					cy = 0;
+					for (i = 0; i < c->total; i++) {
+						CvPoint* p = CV_GET_SEQ_ELEM(CvPoint, c,
+								i);
+						cx += p->x;
+						cy += p->y;
+					}
+					cx /= c->total;
+					cy /= c->total;
+					param->reply.data[1] = cx;
+					param->reply.data[2] = cx >> 8;
+					param->reply.data[3] = cy;
+					param->reply.data[4] = cy >> 8;
+					param->reply.data[5] = '\0';
+					data_len = 5;
+				} else if (image_mode == CMD_TYPE_IMAGE_MODE_2) {
+					for (i = 0; i < c->total; i++) {
+						CvPoint* p = CV_GET_SEQ_ELEM(CvPoint, c,
+								i);
+						param->reply.data[1 + 4 * i] = p->x;
+						param->reply.data[2 + 4 * i] = p->x >> 8;
+						param->reply.data[3 + 4 * i] = p->y;
+						param->reply.data[4 + 4 * i] = p->y >> 8;
+					}
+					data_len = 5 + 4 * i;
+					param->reply.data[data_len] = '\0';
 				}
-				cx /= c->total;
-				cy /= c->total;
-				if (first) {
-					param->reply.type =2;
-					first = false;
-				} else {
-					param->reply.type =3;
-				}
-				param->reply.x =cx;
-				param->reply.y =cy;
-				send_reply_to_server(param);
-			}
+				
+				pr_debug("waiting for data_ack\n");
+				sem_wait(&param->data_ack);
+				pr_debug("Got data_ack\n");
+				send_reply_to_server(param, data_len);
+			} 
 		}
 #if DEBUG_OUTPUT_IMAGE
 		cvShowImage("OUTPUT", temp2);
 #endif
 		gray = temp2;
-		sem_post(&param->start);
+		sem_post(&param->start_cam);
+		pr_debug("Posted start_cam\n");
 	}
 
 exit:
@@ -397,34 +454,53 @@ exit:
 static void* execute(void *data)
 {
 	struct configuration_params *param = (struct configuration_params *)data;
-	PyObject *query;
+	PyObject *cmd;
 	PyObject *pargs;
+	u16 width, height;
 
 	initialize_python(param);
 
 	while (1) {
-		query = receive_query_from_server(param);
-		if (!query) {
-			pr_error("Received wrong query\n");
+		cmd = receive_cmd_from_server(param);
+		if (!cmd) {
+			pr_error("Received wrong cmd\n");
 			return (void *)-1;
 		}
-		switch (get_query(PyString_AS_STRING(query))) {
-			case 1:
-				param->reply.type = 1;
-				param->reply.x = get_image_width(param->stream);
-				param->reply.y = get_image_height(param->stream);
-				send_reply_to_server(param);
+		switch (get_cmd(PyString_AS_STRING(cmd))) {
+			case CMD_TYPE_RESOLUTION:
+				param->reply.data[0] = REPLY_TYPE_CAM_RESOLUTION;
+				width = get_image_width(param->stream);
+				height = get_image_height(param->stream);
+				param->reply.data[1] = width;
+				param->reply.data[2] = width >> 8;
+				param->reply.data[3] = height;
+				param->reply.data[4] = height >> 8;
+				param->reply.data[5] = '\0';
+				send_reply_to_server(param, 5);
 				break;
-			case 2:
-				sem_post(&param->start);
+			case CMD_TYPE_START_CAM:
+				sem_post(&param->start_cam);
+				pr_debug("Posted start_cam\n");
 				break;
-			case 3:
-				sem_wait(&param->start);
+			case CMD_TYPE_STOP_CAM:
+				pr_debug("waiting for start_cam\n");
+				sem_wait(&param->start_cam);
+				pr_debug("Got start_cam\n");
 				break;
-			case 4:
+			case CMD_TYPE_DISCONNECT:
 				return NULL;
+			case CMD_TYPE_IMAGE_MODE_1:
+				image_mode = CMD_TYPE_IMAGE_MODE_1;
+				break;
+			case CMD_TYPE_IMAGE_MODE_2:
+				image_mode = CMD_TYPE_IMAGE_MODE_2;
+				break;
+			case CMD_TYPE_ACK:
+				sem_post(&param->data_ack);
+				pr_debug("Posted data_ack\n");
+				break;
 			default:
-				pr_error("Could not understand query\n");
+				pr_error("Could not understand cmd\n");
 				break;
 		}
 	}
@@ -509,7 +585,8 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	sem_init (&cfg_param.start, 0, 0);
+	sem_init (&cfg_param.start_cam, 0, 0);
+	sem_init (&cfg_param.data_ack, 0, 1);
 	pthread_create(&thread2, NULL, &execute, (void*)&cfg_param);
 	pthread_create(&thread1, NULL, &image_acquisition, (void*)&cfg_param);
 	pthread_join(thread1, NULL);
