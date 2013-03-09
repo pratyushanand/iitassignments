@@ -1,0 +1,12 @@
+This directory contains the diffs to gnu time-1.3 that I used for
+linux.  Linux (at least with newgcc) doesn't have wait3 so I made
+one that performs well enought for time (I hope).
+NOTE it isn't really wait3, for example it completly ignors the
+options field!!!
+
+To make get the time-1.3 release copy linux.c into the directory and
+patch < diffs.
+
+Jon Tombs  <jon@robots.ox.ac.uk>
+
+Look on ftp.robots.ox.ac.uk for updates.

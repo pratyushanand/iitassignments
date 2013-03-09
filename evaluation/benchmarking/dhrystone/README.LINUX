@@ -1,0 +1,63 @@
+This came through comp.unix.sources a while ago. To run you will need to
+install the program "time" in /usr/bin. A compiled gnu time-1.3 is in
+the subdirectory time.  Just copy time/time /usr/bin.
+
+You will need a working sort (the one in text.1.1 is broken),
+check it by typing:
+
+echo hi | sort
+
+If this doesn't work pick up the latest one, I got mine from ftp.mcc.ac.uk
+in textutils.1.2.tar.Z (now included as ./sort.Z uncompress it and put it
+in /usr/bin).
+
+You also need a awk (gawk) with working trig functions. try:
+
+echo | awk '{print exp(0.5)}'
+
+if it returns 1, uncompress awk.Z and mv it to /usr/bin (this was compiled
+with gcc1.40 and libsoft.a so it should work without a 387, I have a 486
+so I couldn't test), it should return 1.64872.
+
+You should have:
+	cat gcc chmod comm cp date dc df echo ed expr
+	ls make mkdir rm sed touch tty umask who
+
+I have bash as /bin/sh and /usr/bin/sh if ./Run falls over maybe you
+are using ash - install bash or edit the scripts to use it.
+
+I had all these (rename or link gawk -> awk) so if you don't look for
+them on a nearby site :-).
+
+With all the binaries in place, type ./Run and sit back, have a coffee,
+take the dog for a walk, write a thesis... Its not quick!  The filesystem
+test bring my machine too an almost halt so be warned and don't be
+too quick to ^C  
+
+Results will appear in results/times and results/log as the tests run.
+
+All the binaries in this distribution were compiled with gcc1.40 gcc2.x
+might well be better. If you have the time try again after saving 
+results/report and see if gcc2 is any better! (my kernel is also
+gcc1.40 compiled).
+
+I would very much like to see reports from other systems.  The report
+directory contains a few comparative results. isabel.report is my machine,
+the two sun4.??.report were both taken with the machines under load so they
+might be a bit lower than expected but they put my machine under a better
+light :-).  
+
+
+I hope these reports might help others in the choise of machines/disk and
+track kernel performance etc.  Wouldn't you like to know that brand X
+386sx25 is much faster than brand Y, or that brand Z disks are so much
+faster than X (These tests might be far from perfect - but they are fairly
+comprehensive).
+
+If you have the time please write a machine.sys file for your setup, and
+either email it to me, or it place in /pub/incoming on ftp.robots.ox.ac.uk
+(192.76.8.31) with a copy of the file report/report from these bench marks.
+Please use a unique name (`hostname`.report ?).  I'll summarise in
+comp.os.linux if/when I have enought reports.
+
+Jon				<jon@robots.ox.ac.uk>		5/2/92

@@ -1,0 +1,10 @@
+Type:	486c @ 33MHz
+Ram:	8M @ 70ns No swap.
+Cache:	256K @ 25ns
+Disk:	1*cp3204 IDE (16ms average seek ~500K/s throughput with Norton si)
+Make:	clone OPTi 486WB chip set 
+Bios:	AMI
+Load:	Editing, some ps use.
+From:	Micro Surgeons, Deeside UK. "eagle"
+Kernel:	0.95c compiled with gcc1.40
+pgms:	All gcc1.40 compiled

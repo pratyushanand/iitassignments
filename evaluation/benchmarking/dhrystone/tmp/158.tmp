@@ -1,0 +1,4 @@
+TEST|Dhrystone 2 without register variables
+FLAVOR|BSD
+198528 loops
+        10.28 real        9.89 user        0.1 sys

@@ -1,0 +1,7 @@
+Type:	Sparc2
+Ram:	32M
+Disk:	1*210M SYNC-SCSI, NFS file IO
+Load:	One background simulation FPU intense, X11R5, numerous compilations
+		news/mail reading etc.
+Kernel:	Sunos 4.1.1
+pgms:	compiled sun cc -O2

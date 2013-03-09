@@ -1,0 +1,8 @@
+rm -rf build out
+mkdir build out
+cd build
+cmake ../src
+make
+cd ..
+build/bin/bgsub_learn ../../../../../test_video/OneStopNoEnter1cor.mpeg model.out -sfn 4
+build/bin/bgsub_detect ../../../../../test_video/OneStopNoEnter1cor.mpeg model.out -od out -ofpi

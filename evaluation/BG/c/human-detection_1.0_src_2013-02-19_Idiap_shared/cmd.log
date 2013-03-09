@@ -1,0 +1,53 @@
+# Date: Sat Mar  9 19:39:41 2013
+# Program: build/bin/bgsub_detect
+
+# Mode: default
+
+# Arguments:
+    images list or video [../../../../../test_video/OneStopNoEnter1cor.mpeg]
+    background model     [model.out]
+
+# Options:
+    -sf                  [0]
+    -ef                  [1000000]
+    -sfn                 [0]
+    -xs                  [1]
+    -ys                  [1]
+    -ngaus               [0]
+    -nolearn             
+    -mlr                 [0.02]
+    -wlr                 [0.02]
+    -initw               [0.001]
+    -wuc                 [5]
+    -fdur                [0.04]
+    -maxm                [5]
+    -tw                  [0.5]
+    -bmp                 [0.6]
+    -bgut                [0.2]
+    -sr                  [0.7]
+    -hr                  [1.2]
+    -rc                  [15]
+    -rl                  [15]
+    -mna                 [0.174533]
+    -phs                 [5]
+    -pgs                 [3]
+    -bfss                [3]
+    -bfsr                [0.1]
+    -bgt                 [0.2]
+    -cam                 []
+    -ucam                []
+    -owm                 []
+ *  -od                  [out]
+    -oog                 
+    -ofi                 
+    -ofmi                
+ *  -ofpi                
+    -obi                 
+    -omerged             
+    -mask                []
+    -nobilateral         
+    -changedetection     
+    -os                  
+
+<#>
+
