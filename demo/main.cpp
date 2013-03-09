@@ -17,8 +17,7 @@
 #define DEBUG_GRAY_IMAGE	1
 #define DEBUG_FG_IMAGE		0
 #define DEBUG_CLEANED_IMAGE	0
-#define DEBUG_SEPARATED_IMAGE	0
-#define DEBUG_OUTPUT_IMAGE	0
+#define DEBUG_SEPARATED_IMAGE	1
 //#define pr_debug(args...) fprintf(stdout, ##args)
 #define pr_debug(args...)
 #define pr_info(args...) fprintf(stdout, ##args)
@@ -235,11 +234,130 @@ static int send_reply_to_server(struct configuration_params *param, int reply_si
 	return 0;
 }
 
+static int skeltonize(IplImage *img)
+{
+	IplImage *skel, *eroded, *temp;
+	IplConvKernel *element;
+	int ret = 0;
+	bool done;
+	CvMemStorage* storage;
+	CvSeq *line_seq;
+
+	skel = cvCreateImage(cvSize(img->width, img->height), IPL_DEPTH_8U, 1);
+	if (!skel) {
+		pr_error("Could not allocate memory for skel image\n");
+		return -1;
+	}
+	cvZero(skel);
+
+	eroded = cvCreateImage(cvSize(img->width, img->height), IPL_DEPTH_8U, 1);
+	if (!eroded) {
+		pr_error("Could not allocate memory for eroded image\n");
+		ret = -1;
+		goto skel_free;
+	}
+	temp = cvCreateImage(cvSize(img->width, img->height), IPL_DEPTH_8U, 1);
+	if (!skel) {
+		pr_error("Could not allocate memory for temp image\n");
+		ret = -1;
+		goto skel_free;
+	}
+
+	element = cvCreateStructuringElementEx(3, 3, 1, 1, CV_SHAPE_CROSS, NULL);
+	if (!element) {
+		pr_error("Could not create structuring element\n");
+		ret = -1;
+		goto skel_free;
+	}
+
+	storage = cvCreateMemStorage(0);
+
+	if (!storage) {
+		pr_error("Could not create storage area\n");
+		ret = -1;
+		goto skel_free;
+	}
+
+	cvThreshold(img, img, 127, 255, CV_THRESH_BINARY);
+
+	do
+	{
+		cvErode(img, eroded, element, 1);
+		cvDilate(eroded, temp, element, 1);
+		cvSub(img, temp, temp, NULL);
+		cvOr(skel, temp, skel, NULL);
+		cvCopy(eroded, img);
+
+		done = (cvCountNonZero(img) == 0);
+	} while (!done);
+
+	cvSmooth(skel, skel, CV_GAUSSIAN, 5, 5 );
+
+//	cvCopy (skel, img);
+	cvZero(img);
+#if 0
+	line_seq = cvHoughLines2( skel, storage, CV_HOUGH_STANDARD, 1, CV_PI/180, 500, 0, 0 );
+
+		printf("\n");
+	for(int i = 0; i < line_seq->total; i++ ) {
+		float* line = (float*) cvGetSeqElem( line_seq , i );
+	        float rho = line[0];
+		float theta = line[1];
+		CvPoint pt1, pt2;
+		double a = cos(theta), b = sin(theta);
+		double x0 = a*rho, y0 = b*rho;
+
+//		printf("%f %f \n", rho, theta);
+		pt1.x = cvRound(x0 + 1000*(-b));
+		pt1.y = cvRound(y0 + 1000*(a));
+		pt2.x = cvRound(x0 - 1000*(-b));
+		pt2.y = cvRound(y0 - 1000*(a));
+
+		cvLine(img, pt1, pt2, CV_RGB(255,255,255), 1, 8, 0 );
+	}
+#endif
+	line_seq = cvHoughLines2(skel, storage, CV_HOUGH_PROBABILISTIC, 1, CV_PI/180, 100, 20, 1);
+	for(int i = 0; i < line_seq->total; i++ ) {
+		CvPoint* line = (CvPoint*)cvGetSeqElem(line_seq,i);
+		cvLine(img, line[0], line[1], CV_RGB(255, 255, 255), 1, 8, 0 );
+	}
+
+	for(int i = 0; i < line_seq->total; i++ ) {
+		float* line = (float*) cvGetSeqElem( line_seq , i );
+	        float rho = line[0];
+		float theta = line[1];
+		CvPoint pt1, pt2;
+		double a = cos(theta), b = sin(theta);
+		double x0 = a*rho, y0 = b*rho;
+
+//		printf("%f %f \n", rho, theta);
+		pt1.x = cvRound(x0 + 1000*(-b));
+		pt1.y = cvRound(y0 + 1000*(a));
+		pt2.x = cvRound(x0 - 1000*(-b));
+		pt2.y = cvRound(y0 - 1000*(a));
+
+		cvLine(img, pt1, pt2, CV_RGB(255,255,255), 1, 8, 0 );
+	}
+
+skel_free:
+	if (storage)
+		cvReleaseMemStorage(&storage);
+	if (element)
+		cvReleaseStructuringElement(&element);
+	if (eroded)
+		cvReleaseImage(&eroded);
+	if (temp)
+		cvReleaseImage(&temp);
+	if (skel)
+		cvReleaseImage(&skel);
+	return ret;
+}
+
 static void* image_acquisition(void *data)
 {
 	struct configuration_params *param = (struct configuration_params *)data;
 	CvMemStorage *storage;
-	IplImage *gray, *temp1 = NULL, *temp2 = NULL, *map, *eroded, *dilated;
+	IplImage *gray, *temp, *map, *eroded, *dilated;
 	CvSeq *contours = NULL;
 	CvSeq *c = NULL;
 	int width, height, stride, cx, cy, i, data_len, valid_contour;
@@ -267,10 +385,6 @@ static void* image_acquisition(void *data)
 	cvNamedWindow("SEPRATED_CONTOUR", 1);
 	cvMoveWindow("SEPRATED_CONTOUR", 3 * width, 0);
 #endif
-#if DEBUG_OUTPUT_IMAGE
-	cvNamedWindow("OUTPUT", 1);
-	cvMoveWindow("OUTPUT", 4 * width, 0);
-#endif
 
 	storage = cvCreateMemStorage(0);
 	if (!storage) {
@@ -280,18 +394,42 @@ static void* image_acquisition(void *data)
 	}
 
 	/* Allocates memory to store the input images and the segmentation maps */
-	temp1 = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
-	if (!temp1) {
-		pr_error("Could not allocate memory for temp1 image\n");
+	gray = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
+	if (!gray) {
+		pr_error("Could not allocate memory for gray image\n");
 		err = (void *)-1;
 		goto exit;
 	}
-	temp2 = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
-	if (!temp2) {
-		pr_error("Could not allocate memory for temp2 image\n");
+
+	map = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
+	if (!map) {
+		pr_error("Could not allocate memory for map image\n");
 		err = (void *)-1;
 		goto exit;
 	}
+
+	eroded = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
+	if (!eroded) {
+		pr_error("Could not allocate memory for eroded image\n");
+		err = (void *)-1;
+		goto exit;
+	}
+
+	dilated = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
+	if (!dilated) {
+		pr_error("Could not allocate memory for dilated image\n");
+		err = (void *)-1;
+		goto exit;
+	}
+
+	temp = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
+	if (!temp) {
+		pr_error("Could not allocate memory for temp image\n");
+		err = (void *)-1;
+		goto exit;
+	}
+
+
 	/* Get a model data structure */
 	/*
 	 * Library for background detection from following paper.
@@ -307,7 +445,6 @@ static void* image_acquisition(void *data)
 	}
 
 	/* Acquires your first image */
-	gray = temp2;
 	acquire_grayscale_image(param->stream, gray);
 
 	/* Allocates the model and initialize it with the first image */
@@ -323,21 +460,15 @@ static void* image_acquisition(void *data)
 #if DEBUG_GRAY_IMAGE
 		cvShowImage("GRAY", gray);
 #endif
-		/* Get FG image in temp1 */
-		map = temp1;
+		/* Get FG image in map */
 		libvibeModelUpdate_8u_C1R(model, (const uint8_t*)gray->imageData,
 				(uint8_t*)map->imageData);
 #if DEBUG_FG_IMAGE
 		cvShowImage("FG", map);
 #endif
-		/*
-		 * Clean all small unnecessary FG objects. Get cleaned
-		 * one in temp2
-		 */
-		eroded = temp2;
+		/* Clean all small unnecessary FG objects. */
 		cvErode(map, eroded, NULL, 2);
 		/* Dilate it to get in proper shape */
-		dilated = temp1;
 		cvDilate(eroded, dilated, NULL, 1);
 #if DEBUG_CLEANED_IMAGE
 		cvShowImage("CLEANED", dilated);
@@ -349,7 +480,6 @@ static void* image_acquisition(void *data)
 		cvFindContours(dilated, storage, &contours,
 				sizeof(CvContour), CV_RETR_EXTERNAL,
 				CV_CHAIN_APPROX_NONE, cvPoint(0, 0));
-		cvZero(temp2);
 		valid_contour = 0;
 		for (c = contours; c != NULL; c = c->h_next) {
 			if (cvContourArea(c, CV_WHOLE_SEQ, 0) > param->area)
@@ -367,13 +497,14 @@ static void* image_acquisition(void *data)
 				valid_contour--;
 				cvWaitKey(50);
 #if DEBUG_SEPARATED_IMAGE
-				cvZero(temp1);
-				cvDrawContours(temp1, c,
+				cvZero(temp);
+				cvDrawContours(temp, c,
 						cvScalar(255, 255, 255, 0),
 						cvScalar(0, 0, 0, 0),
 						-1, CV_FILLED, 8,
 						cvPoint(0, 0));
-				cvShowImage("SEPRATED_CONTOUR", temp1);
+				skeltonize(temp);
+				cvShowImage("SEPRATED_CONTOUR", temp);
 #endif
 				if (!valid_contour)
 					param->reply.data[0] = REPLY_TYPE_LAST_CONTOUR;
@@ -416,10 +547,6 @@ static void* image_acquisition(void *data)
 				send_reply_to_server(param, data_len);
 			} 
 		}
-#if DEBUG_OUTPUT_IMAGE
-		cvShowImage("OUTPUT", temp2);
-#endif
-		gray = temp2;
 		sem_post(&param->start_cam);
 		pr_debug("Posted start_cam\n");
 	}
@@ -427,10 +554,16 @@ static void* image_acquisition(void *data)
 exit:
 	if (model)
 		libvibeModelFree(model);
-	if (temp1)
-		cvReleaseImage(&temp1);
-	if (temp2)
-		cvReleaseImage(&temp2);
+	if (temp)
+		cvReleaseImage(&temp);
+	if (gray)
+		cvReleaseImage(&gray);
+	if (map)
+		cvReleaseImage(&map);
+	if (eroded)
+		cvReleaseImage(&eroded);
+	if (dilated)
+		cvReleaseImage(&dilated);
 	if (storage)
 		cvReleaseMemStorage(&storage);
 #if DEBUG_GRAY_IMAGE
@@ -444,9 +577,6 @@ exit:
 #endif
 #if DEBUG_SEPARATED_IMAGE
 	cvDestroyWindow("SEPRATED_CONTOUR");
-#endif
-#if DEBUG_OUTPUT_IMAGE
-	cvDestroyWindow("OUTPUT");
 #endif
 	return err;
 }
