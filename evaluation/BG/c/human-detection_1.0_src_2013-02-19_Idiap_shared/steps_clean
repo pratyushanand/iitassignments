@@ -1,1 +1,1 @@
-rm -rf build out
+rm -rf build out cmd.log
