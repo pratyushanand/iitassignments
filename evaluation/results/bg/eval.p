@@ -9,4 +9,4 @@ set ylabel "Time in Second"
 set term png
 set output "fg_compare.png"
 set label "Performance with the System having DMIPS = 800" at 40, 0.1
-plot "bg.csv" using 1:2 title 'IDIAP=>0.389002', "bg.csv" using 1:3 title 'vibe=>0.005024'
+plot "bg.csv" using 1:2 title 'IDIAP=>0.388779', "bg.csv" using 1:3 title 'vibe=>0.004991'
