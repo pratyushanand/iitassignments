@@ -66,6 +66,188 @@ int clean_fg(IplImage *img)
 	cvReleaseImage(&temp);
 }
 
+static int hit_or_miss(IplImage *img, IplConvKernel *element1,
+		IplConvKernel *element2)
+{
+	int ret = 0;
+	IplImage *temp1 = cvCreateImage(cvSize(img->width, img->height), IPL_DEPTH_8U, 1);
+	if (!temp1) {
+		printf("Could not allocate memory for skel image\n");
+		return -1;
+	}
+	IplImage *temp2 = cvCreateImage(cvSize(img->width, img->height), IPL_DEPTH_8U, 1);
+	if (!temp2) {
+		printf("Could not allocate memory for skel image\n");
+		ret = -1;
+		goto hmt_free;
+	}
+	cvNormalize(img, img, 0, 1, CV_MINMAX);
+	cvErode(img, temp1, element1, 1);
+	cvNot(img, img);
+	cvErode(img, temp2, element2, 1);
+	cvAnd(temp1, temp2, img, NULL);
+hmt_free:
+	if (temp1)
+		cvReleaseImage(&temp1);
+	if (temp2)
+		cvReleaseImage(&temp2);
+	return ret;
+}
+
+static int prune (IplImage *img)
+{
+	IplImage *temp, *temp1, *temp2, *temp3;
+	int ret = 0;
+	IplConvKernel *elementb[8], *elementc[8];
+	IplConvKernel *elementh;
+	int H[9] = {1, 1, 1, 1, 1, 1, 1, 1, 1};
+	int B[8][9] = {
+		{0, 0, 0,
+		1, 1, 0,
+		0, 0, 0},
+
+		{0, 1, 0,
+		0, 1, 0,
+		0, 0, 0},
+
+		{0, 0, 0,
+		0, 1, 1,
+		0, 0, 0},
+
+		{0, 0, 0,
+		0, 1, 0,
+		0, 1, 0},
+
+		{1, 0, 0,
+		0, 1, 0,
+		0, 0, 0},
+
+		{0, 0, 1,
+		0, 1, 0,
+		0, 0, 0},
+
+		{0, 0, 0,
+		0, 1, 0,
+		0, 0, 1},
+
+		{0, 0, 0,
+		0, 1, 0,
+		1, 0, 0},
+	};
+	int C[8][9] = {
+		{1, 1, 1,
+		0, 0, 1,
+		1, 1, 1},
+
+		{1, 0, 1,
+		1, 0, 1,
+		1, 1, 1},
+
+		{1, 1, 1,
+		1, 0, 0,
+		1, 1, 1},
+
+		{1, 1, 1,
+		1, 0, 1,
+		1, 0, 1},
+
+		{0, 1, 1,
+		1, 0, 1,
+		1, 1, 1},
+
+		{1, 1, 0,
+		1, 0, 1,
+		1, 1, 1},
+
+		{1, 1, 1,
+		1, 0, 1,
+		1, 1, 0},
+
+		{1, 1, 1,
+		1, 0, 1,
+		0, 1, 1},
+	};
+	temp1 = cvCreateImage(cvSize(img->width, img->height), IPL_DEPTH_8U, 1);
+	if (!temp1) {
+		printf("Could not allocate memory for skel image\n");
+		return -1;
+	}
+	temp2 = cvCreateImage(cvSize(img->width, img->height), IPL_DEPTH_8U, 1);
+	if (!temp2) {
+		printf("Could not allocate memory for skel image\n");
+		ret = -1;
+		goto prune_free;
+	}
+	temp3 = cvCreateImage(cvSize(img->width, img->height), IPL_DEPTH_8U, 1);
+	if (!temp3) {
+		printf("Could not allocate memory for skel image\n");
+		ret = -1;
+		goto prune_free;
+	}
+	temp = cvCreateImage(cvSize(img->width, img->height), IPL_DEPTH_8U, 1);
+	if (!temp) {
+		printf("Could not allocate memory for skel image\n");
+		ret = -1;
+		goto prune_free;
+	}
+	for (int i = 0; i < 8; i++) {
+		elementb[i] = cvCreateStructuringElementEx(3, 3, 1, 1, CV_SHAPE_CUSTOM, B[0]);
+		if (!elementb[0]) {
+			printf("Could not create structuring element\n");
+			ret = -1;
+			goto prune_free;
+		}
+	}
+	for (int i = 0; i < 8; i++) {
+		elementc[i] = cvCreateStructuringElementEx(3, 3, 1, 1, CV_SHAPE_CUSTOM, C[0]);
+		if (!elementc[0]) {
+			printf("Could not create structuring element\n");
+			ret = -1;
+			goto prune_free;
+		}
+	}
+
+	elementh = cvCreateStructuringElementEx(3, 3, 1, 1, CV_SHAPE_CUSTOM, H);
+	if (!elementh) {
+		printf("Could not create structuring element\n");
+		ret = -1;
+		goto prune_free;
+	}
+	cvCopy(img, temp1);
+	hit_or_miss(temp1, elementb[0], elementc[0]);
+	cvSub(img, temp1, temp1, NULL);
+	/*now we have x1 in temp1 */
+	for (int k = 1; k < 8; k++) {
+		cvCopy(temp1, temp);
+		hit_or_miss(temp, elementb[0], elementc[0]);
+		cvOr(temp2, temp, temp2, NULL);
+	}
+	/*now we have x2 in temp2 */
+	cvDilate(temp2, temp3, elementh, 1);
+	cvAnd(temp3, img, temp3);
+	/*now we have x3 in temp3 */
+	cvOr(temp1, temp3, img);
+
+prune_free:
+	if (temp1)
+		cvReleaseImage(&temp1);
+	if (temp2)
+		cvReleaseImage(&temp2);
+	if (temp3)
+		cvReleaseImage(&temp3);
+	if (temp)
+		cvReleaseImage(&temp);
+	if (elementh)
+		cvReleaseStructuringElement(&elementh);
+	for (int i = 0; i < 8; i++)
+		if (elementb[i])
+			cvReleaseStructuringElement(&elementb[i]);
+	for (int i = 0; i < 8; i++)
+		if (elementc[i])
+			cvReleaseStructuringElement(&elementc[i]);
+	return ret;
+}
+
 static int skeltonize_line(IplImage *img)
 {
 	IplImage *skel, *eroded, *temp;
@@ -76,9 +258,9 @@ static int skeltonize_line(IplImage *img)
 	CvSeq *line_seq;
 	int H[9] = {1, 1, 1, 1, 1, 1, 1, 1, 1};
 	int i, k;
-	cvNamedWindow("TEST", 1);
-	cvNamedWindow("TEST1", 1);
-	cvNamedWindow("TEST2", 1);
+//	cvNamedWindow("TEST", 1);
+//	cvNamedWindow("TEST1", 1);
+//	cvNamedWindow("TEST2", 1);
 
 	skel = cvCreateImage(cvSize(img->width, img->height), IPL_DEPTH_8U, 1);
 	if (!skel) {
@@ -121,17 +303,18 @@ static int skeltonize_line(IplImage *img)
 	do
 	{
 		cvErode(img, eroded, element, 1);
-		cvShowImage("TEST", eroded);
+//		cvShowImage("TEST", eroded);
 		cvDilate(eroded, temp, element, 1);
-		cvShowImage("TEST1", temp);
+//		cvShowImage("TEST1", temp);
 		cvSub(img, temp, temp, NULL);
 		cvOr(skel, temp, skel, NULL);
 		cvCopy(eroded, img);
 
 		done = (cvCountNonZero(img) == 0);
-		cvShowImage("TEST2", skel);
-		cvWaitKey(0);
+//		cvShowImage("TEST2", skel);
+//		cvWaitKey(0);
 	} while (!done);
+#if 0
 		for(i = 0; i < skel->height;i++) {
 			uchar *ptr = (uchar*)(skel->imageData + i * skel->widthStep);
 			for(k = 0; k < skel->width;k++) {
@@ -141,7 +324,7 @@ static int skeltonize_line(IplImage *img)
 			printf("\n");
 		}
 
-
+#endif
 #if 1
 	cvCopy (skel, img);
 #else
@@ -205,113 +388,55 @@ skel_free:
 	return ret;
 }
 
-
-int skeltonize(IplImage *img, char **argv)
-{
-	CvSeq *contours = NULL;
-	CvSeq *c = NULL;
-	CvMemStorage *storage = cvCreateMemStorage(0);
-	IplImage *temp = cvCreateImage(cvSize(img->width, img->height),
-			IPL_DEPTH_8U, 1);
-	static int count = 0;
-	int j = 0, i;
-	int area, cx, cy;
-	char name[30];
-
-	if (!temp) {
-		printf("No space for temp image creation\n");
-		return -1;
-	}
-
-	cvNamedWindow("CONTOUR", 1);
-	cvFindContours(img, storage, &contours,
-			sizeof(CvContour), CV_RETR_TREE,
-			CV_CHAIN_APPROX_SIMPLE, cvPoint(0, 0));
-	if (contours)
-		contours = cvApproxPoly(contours, sizeof(CvContour), storage, CV_POLY_APPROX_DP, 3, 1 );
-
-	for (c = contours; c != NULL; c = c->h_next) {
-		area = cvContourArea(c, CV_WHOLE_SEQ, 0);
-		/*
-		 * choose only if moving object area is greater
-		 * than MIN_AREA square pixel
-		 */
-		if (area > atoi(argv[2])) {
-			cvZero(temp);
-			cvDrawContours(temp, c,
-					cvScalar(255, 255, 255, 0),
-					cvScalar(0, 0, 0, 0),
-					-1, CV_FILLED, 8,
-					cvPoint(0, 0));
-			cvShowImage("CONTOUR", temp);
-			skeltonize_line(temp);
 #if 0
-			/* calculate centroid */
-			cx = 0;
-			cy = 0;
-			for (i = 0; i < c->total; i++) {
-				CvPoint* p = CV_GET_SEQ_ELEM(CvPoint, c,
-						i);
-				cx += p->x;
-				cy += p->y;
-			}
-			cx /= c->total;
-			cy /= c->total;
-			printf("%d\n", c->total);
-#endif
-//			CvRect rect=cvBoundingRect (c, 0);
-//			cvEllipseBox(temp, rect, cvScalar(255, 0, 0, 0), 2, 8, 0);
-//			cvRectangle(temp, cvPoint(rect.x, rect.y),
-//					cvPoint(rect.x + rect.width, rect.y + rect.height), cvScalar(255,0,0,0));
-			sprintf(name, "out/out%d_%d.jpg", count, j);
-			cvSaveImage(name, temp, 0);
-		//	cvWaitKey(0);
-		}
-		j++;
-	}
-	cvReleaseImage(&temp);
-	cvReleaseMemStorage(&storage);
-	count++;
-}
+int find_endpoints(IplImage *img)
+{
+	CvMemStorage* storage = cvCreateMemStorage(0);
+	CvSeq* comp = NULL;
+	int ret = 0, n_comp;
+	IplImage *temp;
 
+	temp = cvCreateImage(cvSize(img->width, img->height), IPL_DEPTH_8U, 1);
+	if (!temp) {
+		printf("Could not allocate memory for temp image\n");
+		ret = -1;
+		goto find_ep_free;
+	}
+
+	cvPyrSegmentation(img, temp, storage, &comp, 4, 200, 50 );
+	n_comp = comp->total;
+
+	printf("%d\n", n_comp);
+	cvZero(img);
+	for(int i=0; i < n_comp; i++) {
+		CvConnectedComp* cc = (CvConnectedComp*) cvGetSeqElem(comp, i);
+		CvSeq *contours = cc->contour;
+	for (c = contours; c != NULL; c = c->h_next) {
+			for (i = 0; i < c->total; i++) {
+//				CvPoint* p = CV_GET_SEQ_ELEM(CvPoint, c,
+//						i);
+//				CvScalar s = cvScalar(0+rand()%255, 0+rand()%255, 0+rand()%255, 0);			
+//				cvCircle(temp, *p, 2, s, 2, 8, 0);
+			}
+
+	}
+	cvReleaseMemStorage(&storage);
+find_ep_free:
+	if (temp)
+		cvReleaseImage(&temp);
+	}
+#endif
 int main(int argc, char **argv)
 {
 	/* Your video stream */
-	CvCapture* stream = cvCaptureFromFile(argv[1]);
+	IplImage *img = cvLoadImage(argv[1], CV_LOAD_IMAGE_GRAYSCALE);
+	skeltonize_line(img);
+	cvSaveImage("skel.jpg", img, 0);
+	//find_endpoints(img);
+	
 
-	/* Get a model data structure */
-	vibeModel_t *model = libvibeModelNew();
-
-	/* Get the dimensions of the images of your stream 
-nb: stride is te number of bytes from the start of one row of the image  
-to the start of the next row. */
-	int32_t width = get_image_width(stream);
-	int32_t height = get_image_height(stream);
-	int32_t stride = get_image_stride(stream);
-
-	/* Allocates memory to store the input images and the segmentation maps */
-	IplImage *map = cvCreateImage(cvSize(width, height),
-			IPL_DEPTH_8U, 1);
-	IplImage *gray = cvCreateImage(cvSize(width, height),
-			IPL_DEPTH_8U, 1);
-
-	/* Acquires your first image */
-	acquire_grayscale_image(stream, gray);
-
-	/* Allocates the model and initialize it with the first image */
-	libvibeModelAllocInit_8u_C1R(model, (const uint8_t*)gray->imageData, width, height, stride);
-
-	/* Processes all the following frames of your stream:
-	 * results are stored in "segmentation_map"
-	 */
-	while(!acquire_grayscale_image(stream, gray)){
-		libvibeModelUpdate_8u_C1R(model, (const uint8_t*)gray->imageData, (uint8_t*)map->imageData);
-		clean_fg(map);
-		skeltonize(map, argv);
-	}
-	/* Cleanup allocated memory */
-	libvibeModelFree(model);
-	cvReleaseImage(&gray);
-	cvReleaseImage(&map);
+	prune(img);
+	cvSaveImage("prune.jpg", img, 0);
+	cvReleaseImage(&img);
 	return(0);
 }

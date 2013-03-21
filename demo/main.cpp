@@ -15,9 +15,10 @@
 #include <netdb.h>
 
 #define DEBUG_GRAY_IMAGE	1
-#define DEBUG_FG_IMAGE		0
-#define DEBUG_CLEANED_IMAGE	0
+#define DEBUG_FG_IMAGE		1
+#define DEBUG_CLEANED_IMAGE	1
 #define DEBUG_SEPARATED_IMAGE	1
+#define DEBUG_SKELTONIZE_IMAGE	1
 //#define pr_debug(args...) fprintf(stdout, ##args)
 #define pr_debug(args...)
 #define pr_info(args...) fprintf(stdout, ##args)
@@ -293,7 +294,9 @@ static int skeltonize(IplImage *img)
 
 	cvSmooth(skel, skel, CV_GAUSSIAN, 5, 5 );
 
-//	cvCopy (skel, img);
+#if 1
+	cvCopy (skel, img);
+#else
 	cvZero(img);
 #if 0
 	line_seq = cvHoughLines2( skel, storage, CV_HOUGH_STANDARD, 1, CV_PI/180, 500, 0, 0 );
@@ -338,6 +341,7 @@ static int skeltonize(IplImage *img)
 
 		cvLine(img, pt1, pt2, CV_RGB(255,255,255), 1, 8, 0 );
 	}
+#endif
 
 skel_free:
 	if (storage)
@@ -384,6 +388,10 @@ static void* image_acquisition(void *data)
 #if DEBUG_SEPARATED_IMAGE
 	cvNamedWindow("SEPRATED_CONTOUR", 1);
 	cvMoveWindow("SEPRATED_CONTOUR", 3 * width, 0);
+#endif
+#if DEBUG_SKELTONIZE_IMAGE
+	cvNamedWindow("SKELTON", 1);
+	cvMoveWindow("SKELTON", 4 * width, 0);
 #endif
 
 	storage = cvCreateMemStorage(0);
@@ -478,8 +486,10 @@ static void* image_acquisition(void *data)
 		 * it out. Create separte image for each moving object.
 		 */
 		cvFindContours(dilated, storage, &contours,
-				sizeof(CvContour), CV_RETR_EXTERNAL,
-				CV_CHAIN_APPROX_NONE, cvPoint(0, 0));
+				sizeof(CvContour), CV_RETR_TREE,
+				CV_CHAIN_APPROX_SIMPLE, cvPoint(0, 0));
+		if (contours)
+			contours = cvApproxPoly(contours, sizeof(CvContour), storage, CV_POLY_APPROX_DP, 3, 1 );
 		valid_contour = 0;
 		for (c = contours; c != NULL; c = c->h_next) {
 			if (cvContourArea(c, CV_WHOLE_SEQ, 0) > param->area)
@@ -495,16 +505,19 @@ static void* image_acquisition(void *data)
 			if (area > param->area) {
 
 				valid_contour--;
-				cvWaitKey(50);
-#if DEBUG_SEPARATED_IMAGE
+				cvWaitKey(0);
 				cvZero(temp);
 				cvDrawContours(temp, c,
 						cvScalar(255, 255, 255, 0),
 						cvScalar(0, 0, 0, 0),
 						-1, CV_FILLED, 8,
 						cvPoint(0, 0));
-				skeltonize(temp);
+#if DEBUG_SEPARATED_IMAGE
 				cvShowImage("SEPRATED_CONTOUR", temp);
+#endif
+				skeltonize(temp);
+#if DEBUG_SKELTONIZE_IMAGE
+				cvShowImage("SKELTON", temp);
 #endif
 				if (!valid_contour)
 					param->reply.data[0] = REPLY_TYPE_LAST_CONTOUR;
@@ -577,6 +590,9 @@ exit:
 #endif
 #if DEBUG_SEPARATED_IMAGE
 	cvDestroyWindow("SEPRATED_CONTOUR");
+#endif
+#if DEBUG_SKELTONIZE_IMAGE
+	cvDestroyWindow("SKELTON");
 #endif
 	return err;
 }
