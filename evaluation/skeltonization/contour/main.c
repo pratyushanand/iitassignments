@@ -76,9 +76,6 @@ static int skeltonize_line(IplImage *img)
 	CvSeq *line_seq;
 	int H[9] = {1, 1, 1, 1, 1, 1, 1, 1, 1};
 	int i, k;
-	cvNamedWindow("TEST", 1);
-	cvNamedWindow("TEST1", 1);
-	cvNamedWindow("TEST2", 1);
 
 	skel = cvCreateImage(cvSize(img->width, img->height), IPL_DEPTH_8U, 1);
 	if (!skel) {
@@ -121,16 +118,12 @@ static int skeltonize_line(IplImage *img)
 	do
 	{
 		cvErode(img, eroded, element, 1);
-		cvShowImage("TEST", eroded);
 		cvDilate(eroded, temp, element, 1);
-		cvShowImage("TEST1", temp);
 		cvSub(img, temp, temp, NULL);
 		cvOr(skel, temp, skel, NULL);
 		cvCopy(eroded, img);
 
 		done = (cvCountNonZero(img) == 0);
-		cvShowImage("TEST2", skel);
-		cvWaitKey(0);
 	} while (!done);
 		for(i = 0; i < skel->height;i++) {
 			uchar *ptr = (uchar*)(skel->imageData + i * skel->widthStep);
@@ -244,7 +237,8 @@ int skeltonize(IplImage *img, char **argv)
 					-1, CV_FILLED, 8,
 					cvPoint(0, 0));
 			cvShowImage("CONTOUR", temp);
-			skeltonize_line(temp);
+			cvWaitKey(10);
+			//			skeltonize_line(temp);
 #if 0
 			/* calculate centroid */
 			cx = 0;
@@ -259,13 +253,12 @@ int skeltonize(IplImage *img, char **argv)
 			cy /= c->total;
 			printf("%d\n", c->total);
 #endif
-//			CvRect rect=cvBoundingRect (c, 0);
-//			cvEllipseBox(temp, rect, cvScalar(255, 0, 0, 0), 2, 8, 0);
-//			cvRectangle(temp, cvPoint(rect.x, rect.y),
-//					cvPoint(rect.x + rect.width, rect.y + rect.height), cvScalar(255,0,0,0));
+			//			CvRect rect=cvBoundingRect (c, 0);
+			//			cvEllipseBox(temp, rect, cvScalar(255, 0, 0, 0), 2, 8, 0);
+			//			cvRectangle(temp, cvPoint(rect.x, rect.y),
+			//					cvPoint(rect.x + rect.width, rect.y + rect.height), cvScalar(255,0,0,0));
 			sprintf(name, "out/out%d_%d.jpg", count, j);
 			cvSaveImage(name, temp, 0);
-		//	cvWaitKey(0);
 		}
 		j++;
 	}

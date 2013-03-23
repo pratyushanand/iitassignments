@@ -388,44 +388,100 @@ skel_free:
 	return ret;
 }
 
-#if 0
 int find_endpoints(IplImage *img)
 {
+	int i, j, count;
+	uchar *ptri, *ptrt;
+	CvSeq *contours = NULL;
+	CvSeq *c = NULL;
+	CvPoint2D32f points[1000];
+	CvPoint pt1, pt2;
+	float line[4];
+	float d, t;
+	CvRect rect;
 	CvMemStorage* storage = cvCreateMemStorage(0);
-	CvSeq* comp = NULL;
-	int ret = 0, n_comp;
-	IplImage *temp;
+	IplImage *temp = cvCreateImage(cvSize(img->width, img->height),
+			IPL_DEPTH_8U, 1);
 
-	temp = cvCreateImage(cvSize(img->width, img->height), IPL_DEPTH_8U, 1);
-	if (!temp) {
-		printf("Could not allocate memory for temp image\n");
-		ret = -1;
-		goto find_ep_free;
-	}
+	cvNamedWindow("TEST", 1);
 
-	cvPyrSegmentation(img, temp, storage, &comp, 4, 200, 50 );
-	n_comp = comp->total;
-
-	printf("%d\n", n_comp);
-	cvZero(img);
-	for(int i=0; i < n_comp; i++) {
-		CvConnectedComp* cc = (CvConnectedComp*) cvGetSeqElem(comp, i);
-		CvSeq *contours = cc->contour;
+	cvFindContours(img, storage, &contours,
+			sizeof(CvContour), CV_RETR_TREE,
+			CV_CHAIN_APPROX_SIMPLE, cvPoint(0, 0));
+	cvZero(temp);
 	for (c = contours; c != NULL; c = c->h_next) {
-			for (i = 0; i < c->total; i++) {
-//				CvPoint* p = CV_GET_SEQ_ELEM(CvPoint, c,
-//						i);
-//				CvScalar s = cvScalar(0+rand()%255, 0+rand()%255, 0+rand()%255, 0);			
-//				cvCircle(temp, *p, 2, s, 2, 8, 0);
+#if 1
+		rect=cvBoundingRect (c, 0);
+		count = 0;
+		for (i = rect.x; i < rect.x + rect.width; i++) {
+			for (j = rect.y; j < rect.y + rect.height; j++) {
+				ptri = (uchar*) (img->imageData + j * img->widthStep);
+				if (*(ptri + i)) {
+					ptrt = (uchar*) (temp->imageData + j * temp->widthStep);
+					//*(ptrt + i) = 255;
+					points[count].x += i;
+					points[count++].y += j;
+					printf("%d\t%d\n", i, j);
+				}
 			}
+		}
+		printf("%d\n", count);
+		cvFitLine2D(points, count, CV_DIST_L12, 0, 1, 1, line);
+		d = sqrt((double)line[0]*line[0] + (double)line[1]*line[1]);
+		line[0] /= d;
+		line[1] /= d;
+		t = (float)(img->width + img->height);
+		pt1.x = cvRound(line[2] - line[0]*t);
+		pt1.y = cvRound(line[3] - line[1]*t);
+		pt2.x = cvRound(line[2] + line[0]*t);
+		pt2.y = cvRound(line[3] + line[1]*t);
+		cvLine(temp, pt1, pt2, cvScalar(255, 0, 0, 0), 1, CV_AA, 0);
+#endif
+#if 0
 
+		if (c->total > 1000) {
+			printf("Too many points\n");
+			exit(-1);
+		}
+		for (i = 0; i < c->total; i++) {
+			CvPoint* p = CV_GET_SEQ_ELEM(CvPoint, c,
+					i);
+			points[i].x += p->x;
+			points[i].y += p->y;
+			printf("%d %d \n", p->x, p->y);
+		}
+		pointMat = cvMat (1, c->total, CV_32SC2, points);
+		cvFitLine2D(points, c->total, CV_DIST_L1, 0, 0.001, 0.001, line);
+		d = sqrt((double)line[0]*line[0] + (double)line[1]*line[1]);
+		line[0] /= d;
+		line[1] /= d;
+		t = (float)(img->width + img->height);
+		pt1.x = cvRound(line[2] - line[0]*t);
+		pt1.y = cvRound(line[3] - line[1]*t);
+		pt2.x = cvRound(line[2] + line[0]*t);
+		pt2.y = cvRound(line[3] + line[1]*t);
+		cvLine(temp, pt1, pt2, cvScalar(255, 0, 0, 0), 1, CV_AA, 0);
+#endif
+#if 0
+		rect=cvBoundingRect (c, 0);
+		printf("%d\t%d\t%d\t%d\n", rect.x, rect.y, rect.width,
+				rect.height);
+		//if(cvArcLength(c, CV_WHOLE_SEQ, 0) <= 1) {
+		cvRectangle(temp, cvPoint(rect.x, rect.y),
+					cvPoint(rect.x + rect.width, rect.y + rect.height), cvScalar(255,0,0,0));
+	//	}
+#endif
+
+		cvShowImage("TEST", temp);
+		cvWaitKey(0);
 	}
-	cvReleaseMemStorage(&storage);
+	cvCopy(temp, img);
 find_ep_free:
+	if (storage)
+		cvReleaseMemStorage(&storage);
 	if (temp)
 		cvReleaseImage(&temp);
-	}
-#endif
+}
 int main(int argc, char **argv)
 {
 	/* Your video stream */
@@ -433,10 +489,9 @@ int main(int argc, char **argv)
 	skeltonize_line(img);
 	cvSaveImage("skel.jpg", img, 0);
 	//find_endpoints(img);
-	
 
-	prune(img);
-	cvSaveImage("prune.jpg", img, 0);
-	cvReleaseImage(&img);
+//	prune(img);
+//	cvSaveImage("prune.jpg", img, 0);
+//	cvReleaseImage(&img);
 	return(0);
 }
