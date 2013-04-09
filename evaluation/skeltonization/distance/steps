@@ -1,0 +1,3 @@
+make
+./build/main ../../../../test_video/OneStopNoEnter1cor.mpeg 1000
+#./build/main ../../../../test_video/haut-640x480.mpg 100
