@@ -73,7 +73,7 @@
 % *** GRAPHICS RELATED PACKAGES ***
 %
 \ifCLASSINFOpdf
-  % \usepackage[pdftex]{graphicx}
+  \usepackage[pdftex]{graphicx}
   % declare the path(s) where your graphic files are
   % \graphicspath{{../pdf/}{../jpeg/}}
   % and their extensions so you won't have to specify these with
@@ -211,6 +211,7 @@
 
 
 %\usepackage[caption=false]{caption}
+\usepackage[justification=centering]{caption}
 %\usepackage[font=footnotesize]{subfig}
 % subfig.sty, also written by Steven Douglas Cochran, is the modern
 % replacement for subfigure.sty. However, subfig.sty requires and
@@ -454,13 +455,68 @@ foreground color then texture features represented by local binary
 pattern ~\cite{3} provides interestingly nice result. Further, features
 computed at a single scale can be used to approximate feature at nearby
 scale. Such implementations ~\cite{4} accelerates the execution for
-practical applications.  There is one implementation ~\cite{5} which
-decides about pixel value after comparision with closest samples.
-
+practical applications.Methods based on Gaussian Mixtures Model(GMM)
+have also been widely used, but they are computationally very expensive.
+There is one non-parametric implementation ~\cite{5} known as Vibe, which
+decides about background pixel value after comparison with closest samples
+selected randomly.Interesting part of this approach is that background
+model is getting initialized from a single frame itself.\\
+\indent Once we have identified the foreground moving part, next
+important task is to reduce it's size or extract minimal useful
+information out of it. So far, object based video coding such as
+~\cite{7}, ~\cite{8} seems to be the best compression techniques.
+Commercial algorithms such as MPEG-4 also employees object based
+coding.Applications which we have targeted in this work is to identify
+few surveillance objects such as human, animal, car etc and that too
+with minimal computational cost.There have been several work which used
+shape or skeleton based approach to detect moving object. Such
+implementation seems to be of fairly low computational complexity.
+Medial axis transform, distance transform and morphological
+skeletonization etc are different methods which can be used to find out
+skeleton of a moving object.\\
 
 
 \section{Proposed Framework}
 % no \IEEEPARstart
+We have implemented our pipeline in C and on Linux platform, so that it
+can easily be ported from a PC to embedded environment. Wherever
+possible, we have used opencv library to carry intended job. Our top
+level pipeline can be explained as in figure ~\ref{image_pipeline}.
+\begin{figure}[!h]
+\centering
+\includegraphics[scale=0.35]{image_pipeline}
+\caption{Low BW surveillance Image Pipeline}
+\label{image_pipeline}
+\end{figure}
+
+
+Since background subtraction has key role in accomplishing intended job,
+therefore we have compared two recently developed efficient background
+subtraction algorithm and then choosed one of them in our final
+work.First one ~\cite{3} is based on use of texture features present in
+Local Binary Pattern(LBP). LBP works well with local illumination
+changes, however there can be issues in case of global illumination
+change.Author of this paper has done several improvements by using
+photometric invariant color measurement and flexible weight updating for
+background modes. However, computationally it is not so efficient
+compared to second one ~\cite{5} which we have also selected for our
+uses.  It is based on unique way of replacing background pixel value
+over the time.It replaces background values for last N frames
+randomly.Furthermore, it diffuses updated values to neighbouring pixels,
+and again that too on random basis. So far selected algorithm surpasses
+other existing algorithm in computation complexities. Figure
+\ref{bg_compare} shows the comparison of execution time of these tow
+algorithm.
+
+\begin{figure}[!h]
+\centering
+\includegraphics[scale=0.35]{bg_compare}
+\caption{Variation of background subtraction execution time of ~\cite{3}
+and ~\cite{5} with frame number. This timing was observed with a system
+having having DMIPS = 800.}
+\label{bg_compare}
+\end{figure}
+
 
 
 \section{Results}
