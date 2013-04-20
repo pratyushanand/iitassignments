@@ -55,8 +55,6 @@ enum obj_type {
 struct object_class {
 	/* type of object */
 	enum obj_type type;
-	/* level of confidence with which type has been identified */
-	int confidence;
 	int x;
 	int y;
 };
@@ -75,6 +73,77 @@ struct tracker{
 
 static LIST_HEAD(trackerhead, tracker) tracker_head;
 
+float compute_mean(int *data, int count)
+{
+	int i;
+	float mean = 0;
+
+	for (i = 0; i < count; i++)
+		mean = mean + ((float)data[i] / (float)count);
+
+	return mean;
+}
+
+float compute_variance(int *data, int count, float mean)
+{
+	int i;
+	float var = 0;
+
+	for (i = 0; i < count; i++)
+		var = var + (pow(((float)data[i] - mean), 2) / (float)count);
+
+	return var;
+}
+
+float compute_autocovariance(int *data, int count, int lag, int mean, int var)
+{
+	int i;
+	float autocv = 0;
+
+	for (i = 0; i < (count - lag); i++)
+		autocv = autocv + (((float)data[i] - mean) * ((float)data[i+lag] - mean) / (float)count);
+
+	return (autocv / var);
+}
+
+enum obj_type analyze_leg_motion(int *theta2)
+{
+	int i, p[3], j = 0, m1, m2, n;
+	int *t1, *t2;
+	int numr, dnm1, dnm2;
+	float corel;
+
+	for (i = 0; i < MAX_TRACK_HISTORY; i++) {
+		printf("%d\t", theta2[i]);
+		if (!theta2[i]) {
+			p[j++] = i;
+			if (j == 3)
+				break;
+		}
+	}
+	printf("\n\n");
+	if (j < 3)
+		return TYPE_UNDEFINED;
+	n = p[2] - p[1];
+	t1 = &theta2[p[1]];
+	t2 = &theta2[p[2]];
+	m1 = compute_mean(t1, n);
+	m2 = compute_mean(t2, n);
+	numr = dnm1 = dnm2 =0;
+	for (i = 0; i < n; i++)
+		numr += (t1[i] - m1) * (t2[i] - m2);
+	for (i = 0; i < n; i++)
+		dnm1 += (t1[i] - m1) * (t1[i] - m1);
+	for (i = 0; i < n; i++)
+		dnm2 += (t2[i] - m2) * (t2[i] - m2);
+	corel = numr / sqrt (dnm1 * dnm2);
+	printf("%f\n", corel);
+	if (corel > 0.9)
+		return TYPE_HUMAN;
+	else
+		return TYPE_UNDEFINED;
+}
+
 void update_tracker(CvSeq *c, int width, int height, struct object_class
 		*object)
 {
@@ -88,10 +157,11 @@ void update_tracker(CvSeq *c, int width, int height, struct object_class
 	double theta1, theta2;
 	float di, di1, delta, delta1;
 	int i, j, cx, cy, hy, wx, dmin, dmin_prev;
+	float mean, var, autoco;
 	IplImage *temp1 = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
-#if 0
 	cvNamedWindow("SEPRATED_CONTOUR", 1);
 	cvMoveWindow("SEPRATED_CONTOUR", 3 * width, 0);
+#if 0
 	cvNamedWindow("DI", 1);
 	cvMoveWindow("DI", width, 2 * height);
 #endif
@@ -106,7 +176,7 @@ void update_tracker(CvSeq *c, int width, int height, struct object_class
 		*((uchar*) (temp1->imageData +
 					p->y * temp1->widthStep) + p->x) = 255;
 	}
-//	cvShowImage("SEPRATED_CONTOUR", temp1);
+	cvShowImage("SEPRATED_CONTOUR", temp1);
 	/* calculate centroid */
 	cx = 0;
 	cy = 0;
@@ -251,13 +321,16 @@ void update_tracker(CvSeq *c, int width, int height, struct object_class
 		atan2(skel_pt_final[3].y - skel_pt_final[0].y, skel_pt_final[3].x - skel_pt_final[0].x) * 180.0 / CV_PI;
 	di = sqrt(pow(((skel_pt_final[3].x + skel_pt_final[4].x)/2 - cx), 2) +
 			pow(((skel_pt_final[3].y + skel_pt_final[4].y)/2 - cy), 2));
-	printf("%f %f %f %d %d %d %d %d %d %d\n", theta1, theta2, di, hy, cx, cy,
-			skel_pt_final[3].x, skel_pt_final[3].y,
-			skel_pt_final[4].x, skel_pt_final[4].y);
+	//printf("%f\n", theta2);
+	//printf("%f %f %f %d %d %d %d %d %d %d\n", theta1, theta2, di, hy, cx, cy,
+//			skel_pt_final[3].x, skel_pt_final[3].y,
+//			skel_pt_final[4].x, skel_pt_final[4].y);
 	LIST_FOREACH(node, &tracker_head, list) {
-		//		printf("Matching object\n");
-		if (abs(node->cx[node->cur] - cx) < 10 && abs(node->cy[node->cur] - cy) < 10) {
-			node->cur++;
+//				printf("Matching object\n");
+		if (abs(node->cx[node->cur] - cx) < 15 && abs(node->cy[node->cur] - cy) < 15) {
+			if (!(!node->theta2[node->cur] && !theta2))
+				node->cur++;
+			node->cur %= MAX_TRACK_HISTORY;
 			node->theta1[node->cur] = theta1;
 			node->theta2[node->cur] = theta2;
 			node->di[node->cur] = di;
@@ -270,18 +343,27 @@ void update_tracker(CvSeq *c, int width, int height, struct object_class
 		}
 	}
 	if (!found) {
-//		printf("object not matched\n");
+		printf("object not matched\n");
 		/* this is a new object */
 		node = (struct tracker *)malloc(sizeof(*node));
 		node->theta1[0] = theta1;
 		node->theta2[0] = theta2;
+		for (i = 1; i < MAX_TRACK_HISTORY; i++)
+			node->theta2[i] = 180;
 		node->di[0] = di;
 		node->hy[0] = hy;
 		node->cx[0] = cx;
 		node->cy[0] = cy;
 		node->cur = 0;
+		node->object.type = TYPE_UNDEFINED;
 		LIST_INSERT_HEAD(&tracker_head, node, list);
 	}
+	if (node->object.type == TYPE_UNDEFINED)
+		node->object.type = analyze_leg_motion(node->theta2);
+	object->type = node->object.type;
+	object->x = cx;
+	object->y = cy;
+#if 0
 	node->object.type = TYPE_UNDEFINED;
 	node->object.confidence = 0;
 	if (theta1 >= 5 && theta1 <= 20) {
@@ -294,6 +376,7 @@ void update_tracker(CvSeq *c, int width, int height, struct object_class
 	object->confidence = node->object.confidence;
 	object->x = cx;
 	object->y = cy;
+#endif
 	//printf("%f\t%f\t%f\t%d\n", theta1, theta2, di, hy);
 exit:
 	cvReleaseMat(&mat);
@@ -384,7 +467,7 @@ int main(int argc, char **argv)
 			 */
 			if (area > MIN_AREA) {
 				update_tracker(c, width, height, &object);
-				//printf("%d\t%d\t%d\t%d\n", object.type, object.confidence, object.x, object.y);
+		//		printf("%d\t%d\t%d\n", object.type, object.x, object.y);
 			}
 		}
 				gray = temp2;
