@@ -116,7 +116,7 @@
 
 % *** MATH PACKAGES ***
 %
-%\usepackage[cmex10]{amsmath}
+\usepackage[cmex10]{amsmath}
 % A popular package from the American Mathematical Society that provides
 % many useful and powerful commands for dealing with mathematics. If using
 % it, be sure to load this package with the cmex10 option to ensure that
@@ -300,7 +300,7 @@
 %
 % paper title
 % can use linebreaks \\ within to get better formatting as desired
-\title{Ultra Low Bandwidth Image Surveillance System}
+\title{Ultra Low Bandwidth Video Surveillance System}
 
 
 % author names and affiliations
@@ -363,7 +363,7 @@ relevant information from the video frame and transmit it over the
 network.This work is an attempt to frame such a low data rate
 image pipeline.We are stripping down each moving object to few pixel,
 mainly the skeleton endpoints and then also try to recognize moving
-object based on these information.We have also analyzed feasibility of
+object based on motion information.We have also analyzed feasibility of
 such a low data rate image pipeline for a low cost embedded system.
 \end{abstract}
 % IEEEtran.cls defaults to using nonbold math in the Abstract.
@@ -411,27 +411,27 @@ life.\\
 Only a few segments of image need to be transmitted(the fast changing
 scenes).Transmitting only significant features pre-extracted locally
 from the image can reduce transmission requirement
-significantly.Extraction of such image information is possible if end
-node is intelligent. Semantic information transfer can reduce data rate
-further.  But, we also need to ensure that this minimization of content
-allows us to reconstruct the image with relevant details at the other
-end.\\
+significantly.However, we will need to ensure that this minimization of
+content allows us to reconstruct the image with relevant details at the
+other end.Extraction of such image information is possible if end node
+is intelligent. If we go to the level of extracting semantic information
+from deduced features, then it can reduce data rate even further.\\
 \indent Automatic analysis of scene and then to infer desired
-information out of it can be lot complex because of the complexity of
+information out of it can be a lot complex because of the complexity of
 the scene, specially when application is targeted for outdoor
 monitoring.  Sometime background of the scene can be moving, while in
-some other scene ambient light can be different. Similarly can be many
-other hurdles in the process of automation. But if an efficient
-background detection algorithm is chosen then, these issued can be
+some other scene ambient light can be different. Similarly there, can be
+many other hurdles in the process of automation. But if an efficient
+background detection algorithm is chosen then, these issues can be
 addressed up to a lot extent. Care must be taken in selecting algorithm,
 so that it allows information extraction almost in real time. With
-latest research in computer vision, it seems that such task could be
-viable with low cost embedded system.\\
+latest research in computer vision ~\cite{3} ~\cite{5}, it seems that
+such task could be viable with low cost embedded system.\\
 \indent This works has been done by choosing one of best background
 subtraction algorithm. Skeletonization and further information about
-selected object ontology has been used as the recognition method. Once
-key information has been identified, they are sent to a server where
-original scene is recreated.\\
+selected object ontology has been used as the recognition method.When
+object is at distance from the camera then motion features are very
+helpful in object recognition. 
 \indent Organization of the paper is as follows: In the next section we
 provide a survey of related work done in recent past. After this, we
 have provided our proposed framework, followed by result and conclusion.
@@ -447,7 +447,7 @@ extracted. Features such as Gradient histogram, Gray Scale (Haar),
 color, texture, self-similarity and motion have been used by different
 researchers. \\ 
 \indent ~\cite{1} and many other have used color information as the
-feature for estimation. But only color as feature might not be
+feature for background estimation. But only color as feature might not be
 sufficient ~\cite{2} in surveillance applications where image resolution
 is very low.  Adding motion along with image intensities gives better
 result in moving bodies estimation. When background color is same as
@@ -467,13 +467,12 @@ information out of it. So far, object based video coding such as
 ~\cite{7}, ~\cite{8} seems to be the best compression techniques.
 Commercial algorithms such as MPEG-4 also employees object based
 coding.Applications which we have targeted in this work is to identify
-few surveillance objects such as human, animal, car etc and that too
-with minimal computational cost.There have been several work which used
-shape or skeleton based approach to detect moving object. Such
-implementation seems to be of fairly low computational complexity.
-Medial axis transform, distance transform and morphological
-skeletonization etc are different methods which can be used to find out
-skeleton of a moving object.\\
+few surveillance objects such as human, animal, vehicle etc and that too
+with minimal computational cost.Shape or skeleton ~\cite{11} based based
+approach seems computationally efficient for object recognition.  Medial
+axis transform, distance transform, morphological and star
+skeletonization etc ~\cite{9} ~\cite{10} are different methods which can
+be used to find out skeleton of a moving object.\\
 
 
 \section{Proposed Framework}
@@ -505,7 +504,7 @@ over the time.It replaces background values for last N frames
 randomly.Furthermore, it diffuses updated values to neighbouring pixels,
 and again that too on random basis. So far selected algorithm surpasses
 other existing algorithm in computation complexities. Figure
-\ref{bg_compare} shows the comparison of execution time of these tow
+\ref{bg_compare} shows the comparison of execution time of these two
 algorithm.
 
 \begin{figure}[!h]
@@ -517,7 +516,31 @@ having having DMIPS = 800.}
 \label{bg_compare}
 \end{figure}
 
+We get several noise object in the extracted foreground. They are
+cleaned by morphological erosion operation followed by dilation
+operation. Further all moving contours are separated out by using
+opencv library ~\cite{12} function cvFindContours.
 
+Star skeletonization method has been used to find extreme point on 
+moving contours.Following steps have been used to identify types of
+each moving contours.
+\begin{enumerate}
+\item Centroid of each object is found out using following formula.\\
+	\begin{equation}
+	C_x = {1 \over N} \Sigma ^N _{i = 1} X_i 
+	\end{equation}
+	\begin{equation}
+	C_y = {1 \over N} \Sigma ^N _{i = 1} Y_i 
+	\end{equation}
+Here X$_i$ and Y$_i$ are (X,Y) co-ordinate of i$_{th}$ point on the contour
+boundary.
+\item Distance d$_i$ is calculated between centroid and each boundary
+point as follows.
+	\begin{equation}
+	d_i = \sqrt{(C_x - X_i)^2}
+	\end{equation}
+
+\end{enumerate}
 
 \section{Results}
 % no \IEEEPARstart
