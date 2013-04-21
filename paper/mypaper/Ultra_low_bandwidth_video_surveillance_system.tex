@@ -211,7 +211,7 @@
 
 
 %\usepackage[caption=false]{caption}
-\usepackage[justification=centering]{caption}
+\usepackage[justification=justified]{caption}
 %\usepackage[font=footnotesize]{subfig}
 % subfig.sty, also written by Steven Douglas Cochran, is the modern
 % replacement for subfigure.sty. However, subfig.sty requires and
@@ -516,14 +516,33 @@ having having DMIPS = 800.}
 \label{bg_compare}
 \end{figure}
 
-We get several noise object in the extracted foreground. They are
-cleaned by morphological erosion operation followed by dilation
-operation. Further all moving contours are separated out by using
-opencv library ~\cite{12} function cvFindContours.
+We get several noise object in the extracted foreground image, see fig
+\ref{pipeline_images}b. They are cleaned by morphological erosion
+operation followed by dilation operation and we get fig
+\ref{pipeline_images}c. Further all moving contours are separated out by
+using opencv library ~\cite{12} function cvFindContours.This function
+gives us boundary point of moving object as show in fig
+\ref{pipeline_images}d.
 
-Star skeletonization method has been used to find extreme point on 
-moving contours.Following steps have been used to identify types of
-each moving contours.
+\begin{figure}[!h]
+\centering
+\includegraphics[scale=0.30]{pipeline_images}
+\caption{Images at different stage of pipeline. (From top left in
+clockwise order) \textbf{a.} Gray Scale input frame to pipeline
+\textbf{b.}Foreground extracted image using Vibe \textbf{c.} Cleaned
+image \textbf{d.} Contour of moving object \textbf{e.} Plot of smoothed
+distance of boundary points from centroid \textbf{f.} Plot of 3 points
+of interest, centroid and two distance peaks nearer to bottom left and
+bottom right corner of bounding box}
+\label{pipeline_images}
+\end{figure}
+
+
+Star skeletonization method has been used to find extreme point on
+moving contours. This method plots distance of each boundary point from
+the centroid and then uses peaks of the curve as skeleton
+point.Following steps have been used to identify types of each moving
+contours.
 \begin{enumerate}
 \item Centroid of each object is found out using following formula.\\
 	\begin{equation}
@@ -535,18 +554,79 @@ each moving contours.
 Here X$_i$ and Y$_i$ are (X,Y) co-ordinate of i$_{th}$ point on the contour
 boundary.
 \item Distance d$_i$ is calculated between centroid and each boundary
-point as follows.
+point as follows.This calculated distance vetor are stored in a CvMat
+array.
 	\begin{equation}
-	d_i = \sqrt{(C_x - X_i)^2}
+	d_i = \sqrt{(C_x - X_i)^2 + (C_y - Y_i)^2}
 	\end{equation}
+\item Distance vetor array is smoothed to remove noise peaks using
+cvSmooth.If these distances are ploted then it looked like fig
+\ref{pipeline_images}e. Now local maxima of distance vector is
+calculated by finding zero crossing of difference vectors.\\ However,
+even after smoothing operation there are some peaks which is not of our
+interest.In our algorithm, we are using 2 most relevant peaks which are
+nearest to each bottom corner of bounding box of contour respectively,
+as shown in fig \ref{pipeline_images}f. Only these two peaks along with
+centroid will give us sufficient information to distinguish an object
+among human, vehicle or animal.\\
+In case of human these two peaks depicts two legs.For vehicle these are
+just two extream points of lower portion of back and front.In case of
+animal these will correspond to front first leg and back last leg.
+\item Let P$_1$(X$_1$, Y$_1$), P$_2$(X$_2$, Y$_2$) and C(C$_x$, C$_y$) are two peaks
+nearest to bottom right and bottom left corner and centroid
+respectively. Let $\theta$ is the angle beween P$_1$C and P$_2$C, then
+$\theta$ can be calculated as follows.\\
+%
+	\begin{equation}
+	\theta = atan2(Y_2 - C_y, X_2 - C_x) - atan2(Y_1 - C_y, X_1 - C_x)
+	\end{equation}
+%
+If variation of this $\theta$ is plotted in respective frames for human
+and vehicle then it looks like as shown in fig \ref{angle_plot}. There
+are few points noticeable in the plot for human. First that, angle
+variation pattern is repeatable. Second, It touches to 0 at some point.
+For vehicle, it is almost constant as expected. We have not tried with a
+video with animal. But, for animal there would be variation with
+repeatable pattern but would never touch to zero.These criterion can be
+the basis to identify about an object, whether it is a human, vehicle or
+animal.
 
+\begin{figure}[!h]
+\centering
+\includegraphics[scale=0.35]{angle_plot}
+\caption{Variation of angle between legs with frame number for human and
+vehicle.}
+\label{angle_plot}
+\end{figure}
+
+\item We create a linked list of objects. When a new object comes in the
+view of camera, a structure is created and added to the list.This new
+object is tracked and value of (C$_x$, C$_y$), $\theta$ in each frame is
+stored. 
+\begin{enumerate} 
+\item We track value of $\theta$ untill it goes to '0' three times.
+\item Now consider $\theta$ values between first and second '0' as
+vector T$_1$ and $\theta$ values between second and third '0' as vector
+T$_2$.
+\item Find mean m$_1$ and m$_2$ of vector T$_1$ and T$_2$ respectively.
+\item If n is the length of vector T$_1$ then caculate corelation value
+between these two vectors to find similarities as follows.
+	\begin{equation}
+	corel = {{\Sigma ^n _{i = 1}(T_{1i} - m_1) * (T_{2i} - m_2)}
+\over {\sqrt {\Sigma ^n _{i = 1} (T_{1i} - m_1)^2 * \Sigma ^n _{i = 1} (T_{2i}
+- m_2)^2}}}
+	\end{equation}
+\item If corelation value is greater than a threshold value TH$_1$ then we say
+that it is a human.
+\item If we do not find any '0' till N frames, then we calculate varinace of
+angle data for N frames. If it is less than threshold value TH$_2$, then
+we say that it is a vehicle.
+\item If variance is more than threshold value TH$_3$, then it is an
+animal. 
+
+\end{enumerate} 
 \end{enumerate}
-
 \section{Results}
-% no \IEEEPARstart
-
-
-\section{Conclusion}
 % no \IEEEPARstart
 
 

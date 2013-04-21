@@ -161,10 +161,8 @@ void update_tracker(CvSeq *c, int width, int height, struct object_class
 	IplImage *temp1 = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
 	cvNamedWindow("SEPRATED_CONTOUR", 1);
 	cvMoveWindow("SEPRATED_CONTOUR", 3 * width, 0);
-#if 0
 	cvNamedWindow("DI", 1);
 	cvMoveWindow("DI", width, 2 * height);
-#endif
 	cvNamedWindow("SKELETON", 1);
 	cvMoveWindow("SKELETON", 0, 2 * height);
 
@@ -200,16 +198,15 @@ void update_tracker(CvSeq *c, int width, int height, struct object_class
 	}
 	/* Low pass filter it */
 	cvSmooth(mat, smat, CV_GAUSSIAN, 39, 1, 0, 0);
-#if 0
+#if 1
 	/*plot disatance vector */
-	dii = temp1;
-	cvZero(dii);
+	cvZero(temp1);
 	for (i = 0; i < c->total; i++) {
 		int x = CV_MAT_ELEM(*smat, float, 0, i);
-		*((uchar*) (dii->imageData +
-					(height - x) * dii->widthStep) + i) = 255;
+		*((uchar*) (temp1->imageData +
+					(height - x) * temp1->widthStep) + i) = 255;
 	}
-//	cvShowImage("DI", dii);
+	cvShowImage("DI", temp1);
 #endif
 	/* find extream points */
 	cvZero(temp1);
@@ -305,11 +302,11 @@ void update_tracker(CvSeq *c, int width, int height, struct object_class
 		*((uchar*) (temp1->imageData +
 					skel_pt_final[i].y * skel->widthStep) + skel_pt_final[i].x) = 255;
 	}
-#endif
 	cvLine(temp1, skel_pt_final[0], skel_pt_final[1],
 			cvScalar(255, 0, 0, 0), 1, CV_AA,0);
 	cvLine(temp1, skel_pt_final[0], skel_pt_final[2],
 			cvScalar(255, 0, 0, 0), 1, CV_AA,0);
+#endif
 	cvLine(temp1, skel_pt_final[0], skel_pt_final[3],
 			cvScalar(255, 0, 0, 0), 1, CV_AA,0);
 	cvLine(temp1, skel_pt_final[0], skel_pt_final[4],
@@ -328,7 +325,8 @@ void update_tracker(CvSeq *c, int width, int height, struct object_class
 	LIST_FOREACH(node, &tracker_head, list) {
 //				printf("Matching object\n");
 		if (abs(node->cx[node->cur] - cx) < 15 && abs(node->cy[node->cur] - cy) < 15) {
-			if (!(!node->theta2[node->cur] && !theta2))
+			if (!(!node->theta2[node->cur]
+				&& (!theta2 || !node->cur)))
 				node->cur++;
 			node->cur %= MAX_TRACK_HISTORY;
 			node->theta1[node->cur] = theta1;
@@ -394,12 +392,12 @@ int main(int argc, char **argv)
 	CvSeq* c = NULL;
 	IplImage *gray, *temp1, *temp2, *map, *eroded,
 		 *dilated, *dii;
-	int frame;
+	int frame = 0;
 	float area;
 	struct object_class object;
 
 	LIST_INIT(&tracker_head);
-#if 0
+#if 1
 	cvNamedWindow("GRAY", 1);
 	cvNamedWindow("FG", 1);
 	cvMoveWindow("FG", width, 0);
@@ -431,15 +429,15 @@ int main(int argc, char **argv)
 		results are stored in "segmentation_map" */
 	while(!acquire_grayscale_image(stream, gray)){
 		frame++;
-		if (frame < 200)
+		if (frame < 100)
 			continue;
 		//printf("%d\n", frame);
-		//cvShowImage("GRAY", gray);
+		cvShowImage("GRAY", gray);
 		/* Get FG image in temp1 */
 		map = temp1;
 		libvibeModelUpdate_8u_C1R(model, (const uint8_t *)gray->imageData,
 				(uint8_t *)map->imageData);
-		//cvShowImage("FG", map);
+		cvShowImage("FG", map);
 		/*
 		 * Clean all small unnecessary FG objects. Get cleaned
 		 * one in temp2
@@ -448,8 +446,8 @@ int main(int argc, char **argv)
 		cvErode(map, eroded, NULL, 1);
 		/* Dilate it to get in proper shape */
 		dilated = temp1;
-		cvDilate(eroded, dilated, NULL, 1);
-		//cvShowImage("CLEANED", dilated);
+		cvDilate(eroded, dilated, NULL, 3);
+		cvShowImage("CLEANED", dilated);
 		/*
 		 * Find out all moving contours , so basically segment
 		 * it out. Create separte image for each moving object.
