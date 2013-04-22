@@ -5,7 +5,8 @@ from xml.dom.minidom import parseString
 from Tkinter import *
 from PIL import Image, ImageTk, ImageDraw
 import base64
-import array
+import array, io
+
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)         # Create a socket object
 host = socket.gethostname() # Get local machine name
@@ -34,80 +35,38 @@ def send_cmd_to_client (cmd):
 	client.send(str(xml))
 	return
 
+data_array = ''
 def receive_reply_from_client ():
-	data = client.recv(40960)
-	return data
+	global data_array
+	data_array = ''
+	xmlType = '2'
+	while (xmlType == '2'):
+		data = client.recv(40960)
+		xml = parseString(str(data))
+		xmlTag = xml.getElementsByTagName('type')[0].toxml()
+		xmlType=xmlTag.replace('<type>','').replace('</type>','')
+		xmlTag = xml.getElementsByTagName('data')[0].toxml()
+		xmlData=xmlTag.replace('<data>','').replace('</data>','')
+		xml_data = base64.decodestring(xmlData)
+		data_array += xml_data
+		if (xmlType != '1'):
+			send_cmd_to_client("ack");
+	return data_array
 
 def receive_resolution ():
-	data = receive_reply_from_client()
-	xml = parseString(str(data))
-	xmlTag = xml.getElementsByTagName('type')[0].toxml()
-	xmlData=xmlTag.replace('<type>','').replace('</type>','')
-	if (xmlData == '1'):
-		xmlTag = xml.getElementsByTagName('data')[0].toxml()
-		data=xmlTag.replace('<data>','').replace('</data>','')
-		resol = base64.b16decode(data);
-		aresol =  array.array('B', resol)
-		resx = int(aresol[0]) + int(aresol[1]) * 256
-		resy = int(aresol[2]) + int(aresol[3]) * 256
-		return (resx, resy)
-	else:
-		print "wrong resolution type received"
-		return (0, 0)
+	resol = receive_reply_from_client()
+	aresol =  array.array('B', resol)
+	resx = int(aresol[0]) + int(aresol[1]) * 256
+	resy = int(aresol[2]) + int(aresol[3]) * 256
+	return (resx, resy)
 
-centroid = []
-def draw_centroid (data):
-	global centroid
-	xml = parseString(str(data))
-	xmlTag = xml.getElementsByTagName('type')[0].toxml()
-	xmlData=xmlTag.replace('<type>','').replace('</type>','')
-	t = xmlTag.replace('<type>','').replace('</type>','')
-	xmlTag = xml.getElementsByTagName('data')[0].toxml()
-	data=xmlTag.replace('<data>','').replace('</data>','')
-	xy = base64.b16decode(data)
-	centroid.insert(0, xy)
-	if int(t) == 3:
-		canvas.delete(ALL);
-		for c in centroid[:]:
-			axy =  array.array('B', c)
-			x = int(axy[0]) + int(axy[1]) * 256
-			y = int(axy[2]) + int(axy[3]) * 256
-			canvas.create_oval(x -5 , y - 5, x + 5, y + 5, outline="red", 
-		        	    fill="green", width=2)
-		canvas.update_idletasks()
-		centroid = []
+def draw_rawdata (data):
+	print len(data)
+#	img = Image.frombuffer('L', (w,h), data, "raw", 'L', 0, 1)
+#	img = ImageTk.PhotoImage(img)
+#	canvas.create_image(0, 0, image=img, anchor=NW)
+#	canvas.pack()
 	return
-
-contour = []
-def draw_contour (data):
-	global contour, w, h
-	xml = parseString(str(data))
-	xmlTag = xml.getElementsByTagName('type')[0].toxml()
-	xmlData=xmlTag.replace('<type>','').replace('</type>','')
-	t = xmlTag.replace('<type>','').replace('</type>','')
-	xmlTag = xml.getElementsByTagName('data')[0].toxml()
-	data=xmlTag.replace('<data>','').replace('</data>','')
-	xy = base64.b16decode(data);
-	contour.insert(0, xy)
-	if int(t) == 3:
-		canvas.delete(ALL);
-		for c in contour[:]:
-			axy =  array.array('B', c)
-			num_pt = len(axy)
-			x = int(axy[0]) + int(axy[1]) * 256
-			y = int(axy[2]) + int(axy[3]) * 256
-			i = 4
-			while (i < num_pt):
-				x1 = int(axy[i + 0]) + int(axy[i + 1]) * 256
-				y1 = int(axy[i + 2]) + int(axy[i + 3]) * 256
-				canvas.create_line(x , y, x1, y1, fill="green")
-				x = x1
-				y = y1
-				i = i + 4
-		canvas.update_idletasks()
-		contour = []
-	return
-
 
 
 def start_cam_task ():
@@ -115,10 +74,7 @@ def start_cam_task ():
 	while 1:
 		data = receive_reply_from_client()
 		if (mode_image.get() == 1) :
-			draw_centroid (data);
-		if (mode_image.get() == 2) :
-			draw_contour (data);
-		send_cmd_to_client("ack");
+			draw_rawdata (data);
 	return
 
 
@@ -162,6 +118,10 @@ label.pack()
 
 canvas = Canvas(main, width=w, height=h, bg="black")
 canvas.pack()
+#img1 = ImageTk.PhotoImage(file="abc.png")
+#canvas.delete(ALL);
+#canvas.create_image(0, 0, image=img1, anchor=NW)
+#canvas.pack()
 
 capture = Button(frame, text="Start Cam",command=start_cam, fg="red")
 capture.pack(side=LEFT, padx=2, pady=2)

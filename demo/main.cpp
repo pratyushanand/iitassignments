@@ -15,17 +15,18 @@
 #include <netdb.h>
 
 #define DEBUG_GRAY_IMAGE	1
-#define DEBUG_FG_IMAGE		1
-#define DEBUG_CLEANED_IMAGE	1
-#define DEBUG_SEPARATED_IMAGE	1
-#define DEBUG_SKELTONIZE_IMAGE	1
+#define DEBUG_FG_IMAGE		0
+#define DEBUG_CLEANED_IMAGE	0
+#define DEBUG_SEPARATED_IMAGE	0
+#define DEBUG_SKELTONIZE_IMAGE	0
 //#define pr_debug(args...) fprintf(stdout, ##args)
 #define pr_debug(args...)
 #define pr_info(args...) fprintf(stdout, ##args)
 #define pr_error(args...) fprintf(stdout, ##args)
 
-#define cmd_XML_SIZE 1024
-#define REPLY_SIZE   4096
+#define CMD_XML_SIZE 1024
+#define REPLY_XML_SIZE   40960
+#define REPLY_SIZE   10000
 
 typedef unsigned char u8;
 typedef unsigned short u16;
@@ -39,16 +40,16 @@ typedef unsigned short u16;
 #define CMD_TYPE_ACK 7
 
 struct python_cmd {
-	u8 data[cmd_XML_SIZE];
+	u8 data[CMD_XML_SIZE];
 };
 
 #define REPLY_TYPE_CAM_RESOLUTION 1
-#define REPLY_TYPE_CONTOUR 2
-#define REPLY_TYPE_LAST_CONTOUR	3
+#define REPLY_TYPE_DATA 2
+#define REPLY_TYPE_LAST_DATA	3
 
 struct python_reply {
 	/* Max pay load size is expected 2 KB */
-	u8 data[REPLY_SIZE];
+	u8 data[REPLY_XML_SIZE];
 };
 
 struct configuration_params {
@@ -205,19 +206,19 @@ static PyObject* receive_cmd_from_server(struct configuration_params *param)
 	int len;
 	int i;
 
-	memset(&param->cmd.data[0], '\0', cmd_XML_SIZE);
-	pr_debug("waiting for comamnd reception\n");
-	if (len = recv(param->sockfd, param->cmd.data, cmd_XML_SIZE, 0) < 0)
+	memset(&param->cmd.data[0], '\0', CMD_XML_SIZE);
+	pr_debug("waiting for command reception\n");
+	if (len = recv(param->sockfd, param->cmd.data, CMD_XML_SIZE, 0) < 0)
 		return NULL;
 	pcmd = Py_BuildValue("(s#)", (char*)&param->cmd.data, strlen((char *)param->cmd.data));
 	return PyObject_CallObject(param->extract_cmd_from_xml, pcmd);
 }
 
-static int send_reply_to_server(struct configuration_params *param, int reply_size)
+static int send_reply_to_server(struct configuration_params *param)
 {
-	char buffer[cmd_XML_SIZE];
 	PyObject *preply, *pxml;
 	char *xml;
+	int reply_size = ((*(( unsigned int *)&param->reply.data[0])) >> 8) + 4;
 
 	preply = Py_BuildValue("(s#)", (char*)&param->reply, reply_size);
 	if (!preply) {
@@ -232,9 +233,11 @@ static int send_reply_to_server(struct configuration_params *param, int reply_si
 	}
 	if (write(param->sockfd, xml, strlen(xml)) < 0)
 		return -1;
+
 	return 0;
 }
 
+#if 0
 static int skeltonize(IplImage *img)
 {
 	IplImage *skel, *eroded, *temp;
@@ -356,7 +359,41 @@ skel_free:
 		cvReleaseImage(&skel);
 	return ret;
 }
+#endif
 
+static void send_raw_image(IplImage *gray, struct configuration_params *param)
+{
+	unsigned int data_len = gray->height * gray->widthStep;
+	unsigned int len;
+	char *src = gray->imageData;
+#if 0
+		for (int j = 0; j < 288; j++)
+			for (int i = 0; i < 384; i++)
+				printf("%d %d %d\n", *(src + j * 384 + i), i, j);
+#endif
+	while (data_len > 0) {
+		pr_debug("waiting for start_cam\n");
+		sem_wait(&param->start_cam);
+		pr_debug("Got start_cam\n");
+		if (data_len > (REPLY_SIZE - 4))
+			len = REPLY_SIZE - 4;
+		else
+			len = data_len;
+		data_len -= len;
+		if (data_len)
+			*(( unsigned int *)&param->reply.data[0]) = (len << 8) | REPLY_TYPE_DATA;
+		else
+			*(( unsigned int *)&param->reply.data[0]) = (len << 8) | REPLY_TYPE_LAST_DATA;
+		memcpy(&param->reply.data[4], src, len);
+		src += len;
+		send_reply_to_server(param);
+		sem_post(&param->start_cam);
+		pr_debug("Posted start_cam\n");
+		pr_debug("waiting for data_ack\n");
+		sem_wait(&param->data_ack);
+		pr_debug("Got data_ack\n");
+	}
+}
 static void* image_acquisition(void *data)
 {
 	struct configuration_params *param = (struct configuration_params *)data;
@@ -462,12 +499,12 @@ static void* image_acquisition(void *data)
 	/* Processes all the following frames of your stream:
 	   results are stored in "segmentation_map" */
 	while(!acquire_grayscale_image(param->stream, gray)){
-		pr_debug("waiting for start_cam\n");
-		sem_wait(&param->start_cam);
-		pr_debug("Got start_cam\n");
+		send_raw_image(gray, param);
 #if DEBUG_GRAY_IMAGE
 		cvShowImage("GRAY", gray);
 #endif
+		cvWaitKey(3);
+#if 0
 		/* Get FG image in map */
 		libvibeModelUpdate_8u_C1R(model, (const uint8_t*)gray->imageData,
 				(uint8_t*)map->imageData);
@@ -475,7 +512,7 @@ static void* image_acquisition(void *data)
 		cvShowImage("FG", map);
 #endif
 		/* Clean all small unnecessary FG objects. */
-		cvErode(map, eroded, NULL, 2);
+		cvErode(map, eroded, NULL, 1);
 		/* Dilate it to get in proper shape */
 		cvDilate(eroded, dilated, NULL, 1);
 #if DEBUG_CLEANED_IMAGE
@@ -486,10 +523,8 @@ static void* image_acquisition(void *data)
 		 * it out. Create separte image for each moving object.
 		 */
 		cvFindContours(dilated, storage, &contours,
-				sizeof(CvContour), CV_RETR_TREE,
-				CV_CHAIN_APPROX_SIMPLE, cvPoint(0, 0));
-		if (contours)
-			contours = cvApproxPoly(contours, sizeof(CvContour), storage, CV_POLY_APPROX_DP, 3, 1 );
+				sizeof(CvContour), CV_RETR_EXTERNAL,
+				CV_CHAIN_APPROX_NONE, cvPoint(0, 0));
 		valid_contour = 0;
 		for (c = contours; c != NULL; c = c->h_next) {
 			if (cvContourArea(c, CV_WHOLE_SEQ, 0) > param->area)
@@ -505,14 +540,14 @@ static void* image_acquisition(void *data)
 			if (area > param->area) {
 
 				valid_contour--;
-				cvWaitKey(0);
+				cvWaitKey(10);
+#if DEBUG_SEPARATED_IMAGE
 				cvZero(temp);
 				cvDrawContours(temp, c,
 						cvScalar(255, 255, 255, 0),
 						cvScalar(0, 0, 0, 0),
 						-1, CV_FILLED, 8,
 						cvPoint(0, 0));
-#if DEBUG_SEPARATED_IMAGE
 				cvShowImage("SEPRATED_CONTOUR", temp);
 #endif
 				skeltonize(temp);
@@ -521,8 +556,8 @@ static void* image_acquisition(void *data)
 #endif
 				if (!valid_contour)
 					param->reply.data[0] = REPLY_TYPE_LAST_CONTOUR;
-				else 
-					param->reply.data[0] =REPLY_TYPE_CONTOUR;
+				else
+					param->reply.data[0] = REPLY_TYPE_CONTOUR;
 				if (image_mode == CMD_TYPE_IMAGE_MODE_1) {
 					/* calculate centroid */
 					cx = 0;
@@ -560,8 +595,7 @@ static void* image_acquisition(void *data)
 				send_reply_to_server(param, data_len);
 			} 
 		}
-		sem_post(&param->start_cam);
-		pr_debug("Posted start_cam\n");
+#endif
 	}
 
 exit:
@@ -614,15 +648,14 @@ static void* execute(void *data)
 		}
 		switch (get_cmd(PyString_AS_STRING(cmd))) {
 			case CMD_TYPE_RESOLUTION:
-				param->reply.data[0] = REPLY_TYPE_CAM_RESOLUTION;
+				*(( unsigned int *)&param->reply.data[0]) = (4 << 8) | REPLY_TYPE_CAM_RESOLUTION;
 				width = get_image_width(param->stream);
 				height = get_image_height(param->stream);
-				param->reply.data[1] = width;
-				param->reply.data[2] = width >> 8;
-				param->reply.data[3] = height;
-				param->reply.data[4] = height >> 8;
-				param->reply.data[5] = '\0';
-				send_reply_to_server(param, 5);
+				param->reply.data[4] = width;
+				param->reply.data[5] = width >> 8;
+				param->reply.data[6] = height;
+				param->reply.data[7] = height >> 8;
+				send_reply_to_server(param);
 				break;
 			case CMD_TYPE_START_CAM:
 				sem_post(&param->start_cam);
@@ -732,7 +765,7 @@ int main(int argc, char **argv)
 	}
 
 	sem_init (&cfg_param.start_cam, 0, 0);
-	sem_init (&cfg_param.data_ack, 0, 1);
+	sem_init (&cfg_param.data_ack, 0, 0);
 	pthread_create(&thread2, NULL, &execute, (void*)&cfg_param);
 	pthread_create(&thread1, NULL, &image_acquisition, (void*)&cfg_param);
 	pthread_join(thread1, NULL);

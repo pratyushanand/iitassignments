@@ -306,15 +306,11 @@
 % author names and affiliations
 % use a multiple column layout for up to three different
 % affiliations
-\author{\IEEEauthorblockN{Pratyush Anand}
-\IEEEauthorblockA{Indian Institute of Technology Delhi \\
+\author{\IEEEauthorblockN{Pratyush Anand, Prof. Subrat Kar$^*$}
+\IEEEauthorblockA{Dept. of Electrical Engineering,\\
+ Indian Institute of Technology Delhi, \\
 Hauz Khas, New Delhi \\
-email: eey107515@ee.iitd.ac.in}
-\and
-\IEEEauthorblockN{Prof. Subrat Kar}
-\IEEEauthorblockA{Indian Institute of Technology Delhi \\
-Hauz Khas, New Delhi \\
-email: subrat@ee.iitd.ac.in}}
+email: eey107515@ee.iitd.ac.in, subrat@ee.iitd.ac.in}}
 
 % conference papers do not typically use \thanks and this command
 % is locked out in conference mode. If really needed, such as for
@@ -361,7 +357,8 @@ increases further, if we need to build a viable low cost system with a
 low power solution. Such solution is only possible if we extract only
 relevant information from the video frame and transmit it over the
 network.This work is an attempt to frame such a low data rate
-image pipeline.We are stripping down each moving object to few pixel,
+image pipeline with considerably minimal computational cost.
+We are stripping down each moving object to few pixel,
 mainly the skeleton endpoints and then also try to recognize moving
 object based on motion information.We have also analyzed feasibility of
 such a low data rate image pipeline for a low cost embedded system.
@@ -395,10 +392,10 @@ such a low data rate image pipeline for a low cost embedded system.
 Image based surveillance systems are ubiquitous, still number of such
 nodes are increasing everyday. Most of them transmit compressed video
 frames to a base station, where it is monitored by a person or a group
-of person. But such an arrangement can not be full proof. So, any
+of person. But such an arrangement can not be foolproof. So, any
 attempt in the direction of its automation can be of great use in
 application areas, such as traffic monitoring, elderly care, security
-and assembly line inspection etc.\\
+etc.\\
 \indent There had been lot of advancement with low power wireless home
 network eg. ZigBee, DASH-7 etc which are used in smart home
 technologies. Video surveillance system can be integrated with existing
@@ -440,39 +437,37 @@ At the end, we have also provided future work to be done in this line.
 
 \section{Related Work}
 % no \IEEEPARstart
-Various research have been done to extract useful information from a
-moving image. The toughest part of this implementation is to find an
+The most difficult part of such implementation is to find an
 efficient background estimation algorithm so that moving scene can be
 extracted. Features such as Gradient histogram, Gray Scale (Haar),
 color, texture, self-similarity and motion have been used by different
-researchers. \\ 
-\indent ~\cite{1} and many other have used color information as the
-feature for background estimation. But only color as feature might not be
-sufficient ~\cite{2} in surveillance applications where image resolution
-is very low.  Adding motion along with image intensities gives better
-result in moving bodies estimation. When background color is same as
-foreground color then texture features represented by local binary
-pattern ~\cite{3} provides interestingly nice result. Further, features
-computed at a single scale can be used to approximate feature at nearby
-scale. Such implementations ~\cite{4} accelerates the execution for
-practical applications.Methods based on Gaussian Mixtures Model(GMM)
-have also been widely used, but they are computationally very expensive.
-There is one non-parametric implementation ~\cite{5} known as Vibe, which
-decides about background pixel value after comparison with closest samples
-selected randomly.Interesting part of this approach is that background
-model is getting initialized from a single frame itself.\\
-\indent Once we have identified the foreground moving part, next
-important task is to reduce it's size or extract minimal useful
-information out of it. So far, object based video coding such as
-~\cite{7}, ~\cite{8} seems to be the best compression techniques.
-Commercial algorithms such as MPEG-4 also employees object based
-coding.Applications which we have targeted in this work is to identify
-few surveillance objects such as human, animal, vehicle etc and that too
-with minimal computational cost.Shape or skeleton ~\cite{11} based based
-approach seems computationally efficient for object recognition.  Medial
-axis transform, distance transform, morphological and star
-skeletonization etc ~\cite{9} ~\cite{10} are different methods which can
-be used to find out skeleton of a moving object.\\
+researchers. \\ \indent ~\cite{1} and many other have used color
+information as the feature for background estimation. But only color as
+feature might not be sufficient ~\cite{2} in surveillance applications
+where image resolution is very low.  Adding motion along with image
+intensities gives better result in moving bodies estimation. When
+background color is same as foreground color then texture features
+represented by local binary pattern ~\cite{3} provides interestingly
+nice result. Further, features computed at a single scale can be used to
+approximate feature at nearby scale. Such implementations ~\cite{4}
+accelerates the execution for practical applications.Methods based on
+Gaussian Mixtures Model(GMM) have also been widely used, but they are
+computationally very expensive.  There is one non-parametric
+implementation ~\cite{5} known as Vibe, which decides about background
+pixel value after comparison with closest samples selected
+randomly.Interesting part of this approach is that background model is
+getting initialized from a single frame itself.\\ \indent Once we have
+identified the foreground moving part, next important task is to reduce
+it's size or extract minimal useful information out of it. So far,
+object based video coding such as ~\cite{7}, ~\cite{8} seems to be the
+best compression techniques.  Commercial algorithms such as MPEG-4 also
+employees object based coding.Applications which we have targeted in
+this work is to identify moving with minimal computational cost.Shape or
+skeleton ~\cite{11} based based approach seems computationally efficient
+for object recognition.  Medial axis transform, distance transform,
+morphological and star skeletonization etc ~\cite{9} ~\cite{10} are
+different methods which can be used to find out skeleton of a moving
+object.\\
 
 
 \section{Proposed Framework}
@@ -483,7 +478,7 @@ possible, we have used opencv library to carry intended job. Our top
 level pipeline can be explained as in figure ~\ref{image_pipeline}.
 \begin{figure}[!h]
 \centering
-\includegraphics[scale=0.35]{image_pipeline}
+\includegraphics[scale=0.35]{figures/image_pipeline}
 \caption{Low BW surveillance Image Pipeline}
 \label{image_pipeline}
 \end{figure}
@@ -509,34 +504,19 @@ algorithm.
 
 \begin{figure}[!h]
 \centering
-\includegraphics[scale=0.35]{bg_compare}
+\includegraphics[scale=0.35]{figures/bg_compare}
 \caption{Variation of background subtraction execution time of ~\cite{3}
 and ~\cite{5} with frame number. This timing was observed with a system
 having having DMIPS = 800.}
 \label{bg_compare}
 \end{figure}
 
-We get several noise object in the extracted foreground image, see fig
-\ref{pipeline_images}b. They are cleaned by morphological erosion
-operation followed by dilation operation and we get fig
-\ref{pipeline_images}c. Further all moving contours are separated out by
+None of the background subtraction algorithm allows pure foreground
+extraction. There would always be several noise object in the extracted
+image. These are cleaned by morphological erosion operation followed by
+dilation operation.Further all moving contours are separated out by
 using opencv library ~\cite{12} function cvFindContours.This function
-gives us boundary point of moving object as show in fig
-\ref{pipeline_images}d.
-
-\begin{figure}[!h]
-\centering
-\includegraphics[scale=0.30]{pipeline_images}
-\caption{Images at different stage of pipeline. (From top left in
-clockwise order) \textbf{a.} Gray Scale input frame to pipeline
-\textbf{b.}Foreground extracted image using Vibe \textbf{c.} Cleaned
-image \textbf{d.} Contour of moving object \textbf{e.} Plot of smoothed
-distance of boundary points from centroid \textbf{f.} Plot of 3 points
-of interest, centroid and two distance peaks nearer to bottom left and
-bottom right corner of bounding box}
-\label{pipeline_images}
-\end{figure}
-
+gives us boundary point of moving object.
 
 Star skeletonization method has been used to find extreme point on
 moving contours. This method plots distance of each boundary point from
@@ -554,31 +534,38 @@ contours.
 Here X$_i$ and Y$_i$ are (X,Y) co-ordinate of i$_{th}$ point on the contour
 boundary.
 \item Distance d$_i$ is calculated between centroid and each boundary
-point as follows.This calculated distance vetor are stored in a CvMat
+point as follows.This calculated distance vector are stored in a CvMat
 array.
 	\begin{equation}
 	d_i = \sqrt{(C_x - X_i)^2 + (C_y - Y_i)^2}
 	\end{equation}
-\item Distance vetor array is smoothed to remove noise peaks using
-cvSmooth.If these distances are ploted then it looked like fig
-\ref{pipeline_images}e. Now local maxima of distance vector is
+
+\begin{figure}[!h]
+\centering
+\includegraphics[scale=0.35]{figures/distance}
+\caption{Distance plot of human contour points from its centroid}
+\label{distance}
+\end{figure}
+
+\item Distance vector array is smoothed to remove noise peaks using
+cvSmooth.If these distances are plotted then it looks like fig
+\ref{distance}. Now local maxima of distance vector is
 calculated by finding zero crossing of difference vectors.\\ However,
 even after smoothing operation there are some peaks which is not of our
 interest.In our algorithm, we are using 2 most relevant peaks which are
-nearest to each bottom corner of bounding box of contour respectively,
-as shown in fig \ref{pipeline_images}f. Only these two peaks along with
-centroid will give us sufficient information to distinguish an object
-among human, vehicle or animal.\\
+nearest to each bottom corner of bounding box of contour respectively.
+Only these two peaks along with centroid will give us sufficient information
+to distinguish human among human, vehicle or animal etc.\\
 In case of human these two peaks depicts two legs.For vehicle these are
-just two extream points of lower portion of back and front.In case of
+just two extrema points of lower portion of back and front.In case of
 animal these will correspond to front first leg and back last leg.
 \item Let P$_1$(X$_1$, Y$_1$), P$_2$(X$_2$, Y$_2$) and C(C$_x$, C$_y$) are two peaks
 nearest to bottom right and bottom left corner and centroid
-respectively. Let $\theta$ is the angle beween P$_1$C and P$_2$C, then
+respectively. Let $\theta$ is the angle between P$_1$C and P$_2$C, then
 $\theta$ can be calculated as follows.\\
 %
 	\begin{equation}
-	\theta = atan2(Y_2 - C_y, X_2 - C_x) - atan2(Y_1 - C_y, X_1 - C_x)
+	\theta = tan^{-1}[(Y_2 - C_y) / (X_2 - C_x)] \\ - tan^{-1}[(Y_1 - C_y) / (X_1 - C_x)]
 	\end{equation}
 %
 If variation of this $\theta$ is plotted in respective frames for human
@@ -593,7 +580,7 @@ animal.
 
 \begin{figure}[!h]
 \centering
-\includegraphics[scale=0.35]{angle_plot}
+\includegraphics[scale=0.35]{figures/angle_plot}
 \caption{Variation of angle between legs with frame number for human and
 vehicle.}
 \label{angle_plot}
@@ -604,30 +591,55 @@ view of camera, a structure is created and added to the list.This new
 object is tracked and value of (C$_x$, C$_y$), $\theta$ in each frame is
 stored. 
 \begin{enumerate} 
-\item We track value of $\theta$ untill it goes to '0' three times.
+\item We track value of $\theta$ until it goes to '0' three times.
 \item Now consider $\theta$ values between first and second '0' as
 vector T$_1$ and $\theta$ values between second and third '0' as vector
 T$_2$.
 \item Find mean m$_1$ and m$_2$ of vector T$_1$ and T$_2$ respectively.
-\item If n is the length of vector T$_1$ then caculate corelation value
+\item If n is the length of vector T$_1$ then calculate correlation value
 between these two vectors to find similarities as follows.
 	\begin{equation}
 	corel = {{\Sigma ^n _{i = 1}(T_{1i} - m_1) * (T_{2i} - m_2)}
 \over {\sqrt {\Sigma ^n _{i = 1} (T_{1i} - m_1)^2 * \Sigma ^n _{i = 1} (T_{2i}
 - m_2)^2}}}
 	\end{equation}
-\item If corelation value is greater than a threshold value TH$_1$ then we say
+\item If correlation value is greater than a threshold value TH$_1$ then we say
 that it is a human.
-\item If we do not find any '0' till N frames, then we calculate varinace of
-angle data for N frames. If it is less than threshold value TH$_2$, then
-we say that it is a vehicle.
-\item If variance is more than threshold value TH$_3$, then it is an
-animal. 
 
 \end{enumerate} 
 \end{enumerate}
 \section{Results}
 % no \IEEEPARstart
+We observe that with our implementation, code is able to detect a moving
+person after it's 3 steps move. Figure  \ref{pipeline_images} shows
+output images at different stages of pipeline.
+
+\begin{figure}[!h]
+\centering
+\includegraphics[scale=0.30]{figures/pipeline_images}
+\caption{Images at different stage of pipeline. (From top left in
+clockwise order) \textbf{a.} Gray Scale input frame to pipeline
+\textbf{b.}Foreground extracted image using Vibe \textbf{c.} Cleaned
+image \textbf{d.} Contour of moving object \textbf{e.} Plot of 3 points
+of interest, centroid and two distance peaks nearer to bottom left and
+bottom right corner of bounding box \textbf{f.} Virtual represnetation
+of scene} 
+\label{pipeline_images}
+\end{figure}
+
+We have also done experiments with negative images like a person moving
+on bicycle, or a vehicle moving on road. Our algorithm is successfuly
+able to reject these objects. Figure \ref{negative_inputs} shows that
+how does this implementation rejects moving vehicle and bicycle and  does
+not recongnize them as human.
+\begin{figure}[!h]
+\centering
+\includegraphics[scale=0.30]{figures/negative_inputs}
+\caption{Input and output of pipeline in case of negative images}
+\label{negative_inputs}
+\end{figure}
+
+
 
 
 \section{Future Work}

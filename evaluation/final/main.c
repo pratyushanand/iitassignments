@@ -3,8 +3,23 @@
 #include <cxtypes.h>
 #include <highgui.h>
 #include <sys/queue.h>
+#include <error.h>
+#include "Timer.h"
 
 #define MIN_AREA 300
+#define DEBUG_IMAGES
+#define DEBUG_GRAY
+//#define DEBUG_FG
+//#define DEBUG_CLEANED
+//#define DEBUG_SEPRATED_CONTOUR
+//#define DEBUG_DI
+//#define DEBUG_SKELTON
+#define DEBUG_FINAL
+
+//#define pr_debug(args...) fprintf(stdout, ##args)
+#define pr_debug(args...)
+#define pr_info(args...) fprintf(stdout, ##args)
+#define pr_error(args...) fprintf(stdout, ##args)
 
 static int32_t get_image_width(CvCapture *stream)
 {
@@ -45,30 +60,31 @@ filter()
 			&k,cvPoint(-1,-1));
 }
 #endif
-#define MAX_OBJECT	20
+#define MAX_OBJECT	50
 #define MAX_BOUNDARY_POINT 200
 #define MAX_TRACK_HISTORY 100
 enum obj_type {
 	TYPE_UNDEFINED = 0,
 	TYPE_HUMAN = 1,
 };
-struct object_class {
-	/* type of object */
-	enum obj_type type;
-	int x;
-	int y;
-};
 
 struct tracker{
-	int theta1[MAX_TRACK_HISTORY];
-	int theta2[MAX_TRACK_HISTORY];
-	int di[MAX_TRACK_HISTORY];
-	int hy[MAX_TRACK_HISTORY];
+	int theta[MAX_TRACK_HISTORY];
 	int cx[MAX_TRACK_HISTORY];
 	int cy[MAX_TRACK_HISTORY];
+	int px;
+	int py;
 	int cur;
-	struct object_class object;
+	enum obj_type type;
 	LIST_ENTRY(tracker) list;
+};
+struct object_table {
+	int obj_count;
+	int cx[MAX_OBJECT];
+	int cy[MAX_OBJECT];
+	int theta[MAX_OBJECT];
+	enum obj_type type[MAX_OBJECT];
+	bool is_old[MAX_OBJECT];
 };
 
 static LIST_HEAD(trackerhead, tracker) tracker_head;
@@ -106,7 +122,7 @@ float compute_autocovariance(int *data, int count, int lag, int mean, int var)
 	return (autocv / var);
 }
 
-enum obj_type analyze_leg_motion(int *theta2)
+enum obj_type analyze_leg_motion(int *theta)
 {
 	int i, p[3], j = 0, m1, m2, n;
 	int *t1, *t2;
@@ -114,19 +130,17 @@ enum obj_type analyze_leg_motion(int *theta2)
 	float corel;
 
 	for (i = 0; i < MAX_TRACK_HISTORY; i++) {
-		printf("%d\t", theta2[i]);
-		if (!theta2[i]) {
+		if (!theta[i]) {
 			p[j++] = i;
 			if (j == 3)
 				break;
 		}
 	}
-	printf("\n\n");
 	if (j < 3)
 		return TYPE_UNDEFINED;
 	n = p[2] - p[1];
-	t1 = &theta2[p[1]];
-	t2 = &theta2[p[2]];
+	t1 = &theta[p[1]];
+	t2 = &theta[p[2]];
 	m1 = compute_mean(t1, n);
 	m2 = compute_mean(t2, n);
 	numr = dnm1 = dnm2 =0;
@@ -137,44 +151,136 @@ enum obj_type analyze_leg_motion(int *theta2)
 	for (i = 0; i < n; i++)
 		dnm2 += (t2[i] - m2) * (t2[i] - m2);
 	corel = numr / sqrt (dnm1 * dnm2);
-	printf("%f\n", corel);
-	if (corel > 0.9)
+	if (corel > 0.5)
 		return TYPE_HUMAN;
 	else
 		return TYPE_UNDEFINED;
 }
 
-void update_tracker(CvSeq *c, int width, int height, struct object_class
-		*object)
+static void update_tracker(struct object_table *obj_table, int height,
+		int width)
+{
+	struct tracker *node;
+	int count, n_count, cx, cy, theta, dx, dy, x, y, dmin, dmin_prev, i;
+	/* see if object was previously found.
+	 * 1. Check if new centroid is nearby (at max distance D) to
+	 * any centroid of previous frame. If not, then it might be a new
+	 * object.
+	 * 2. If there are more than one centroid of previous frame
+	 * which is nearby to the current centroid, then release all
+	 * nearby previous object and treat it as a new object.
+	 */
+	LIST_FOREACH(node, &tracker_head, list) {
+		dmin_prev = pow(height, 2) + pow(width, 2);
+		n_count = -1;
+		x = node->px;
+		y = node->py;
+		for (count = 0; count < obj_table->obj_count; count++) {
+			cx = obj_table->cx[count];
+			cy = obj_table->cy[count];
+			dmin = pow((x - cx), 2) + pow((y -cy), 2);
+			if (dmin < dmin_prev)
+				n_count = count;
+			dmin_prev = dmin;
+		}
+		if (n_count == -1) {//TBD
+			printf("\nBUG");
+			while(1);
+		}
+		//pr_debug("Updating old object\n");
+		cx = obj_table->cx[n_count];
+		cy = obj_table->cy[n_count];
+		theta = obj_table->theta[n_count];
+		/* drift in x and y direction to predict next cx and cy
+		 */
+		dx = cx - node->cx[node->cur];
+		dy = cy - node->cy[node->cur];
+		if (!(!node->theta[node->cur]
+					&& (!theta || !node->cur)))
+			node->cur++;
+		node->cur %= MAX_TRACK_HISTORY;
+		node->theta[node->cur] = theta;
+		node->cx[node->cur] = cx;
+		node->cy[node->cur] = cy;
+		node->px = cx + dx;
+		node->py = cy + dy;
+		if (node->type == TYPE_UNDEFINED)
+			node->type = analyze_leg_motion(node->theta);
+		obj_table->type[n_count] = node->type;
+		obj_table->is_old[n_count] = true;
+	}
+	for (count = 0; count < obj_table->obj_count; count++) {
+		if (!obj_table->is_old[count]) {
+			pr_debug("Adding a new object\n");
+			node = (struct tracker *)malloc(sizeof(*node));
+			node->theta[0] = theta;
+			for (i = 1; i < MAX_TRACK_HISTORY; i++)
+				node->theta[i] = 180;
+			node->px = node->cx[0] = obj_table->cx[count];
+			node->py = node->cy[0] = obj_table->cy[count];
+			node->cur = 0;
+			node->type = TYPE_UNDEFINED;
+			LIST_INSERT_HEAD(&tracker_head, node, list);
+		}
+	}
+}
+
+static void update_object_table(CvSeq *c, int width, int height,
+		struct object_table *obj_table)
 {
 	int found = 0;
-	struct tracker *node;
-	CvMat* mat = cvCreateMat(1, width * height, CV_32FC1);
-	CvMat* smat = cvCreateMat(1, width * height, CV_32FC1);
-	CvRect rect;
+	CvMat* mat, *smat;
+	CvPoint skel_pt_final[3];
 	CvPoint skel_pt_all[MAX_BOUNDARY_POINT];
-	CvPoint skel_pt_final[5];
-	double theta1, theta2;
+	double theta;
 	float di, di1, delta, delta1;
-	int i, j, cx, cy, hy, wx, dmin, dmin_prev;
-	float mean, var, autoco;
-	IplImage *temp1 = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
-	cvNamedWindow("SEPRATED_CONTOUR", 1);
-	cvMoveWindow("SEPRATED_CONTOUR", 3 * width, 0);
-	cvNamedWindow("DI", 1);
-	cvMoveWindow("DI", width, 2 * height);
-	cvNamedWindow("SKELETON", 1);
-	cvMoveWindow("SKELETON", 0, 2 * height);
+	int i, j, cx, cy, x, y, hy, wx, dmin, dmin_prev, ret;
+	CvRect rect;
 
-	cvWaitKey(0);
-	cvZero(temp1);
+#ifdef DEBUG_IMAGES
+	IplImage *temp = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
+	if (!temp) {
+		pr_error("Error with memory allocation for temp image\n");
+		ret = -1;
+		goto cleanup;
+	}
+#endif
+
+	mat = cvCreateMat(1, width * height, CV_32FC1);
+	if (!mat) {
+		pr_error("Error with memory allocation for mat\n");
+		ret = -1;
+		goto cleanup;
+	}
+	smat = cvCreateMat(1, width * height, CV_32FC1);
+	if (!smat) {
+		pr_error("Error with memory allocation for smat\n");
+		ret = -1;
+		goto cleanup;
+	}
+
+#ifdef DEBUG_SEPRATED_CONTOUR
+	cvNamedWindow("SEPRATED_CONTOUR", 1);
+	cvMoveWindow("SEPRATED_CONTOUR", 0, 2 * height);
+#endif
+#ifdef DEBUG_DI
+	cvNamedWindow("DI", 1);
+	cvMoveWindow("DI", 2 * width, 2 * height);
+#endif
+#ifdef DEBUG_SKELTON
+	cvNamedWindow("SKELETON", 1);
+	cvMoveWindow("SKELETON", 4 * width, 2 * height);
+#endif
+#ifdef DEBUG_SEPRATED_CONTOUR
+	cvZero(temp);
 	for (i = 0; i < c->total; i++) {
 		CvPoint* p = CV_GET_SEQ_ELEM(CvPoint, c,
 				i);
-		*((uchar*) (temp1->imageData +
-					p->y * temp1->widthStep) + p->x) = 255;
+		*((uchar*) (temp->imageData +
+					p->y * temp->widthStep) + p->x) = 255;
 	}
-	cvShowImage("SEPRATED_CONTOUR", temp1);
+	cvShowImage("SEPRATED_CONTOUR", temp);
+#endif
 	/* calculate centroid */
 	cx = 0;
 	cy = 0;
@@ -198,18 +304,17 @@ void update_tracker(CvSeq *c, int width, int height, struct object_class
 	}
 	/* Low pass filter it */
 	cvSmooth(mat, smat, CV_GAUSSIAN, 39, 1, 0, 0);
-#if 1
+#ifdef DEBUG_DI
 	/*plot disatance vector */
-	cvZero(temp1);
+	cvZero(temp);
 	for (i = 0; i < c->total; i++) {
 		int x = CV_MAT_ELEM(*smat, float, 0, i);
-		*((uchar*) (temp1->imageData +
-					(height - x) * temp1->widthStep) + i) = 255;
+		*((uchar*) (temp->imageData +
+					(height - x) * temp->widthStep) + i) = 255;
 	}
-	cvShowImage("DI", temp1);
+	cvShowImage("DI", temp);
 #endif
 	/* find extream points */
-	cvZero(temp1);
 
 	di = CV_MAT_ELEM(*smat, float, 0, 0);
 	di1 = CV_MAT_ELEM(*smat, float, 0, 1);
@@ -227,26 +332,25 @@ void update_tracker(CvSeq *c, int width, int height, struct object_class
 			skel_pt_all[j].x = p->x;
 			skel_pt_all[j++].y = p->y;
 			if (j == MAX_BOUNDARY_POINT) {
-				printf("Error with parameters\n");
-				goto exit;
+				pr_error("More than %d boundary points\n", j);
+				goto cleanup;
 			}
-			//						cvLine(temp1, *p, cvPoint(cx, cy),
-			//							cvScalar(255, 255, 255, 0), 1, 8, 0);
 		}
 		delta = delta1;
 	}
 	rect=cvBoundingRect (c, 0);
 	hy = rect.height;
 	wx = rect.width;
-	/* Centroid of final skeleton */
+	x = rect.x;
+	y = rect.y;
 	skel_pt_final[0].x = cx;
 	skel_pt_final[0].y = cy;
-	/* top left point of skeleton */
-	dmin_prev = sqrt(pow(rect.height, 2) +
-			pow(rect.width, 2));
+	/* skeleton point nearest to bottom right corner */
+	//dmin_prev = sqrt(pow(hy, 2) + pow(wx, 2));
+	dmin_prev = pow(hy, 2) + pow(wx, 2);
 	for (i = 0; i < j; i++) {
-		dmin = sqrt(pow((rect.x - skel_pt_all[i].x), 2) +
-				pow((rect.y - skel_pt_all[i].y), 2));
+		dmin = pow((x + wx - skel_pt_all[i].x), 2) +
+				pow((y + hy - skel_pt_all[i].y), 2);
 		if (dmin < dmin_prev) {
 			skel_pt_final[1].x =
 				skel_pt_all[i].x;
@@ -255,12 +359,12 @@ void update_tracker(CvSeq *c, int width, int height, struct object_class
 			dmin_prev = dmin;
 		}
 	}
-	/* top right point of skeleton */
-	dmin_prev = sqrt(pow(rect.height, 2) +
-			pow(rect.width, 2));
+	/* skeleton point nearest to bottom left corner */
+	//dmin_prev = sqrt(pow(hy, 2) + pow(wx, 2));
+	dmin_prev = pow(hy, 2) + pow(wx, 2);
 	for (i = 0; i < j; i++) {
-		dmin = sqrt(pow((rect.x + rect.width - skel_pt_all[i].x), 2) +
-				pow((rect.y - skel_pt_all[i].y), 2));
+		dmin = pow((x - skel_pt_all[i].x), 2) +
+				pow((y + hy - skel_pt_all[i].y), 2);
 		if (dmin < dmin_prev) {
 			skel_pt_final[2].x =
 				skel_pt_all[i].x;
@@ -269,141 +373,105 @@ void update_tracker(CvSeq *c, int width, int height, struct object_class
 			dmin_prev = dmin;
 		}
 	}
-	/* bottom right point of skeleton */
-	dmin_prev = sqrt(pow(rect.height, 2) +
-			pow(rect.width, 2));
-	for (i = 0; i < j; i++) {
-		dmin = sqrt(pow((rect.x + rect.width - skel_pt_all[i].x), 2) +
-				pow((rect.y + rect.height - skel_pt_all[i].y), 2));
-		if (dmin < dmin_prev) {
-			skel_pt_final[3].x =
-				skel_pt_all[i].x;
-			skel_pt_final[3].y =
-				skel_pt_all[i].y;
-			dmin_prev = dmin;
-		}
-	}
-	/* bottom left point of skeleton */
-	dmin_prev = sqrt(pow(rect.height, 2) +
-			pow(rect.width, 2));
-	for (i = 0; i < j; i++) {
-		dmin = sqrt(pow((rect.x - skel_pt_all[i].x), 2) +
-				pow((rect.y + rect.height - skel_pt_all[i].y), 2));
-		if (dmin < dmin_prev) {
-			skel_pt_final[4].x =
-				skel_pt_all[i].x;
-			skel_pt_final[4].y =
-				skel_pt_all[i].y;
-			dmin_prev = dmin;
-		}
-	}
-#if 0
-	for (i = 0; i < 5; i++) {
-		*((uchar*) (temp1->imageData +
-					skel_pt_final[i].y * skel->widthStep) + skel_pt_final[i].x) = 255;
-	}
-	cvLine(temp1, skel_pt_final[0], skel_pt_final[1],
-			cvScalar(255, 0, 0, 0), 1, CV_AA,0);
-	cvLine(temp1, skel_pt_final[0], skel_pt_final[2],
-			cvScalar(255, 0, 0, 0), 1, CV_AA,0);
+#ifdef DEBUG_SKELTON
+	cvZero(temp);
+	cvLine(temp, skel_pt_final[0], skel_pt_final[1],
+			cvScalar(255, 0, 0, 0), 1, CV_AA, 0);
+	cvLine(temp, skel_pt_final[0], skel_pt_final[2],
+			cvScalar(255, 0, 0, 0), 1, CV_AA, 0);
+	cvShowImage("SKELETON", temp);
+//	cvWaitKey(0);
 #endif
-	cvLine(temp1, skel_pt_final[0], skel_pt_final[3],
-			cvScalar(255, 0, 0, 0), 1, CV_AA,0);
-	cvLine(temp1, skel_pt_final[0], skel_pt_final[4],
-			cvScalar(255, 0, 0, 0), 1, CV_AA,0);
-	cvShowImage("SKELETON", temp1);
-	theta1 = atan2(skel_pt_final[2].y - skel_pt_final[0].y, skel_pt_final[2].x - skel_pt_final[0].x) * 180.0 / CV_PI -
+	/* fine angle between legs */
+	theta = atan2(skel_pt_final[2].y - skel_pt_final[0].y, skel_pt_final[2].x - skel_pt_final[0].x) * 180.0 / CV_PI -
 		atan2(skel_pt_final[1].y - skel_pt_final[0].y, skel_pt_final[1].x - skel_pt_final[0].x) * 180.0 / CV_PI;
-	theta2 = atan2(skel_pt_final[4].y - skel_pt_final[0].y, skel_pt_final[4].x - skel_pt_final[0].x) * 180.0 / CV_PI -
-		atan2(skel_pt_final[3].y - skel_pt_final[0].y, skel_pt_final[3].x - skel_pt_final[0].x) * 180.0 / CV_PI;
-	di = sqrt(pow(((skel_pt_final[3].x + skel_pt_final[4].x)/2 - cx), 2) +
-			pow(((skel_pt_final[3].y + skel_pt_final[4].y)/2 - cy), 2));
-	//printf("%f\n", theta2);
-	//printf("%f %f %f %d %d %d %d %d %d %d\n", theta1, theta2, di, hy, cx, cy,
-//			skel_pt_final[3].x, skel_pt_final[3].y,
-//			skel_pt_final[4].x, skel_pt_final[4].y);
-	LIST_FOREACH(node, &tracker_head, list) {
-//				printf("Matching object\n");
-		if (abs(node->cx[node->cur] - cx) < 15 && abs(node->cy[node->cur] - cy) < 15) {
-			if (!(!node->theta2[node->cur]
-				&& (!theta2 || !node->cur)))
-				node->cur++;
-			node->cur %= MAX_TRACK_HISTORY;
-			node->theta1[node->cur] = theta1;
-			node->theta2[node->cur] = theta2;
-			node->di[node->cur] = di;
-			node->hy[node->cur] = hy;
-			node->cx[node->cur] = cx;
-			node->cy[node->cur] = cy;
-			found = 1;
-//			printf("object matched\n");
-			break;
-		}
-	}
-	if (!found) {
-		printf("object not matched\n");
-		/* this is a new object */
-		node = (struct tracker *)malloc(sizeof(*node));
-		node->theta1[0] = theta1;
-		node->theta2[0] = theta2;
-		for (i = 1; i < MAX_TRACK_HISTORY; i++)
-			node->theta2[i] = 180;
-		node->di[0] = di;
-		node->hy[0] = hy;
-		node->cx[0] = cx;
-		node->cy[0] = cy;
-		node->cur = 0;
-		node->object.type = TYPE_UNDEFINED;
-		LIST_INSERT_HEAD(&tracker_head, node, list);
-	}
-	if (node->object.type == TYPE_UNDEFINED)
-		node->object.type = analyze_leg_motion(node->theta2);
-	object->type = node->object.type;
-	object->x = cx;
-	object->y = cy;
-#if 0
-	node->object.type = TYPE_UNDEFINED;
-	node->object.confidence = 0;
-	if (theta1 >= 5 && theta1 <= 20) {
-		node->object.type = TYPE_HUMAN;
-		node->object.confidence = 60;
-	}
-	if (theta2 == 0 && ((abs(di - hy / 2)) / di) < 0.05)
-		node->object.confidence += 10;
-	object->type = node->object.type;
-	object->confidence = node->object.confidence;
-	object->x = cx;
-	object->y = cy;
-#endif
-	//printf("%f\t%f\t%f\t%d\n", theta1, theta2, di, hy);
-exit:
+	i = obj_table->obj_count;
+	obj_table->cx[i] = cx;
+	obj_table->cy[i] = cy;
+	obj_table->theta[i] = theta;
+
+cleanup:
 	cvReleaseMat(&mat);
 	cvReleaseMat(&smat);
+#ifdef DEBUG_IMAGES
+	if (temp)
+		cvReleaseImage(&temp);
+#endif
+#ifdef DEBUG_SEPRATED_CONTOUR
+	cvDestroyWindow("SEPRATED_CONTOUR");
+#endif
+#ifdef DEBUG_DI
+	cvDestroyWindow("DI");
+#endif
+#ifdef DEBUG_SKELTON
+	cvDestroyWindow("SKELETON");
+#endif
 }
-
 int main(int argc, char **argv)
 {
-	CvCapture* stream = cvCaptureFromFile(argv[1]);
-	CvMemStorage* storage = cvCreateMemStorage(0);
-	int32_t width = get_image_width(stream);
-	int32_t height = get_image_height(stream);
-	int32_t stride = get_image_stride(stream);
+	CTimer Timer;
+	char msg[2048];
+	CvCapture* stream;
+	CvMemStorage* storage;
+	int32_t width, height, stride;
 	CvSeq* contours = NULL;
 	CvSeq* c = NULL;
-	IplImage *gray, *temp1, *temp2, *map, *eroded,
-		 *dilated, *dii;
-	int frame = 0;
+	IplImage *gray, *map, *eroded, *dilated;
+	int frame = 0, ret;
 	float area;
-	struct object_class object;
+	vibeModel_t *model;
+	struct object_table obj_table;
+	int count;
+#ifdef DEBUG_IMAGES
+	IplImage *temp;
+#endif
+#ifdef DEBUG_FINAL
+	CvFont font;
+
+	cvInitFont(&font, CV_FONT_HERSHEY_SIMPLEX|CV_FONT_ITALIC, 1, 1, 1);
+#endif
 
 	LIST_INIT(&tracker_head);
-#if 1
-	cvNamedWindow("GRAY", 1);
-	cvNamedWindow("FG", 1);
-	cvMoveWindow("FG", width, 0);
-	cvNamedWindow("CLEANED", 1);
-	cvMoveWindow("CLEANED", 2 * width, 0);
+	stream = cvCaptureFromFile(argv[1]);
+	if (!stream) {
+		pr_error("Could not create capture stream\n");
+		ret = -1;
+		goto cleanup;
+	}
+	storage = cvCreateMemStorage(0);
+	if (!storage) {
+		pr_error("Could not create storage space\n");
+		ret = -1;
+		goto cleanup;
+	}
+	width = get_image_width(stream);
+	height = get_image_height(stream);
+	stride = get_image_stride(stream);
+
+#ifdef DEBUG_IMAGES
+	temp = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
+	if (!temp) {
+		pr_error("Error with memory allocation for temp image\n");
+		ret = -1;
+		goto cleanup;
+	}
 #endif
+
+#ifdef DEBUG_GRAY
+	cvNamedWindow("GRAY", 1);
+#endif
+#ifdef DEBUG_FG
+	cvNamedWindow("FG", 1);
+	cvMoveWindow("FG", 2*width, 0);
+#endif
+#ifdef DEBUG_CLEANED
+	cvNamedWindow("CLEANED", 1);
+	cvMoveWindow("CLEANED", 4 * width, 0);
+#endif
+#ifdef DEBUG_FINAL
+	cvNamedWindow("FINAL", 1);
+#endif
+
 	/* Get a model data structure */
 	/*
 	 * Library for background detection from following paper.
@@ -411,43 +479,72 @@ int main(int argc, char **argv)
 	 * ViBe: A universal background subtraction algorithm for video sequences.
 	 * In IEEE Transactions on Image Processing, 20(6):1709-1724, June 2011.
 	*/
-	vibeModel_t *model = libvibeModelNew();
+	model = libvibeModelNew();
+	if (!model) {
+		pr_error("Vibe Model could not be created\n");
+		ret = -1;
+		goto cleanup;
+	}
 
 	/* Allocates memory to store the input images and the segmentation maps */
-	temp1 = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
-	temp2 = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
+	gray = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
+	if (!gray) {
+		pr_error("Error with memory allocation for gray image\n");
+		ret = -1;
+		goto cleanup;
+	}
+	map = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
+	if (!map) {
+		pr_error("Error with memory allocation for map image\n");
+		ret = -1;
+		goto cleanup;
+	}
+	eroded = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
+	if (!eroded) {
+		pr_error("Error with memory allocation for eroded image\n");
+		ret = -1;
+		goto cleanup;
+	}
+	dilated = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
+	if (!dilated) {
+		pr_error("Error with memory allocation for dilated image\n");
+		ret = -1;
+		goto cleanup;
+	}
 
 	/* Acquires your first image */
-	gray = temp2;
 	acquire_grayscale_image(stream, gray);
 
 	/* Allocates the model and initialize it with the first image */
-	libvibeModelAllocInit_8u_C1R(model, (const uint8_t *)gray->imageData, width, height,
-			stride);
+	libvibeModelAllocInit_8u_C1R(model, (const uint8_t *)gray->imageData,
+			width, height, stride);
 
 	/* Processes all the following frames of your stream:
 		results are stored in "segmentation_map" */
-	while(!acquire_grayscale_image(stream, gray)){
+	while(!acquire_grayscale_image(stream, gray)) {
+		Timer.Start();
 		frame++;
-		if (frame < 100)
+		if (frame < 20)
 			continue;
-		//printf("%d\n", frame);
+#ifdef DEBUG_GRAY
 		cvShowImage("GRAY", gray);
-		/* Get FG image in temp1 */
-		map = temp1;
+#endif
+		/* Get FG image in temp */
 		libvibeModelUpdate_8u_C1R(model, (const uint8_t *)gray->imageData,
 				(uint8_t *)map->imageData);
+#ifdef DEBUG_FG
 		cvShowImage("FG", map);
+#endif
 		/*
 		 * Clean all small unnecessary FG objects. Get cleaned
 		 * one in temp2
 		 */
-		eroded = temp2;
 		cvErode(map, eroded, NULL, 1);
 		/* Dilate it to get in proper shape */
-		dilated = temp1;
-		cvDilate(eroded, dilated, NULL, 3);
+		cvDilate(eroded, dilated, NULL, 1);
+#ifdef DEBUG_CLEANED
 		cvShowImage("CLEANED", dilated);
+#endif
 		/*
 		 * Find out all moving contours , so basically segment
 		 * it out. Create separte image for each moving object.
@@ -455,26 +552,69 @@ int main(int argc, char **argv)
 		 cvFindContours(dilated, storage, &contours,
 				sizeof(CvContour), CV_RETR_EXTERNAL,
 				CV_CHAIN_APPROX_NONE, cvPoint(0, 0));
+		 memset(&obj_table, 0 , sizeof(obj_table));
 		for (c = contours; c != NULL; c = c->h_next) {
 			area = cvContourArea(c, CV_WHOLE_SEQ, 0);
-			//printf("test%d\n", frame);
-
 			/*
 			 * choose only if moving object area is greater
 			 * than MIN_AREA square pixel
 			 */
 			if (area > MIN_AREA) {
-				update_tracker(c, width, height, &object);
-		//		printf("%d\t%d\t%d\n", object.type, object.x, object.y);
+				update_object_table(c, width, height,
+						&obj_table);
+		 		obj_table.obj_count++;
 			}
 		}
-				gray = temp2;
+		if(obj_table.obj_count)
+			update_tracker(&obj_table, height, width);
+		Timer.Stop();
+		Timer.PrintElapsedTimeMsg(msg);
+		//printf("%s\n", msg);
+#ifdef DEBUG_IMAGES
+		cvZero(temp);
+#endif
+#ifdef DEBUG_FINAL
+		for (count = 0; count < obj_table.obj_count; count++) {
+			if (obj_table.type[count] == TYPE_HUMAN) {
+				cvPutText(temp, "H", cvPoint(obj_table.cx[count], obj_table.cy[count]),
+						&font, cvScalar(255, 255, 0));
+			}
+		}
+		cvShowImage("FINAL", temp);
+		cvWaitKey(0);
+#endif
 	}
+cleanup:
+#ifdef DEBUG_IMAGES
+	if (temp)
+		cvReleaseImage(&temp);
+#endif
 	/* Cleanup allocated memory */
-	libvibeModelFree(model);
-	cvReleaseImage(&temp1);
-	cvReleaseImage(&temp2);
-	cvReleaseMemStorage(&storage);
-
-	return(0);
+	if (dilated)
+		cvReleaseImage(&dilated);
+	if (eroded)
+		cvReleaseImage(&eroded);
+	if (map)
+		cvReleaseImage(&map);
+	if (gray)
+		cvReleaseImage(&gray);
+	if (model)
+		libvibeModelFree(model);
+	if (storage)
+		cvReleaseMemStorage(&storage);
+	if (stream)
+		cvReleaseCapture(&stream);
+#ifdef DEBUG_GRAY
+	cvDestroyWindow("GRAY");
+#endif
+#ifdef DEBUG_FG
+	cvDestroyWindow("FG");
+#endif
+#ifdef DEBUG_CLEANED
+	cvDestroyWindow("CLEANED");
+#endif
+#ifdef DEBUG_CLEANED
+	cvDestroyWindow("FINAL");
+#endif
+	return ret;
 }

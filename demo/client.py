@@ -21,7 +21,9 @@ def encode_reply_to_xml (pargs):
 	xml.init( encoding='ISO-8859-2' )
 	xml.reply.open( )
 	xml.type(data[0])
-	xml.data(base64.b16encode(data[1:].tostring()))
+	length = int(data[1]) + (int(data[2]) << 8) + (int(data[3]) << 16)
+	xml.data(base64.encodestring(data[4:].tostring()))
 	xml.reply.close( )
-	reply = struct.pack("4096s", str(xml))
+	reply = struct.pack("40960s", str(xml))
+	print len(reply)
 	return reply
