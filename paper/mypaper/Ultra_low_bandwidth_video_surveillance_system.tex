@@ -359,9 +359,9 @@ relevant information from the video frame and transmit it over the
 network.This work is an attempt to frame such a low data rate
 image pipeline with considerably minimal computational cost.
 We are stripping down each moving object to few pixel,
-mainly the skeleton endpoints and then also try to recognize moving
-object based on motion information.We have also analyzed feasibility of
-such a low data rate image pipeline for a low cost embedded system.
+mainly the skeleton endpoints and then also recognize moving
+object based on motion information.We have also compared execution time
+of our pipeline with some other implementations.
 \end{abstract}
 % IEEEtran.cls defaults to using nonbold math in the Abstract.
 % This preserves the distinction between vectors and scalars. However,
@@ -622,16 +622,16 @@ clockwise order) \textbf{a.} Gray Scale input frame to pipeline
 \textbf{b.}Foreground extracted image using Vibe \textbf{c.} Cleaned
 image \textbf{d.} Contour of moving object \textbf{e.} Plot of 3 points
 of interest, centroid and two distance peaks nearer to bottom left and
-bottom right corner of bounding box \textbf{f.} Virtual represnetation
+bottom right corner of bounding box \textbf{f.} Virtual representation
 of scene} 
 \label{pipeline_images}
 \end{figure}
 
 We have also done experiments with negative images like a person moving
-on bicycle, or a vehicle moving on road. Our algorithm is successfuly
+on bicycle, or a vehicle moving on road. Our algorithm is successfully
 able to reject these objects. Figure \ref{negative_inputs} shows that
 how does this implementation rejects moving vehicle and bicycle and  does
-not recongnize them as human.
+not recognize them as human.
 \begin{figure}[!h]
 \centering
 \includegraphics[scale=0.30]{figures/negative_inputs}
@@ -640,10 +640,36 @@ not recongnize them as human.
 \end{figure}
 
 
+Comparison of proposed framework with HAAR and IDIAP detection algorithm
+in figure \ref{pipeline_execution_time} shows that, this is quite
+faster. Our pipeline takes just 3.6 mS on the average, while HARR and
+IDIAP takes around 20mS and 248 mS respectively per frame. This timing
+was observed with a system having DMIPS = 800.
 
+\begin{figure}[!h]
+\centering
+\includegraphics[scale=0.30]{figures/pipeline_execution_time}
+\caption{Variation of different pipeline execution time with a system
+having DMIPS=800}
+\label{pipeline_execution_time}
+\end{figure}
+
+So if a surveillance application requires to identify moving person,
+then we might not need to use complex algorithm. Processor like Coretx
+M3/M4 are used in an embedded environment with a low power application.
+Such processors have DMIPS of 1.25 dmips/Mhz. If we use such processors
+at 300 MHz, our pipeline will be able to process one frame in less than
+8 mS, and therefore system can go in sleep mode for longer time and
+hence can save a lot of powers.
 
 \section{Future Work}
 % no \IEEEPARstart
+
+Porting of this pipeline on an ARM platform would be a nice idea.We also
+need to see that how does this pipeline behaves with exiting home
+network like zigbee. Vibe algorithm has one issue that it is not able to
+remove shadow.So, an improvement in Vibe for ghost and shadow removal
+will make this pipeline more robust.
 
 
 % An example of a floating figure using the graphicx package.
@@ -732,8 +758,11 @@ not recongnize them as human.
 
 
 \section{Conclusion}
-The conclusion goes here.
 
+We have taken unique property of human leg motion, that it is periodic
+and also angle between two legs varies between 0 and some maximum value.
+We have demonstrated that with our proposed framework one can achieve
+almost real time pedestrian detection.
 
 
 
