@@ -1,0 +1,255 @@
+% ******************************************************************
+% *** SPACE CONTROL ************************************************
+
+
+\global\long\global\long\def\vf{\vfill}
+ \global\long\global\long\def\vs{\vspace{1pc}}
+ \global\long\global\long\def\hs{\hspace{1in}}
+
+
+\global\long\global\long\def\blank{$\,$ \underline{\hspace{1in}} $\,$}
+ \global\long\global\long\def\Blank{$\,$ \underline{\hspace{1.5in}} $\,$}
+
+
+\global\long\global\long\def\pg{\clearpage}
+
+
+% ******************************************************************
+% *** FORMATTING ***************************************************
+
+
+\global\long\global\long\def\und{\underline{}}
+
+
+% ******************************************************************
+% *** ENGLISH ABBREVIATIONS ****************************************
+
+
+\global\long\global\long\def\ie{\mbox{{\it i.e.} }}
+ \global\long\global\long\def\eg{\mbox{{\it e.g.} }}
+ \global\long\global\long\def\etc{\mbox{{\it et cetera} }}
+
+
+% ******************************************************************
+% *** MATH SHORTCUTS ***********************************************
+
+
+\global\long\global\long\def\ds{{\displaystyle }}
+
+
+\global\long\global\long\def\ddx{\ds\frac{d}{dx}}
+ \global\long\global\long\def\ddt{\ds\frac{d}{dx}}
+ \global\long\global\long\def\dd#1#2{\ds\frac{d{#1}}{d{#2}}}
+
+
+\global\long\global\long\def\pitch{\mathbin{\frown\! \! \! \! \mid\, \, \,}}
+ % replace by \pitchfork if amssymb is working
+
+
+\global\long\global\long\def\qed{\rule[-.23ex]{1.6ex}{1.6ex}}
+
+
+% ******************************************************************
+% *** TABLE SHORTHAND **********************************************
+
+
+\global\long\global\long\def\gotable#1#2#3{\begin{table}[h] \begin{center} \addtolength{\tabcolsep}{#1mm} \global\long\global\long\def\arraystretch{#2}
+\begin{tabular}{c}
+ \end{tabular}\end{center}\end{table}}
+
+
+\global\long\global\long\def\stoptable{{tabular} {center} {table}}
+
+
+% ******************************************************************
+% *** MINIPAGE SHORTHAND *******************************************
+
+
+\global\long\global\long\def\twofig#1#2#3#4{\begin{figure}[h] \begin{minipage}[t]{3in} \begin{center} {\Large{\bf (#1) $\!\!\!\!\!\!\!\!\!$}} \epsfig{file=#2,height=2in,width=2in} \end{center} \end{minipage} \hfill\begin{minipage}[t]{3in} \begin{center} {\Large{\bf (#3) $\!\!\!\!\!\!\!\!\!$}} \epsfig{file=#4,height=2in,width=2in} \end{center} \end{minipage} \end{figure}}
+
+
+\global\long\global\long\def\threefig#1#2#3#4#5#6{\begin{figure}[h] \begin{minipage}[t]{2in} \begin{center} {\large{\bf (#1) $\!\!\!\!\!\!\!\!\!$}} \epsfig{file=#2,height=1.6in,width=1.6in} \end{center} \end{minipage} \hfill\begin{minipage}[t]{2in} \begin{center} {\large{\bf (#3) $\!\!\!\!\!\!\!\!\!$}} \epsfig{file=#4,height=1.6in,width=1.6in} \end{center} \end{minipage} \hfill\begin{minipage}[t]{2in} \begin{center} {\large{\bf (#5) $\!\!\!\!\!\!\!\!\!$}} \epsfig{file=#6,height=1.6in,width=1.6in} \end{center} \end{minipage} \end{figure}}
+
+
+\global\long\global\long\def\twoup#1#2{\begin{minipage}{3in} \begin{center} #1 \end{center} \end{minipage} \hfill\begin{minipage}{3in} \begin{center} #2 \end{center} \end{minipage}}
+
+
+% ******************************************************************
+% *** TESTPOINTS SHORTHAND *****************************************
+
+
+\global\long\global\long\def\bpz{\begin{problem}{0}\end{problem}}
+ \global\long\global\long\def\bp#1{\begin{problem}{#1}\end{problem}}
+
+
+\global\long\global\long\def\npz{\newpart{0}}
+ \global\long\global\long\def\np#1{\newpart{#1}}
+
+
+\global\long\global\long\def\ep{{problem}}
+
+
+%\newcommand{\probpart}...make later
+\global\long\global\long\def\prob#1{\setcounter{problemnum}{#1} \Large{\bf \theproblemnum.}}
+
+
+% ***********************************************************************
+% *** COMMUTATIVE DIAGRAMS **********************************************
+
+
+\global\long\global\long\def\normalbaselines{\baselineskip20pt \lineskip3pt \lineskiplimit3pt}
+
+
+% for extending arrows
+\global\long\global\long\def\ext{\rule[.5ex]{5mm}{.1mm}}
+ \global\long\global\long\def\Ext{\rule[.5ex]{10mm}{.1mm}}
+ \global\long\global\long\def\back{\!\!\!}
+ \global\long\global\long\def\Back{\back\back}
+
+
+% right maps
+\global\long\global\long\def\mapR{\smash{\mathop{\longrightarrow}}}
+ \global\long\global\long\def\mapRR{\smash{\mathop{\ext\back\longrightarrow}}}
+ \global\long\global\long\def\mapRRR{\smash{\mathop{\Ext\back\longrightarrow}}}
+
+
+\global\long\global\long\def\MapR#1#2{\smash{\mathop{\longrightarrow}\limits _{#2}^{#1}}}
+ \global\long\global\long\def\MapRR#1#2{\smash{\mathop{\ext\back\longrightarrow}\limits _{#2}^{#1}}}
+ \global\long\global\long\def\MapRRR#1#2{\smash{\mathop{\Ext\back\longrightarrow}\limits _{#2}^{#1}}}
+
+
+% right injective maps
+\global\long\global\long\def\inprefix{\mbox{\raisebox{1mm}{\tiny\ensuremath{\subset}}}\!\!}
+
+
+\global\long\global\long\def\mapinR{\smash{\mathop{\inprefix\!\!\longrightarrow}}}
+ \global\long\global\long\def\mapinRR{\smash{\mathop{\inprefix\ext\back\longrightarrow}}}
+ \global\long\global\long\def\mapinRRR{\smash{\mathop{\inprefix\Ext\back\longrightarrow}}}
+
+
+\global\long\global\long\def\MapinR#1#2{\smash{\mathop{\inprefix\!\!\longrightarrow}\limits _{#2}^{#1}}}
+ \global\long\global\long\def\MapinRR#1#2{\smash{\mathop{\inprefix\ext\back\longrightarrow}\limits _{#2}^{#1}}}
+ \global\long\global\long\def\MapinRRR#1#2{\smash{\mathop{\inprefix\Ext\back\longrightarrow}\limits _{#2}^{#1}}}
+
+
+% right surjective maps
+\global\long\global\long\def\onsuffix{\longrightarrow\back\back\!\rightarrow}
+
+
+\global\long\global\long\def\maponR{\smash{\mathop{\onsuffix}}}
+ \global\long\global\long\def\maponRR{\smash{\mathop{\ext\back\onsuffix}}}
+ \global\long\global\long\def\maponRRR{\smash{\mathop{\Ext\back\onsuffix}}}
+
+
+\global\long\global\long\def\MaponR#1#2{\smash{\mathop{\onsuffix}\limits _{#2}^{#1}}}
+ \global\long\global\long\def\MaponRR#1#2{\smash{\mathop{\ext\back\onsuffix}\limits _{#2}^{#1}}}
+ \global\long\global\long\def\MaponRRR#1#2{\smash{\mathop{\Ext\back\onsuffix}\limits _{#2}^{#1}}}
+
+
+% right equals maps
+\global\long\global\long\def\smalleq{\rlap{\rule[.3ex]{5mm}{.1mm}}\rule[.7ex]{5mm}{.1mm}}
+ \global\long\global\long\def\medeq{\rlap{\rule[.3ex]{10mm}{.1mm}}\rule[.7ex]{10mm}{.1mm}}
+ \global\long\global\long\def\largeeq{\rlap{\rule[.3ex]{15mm}{.1mm}}\rule[.7ex]{15mm}{.1mm}}
+
+
+\global\long\global\long\def\mapeqR{\smash{\mathop{\smalleq}}}
+ \global\long\global\long\def\mapeqRR{\smash{\mathop{\medeq}}}
+ \global\long\global\long\def\mapeqRRR{\smash{\mathop{\largeeq}}}
+
+
+\global\long\global\long\def\MapeqR#1#2{\smash{\mathop{\smalleq}\limits _{#2}^{#1}}}
+ \global\long\global\long\def\MapeqRR#1#2{\smash{\mathop{\medeq}\limits _{#2}^{#1}}}
+ \global\long\global\long\def\MapeqRRR#1#2{\smash{\mathop{\largeeq}\limits _{#2}^{#1}}}
+
+
+% left maps
+\global\long\global\long\def\mapL{\smash{\mathop{\longleftarrow}}}
+ \global\long\global\long\def\mapLL{\smash{\mathop{\longleftarrow\back\ext}}}
+ \global\long\global\long\def\mapLLL{\smash{\mathop{\longleftarrow\back\Ext}}}
+
+
+\global\long\global\long\def\MapL#1#2{\smash{\mathop{\longleftarrow}\limits _{#2}^{#1}}}
+ \global\long\global\long\def\MapLL#1#2{\smash{\mathop{\longleftarrow\back\ext}\limits _{#2}^{#1}}}
+ \global\long\global\long\def\MapLLL#1#2{\smash{\mathop{\longleftarrow\back\Ext}\limits _{#2}^{#1}}}
+
+
+% left injective maps
+\global\long\global\long\def\insuffix{\!\!\mbox{\raisebox{1mm}{\tiny\ensuremath{\supset}}}}
+
+
+\global\long\global\long\def\mapinL{\smash{\mathop{\longleftarrow\back\insuffix}}}
+ \global\long\global\long\def\mapinLL{\smash{\mathop{\longleftarrow\back\ext\insuffix}}}
+ \global\long\global\long\def\mapinLLL{\smash{\mathop{\longleftarrow\back\Ext\insuffix}}}
+
+
+\global\long\global\long\def\MapinL#1#2{\smash{\mathop{\longleftarrow\back\insuffix}\limits _{#2}^{#1}}}
+ \global\long\global\long\def\MapinLL#1#2{\smash{\mathop{\longleftarrow\back\ext\insuffix}\limits _{#2}^{#1}}}
+ \global\long\global\long\def\MapinLLL#1#2{\smash{\mathop{\longleftarrow\back\Ext\insuffix}\limits _{#2}^{#1}}}
+
+
+% left surjective maps
+\global\long\global\long\def\onprefix{\leftarrow\back\back\!\longleftarrow}
+
+
+\global\long\global\long\def\maponL{\smash{\mathop{\onprefix}}}
+ \global\long\global\long\def\maponLL{\smash{\mathop{\onprefix\back\ext}}}
+ \global\long\global\long\def\maponLLL{\smash{\mathop{\onprefix\back\Ext}}}
+
+
+\global\long\global\long\def\MaponL#1#2{\smash{\mathop{\onprefix}\limits _{#2}^{#1}}}
+ \global\long\global\long\def\MaponLL#1#2{\smash{\mathop{\onprefix\back\ext}\limits _{#2}^{#1}}}
+ \global\long\global\long\def\MaponLLL#1#2{\smash{\mathop{\onprefix\back\Ext}\limits _{#2}^{#1}}}
+
+
+% left equals maps                                % (same as right)
+\global\long\global\long\def\mapeqL{\smash{\mathop{\smalleq}}}
+ \global\long\global\long\def\mapeqLL{\smash{\mathop{\medeq}}}
+ \global\long\global\long\def\mapeqLLL{\smash{\mathop{\largeeq}}}
+
+
+\global\long\global\long\def\MapeqL#1#2{\smash{\mathop{\smalleq}\limits _{#2}^{#1}}}
+ \global\long\global\long\def\MapeqLL#1#2{\smash{\mathop{\medeq}\limits _{#2}^{#1}}}
+ \global\long\global\long\def\MapeqLLL#1#2{\smash{\mathop{\largeeq}\limits _{#2}^{#1}}}
+
+
+% down maps
+\global\long\global\long\def\mapD{\Big\downarrow}
+ \global\long\global\long\def\MapD#1#2{\Big\downarrow\llap{$\vcenter{\hbox{}\Back\!{\scriptstyle #1}}$} \rlap{$\vcenter{\hbox{}{\scriptstyle #2}}$}}
+
+
+% down injective maps
+\global\long\global\long\def\inabove{\rlap{\rule{-.15mm}{0mm}\mbox{\raisebox{3.5mm}{\tiny\ensuremath{\cap}}}}}
+ \global\long\global\long\def\mapinD{\inabove\Big\downarrow}
+ \global\long\global\long\def\MapinD#1#2{\inabove\Big\downarrow\llap{$\vcenter{\hbox{}\Back\!{\scriptstyle #1}}$} \rlap{$\vcenter{\hbox{}{\scriptstyle #2}}$}}
+
+
+% down surjective maps
+\global\long\global\long\def\onbelow{\rlap{\rule{.33mm}{0mm}\mbox{\raisebox{-1.3mm}{\ensuremath{\downarrow}}}} $\Big\downarrow$}
+ \global\long\global\long\def\maponD{\onbelow}
+ \global\long\global\long\def\MaponD#1#2{\onbelow\llap{$\vcenter{\hbox{}\Back\!{\scriptstyle #1}}$} \rlap{$\vcenter{\hbox{}{\scriptstyle #2}}$}}
+
+
+% diagonal maps (SE)
+\global\long\global\long\def\diagSE{\smash{\back\back\back\unitlength=1mm \begin{picture}(10,8)\put(0,8){\line(1,-1){10}}\end{picture}}}
+
+
+\global\long\global\long\def\mapSE{\smash{\diagSE\rlap{\raisebox{-1.5666mm}{$\rule{-4mm}{0mm}\searrow$}}}}
+
+
+\global\long\global\long\def\MapSE#1{\smash{\diagSE\rlap{\raisebox{-1.5666mm}{$\rule{-4mm}{0mm}\searrow$}} \rlap{\raisebox{3mm}{$\rule{-3.5mm}{0mm}\vcenter{\hbox{}{\scriptstyle #1}}$}}}}
+
+
+% older maps (delete later?)
+\global\long\global\long\def\mapright{\smash{\mathop{\longrightarrow}}}
+ \global\long\global\long\def\mapincl{\smash{\mathop{\hookrightarrow}}}
+ \global\long\global\long\def\mapup{\Big\uparrow}
+ \global\long\global\long\def\mapdown{\Big\downarrow}
+ \global\long\global\long\def\mapdowneq{\Big\parallel}
+
+
+\global\long\global\long\def\Mapright#1{\smash{\mathop{\longrightarrow}\limits ^{#1}}}
+ \global\long\global\long\def\Mapincl#1{\smash{\mathop{\hookrightarrow}\limits ^{#1}}}
+ \global\long\global\long\def\Mapup#1{\Big\uparrow\rlap{$\vcenter{\hbox{}{\scriptstyle #1}}$}}
+ \global\long\global\long\def\Mapdown#1{\Big\downarrow\rlap{$\vcenter{\hbox{}{\scriptstyle #1}}$}}
+ \global\long\global\long\def\Mapdowneq#1{\Big\parallel\rlap{$\vcenter{\hbox{}{\scriptstyle #1}}$}}
+
