@@ -14,11 +14,12 @@
 \usepackage{tikz}
 \usepackage{setspace} 
 \hypersetup{urlcolor=black, colorlinks=true}  % Colours hyperlinks in blue, but this can be distracting if there are many links.
+\usepackage{times}
 %% ----------------------------------------------------------------
 \begin{document}
 \frontmatter	  % Begin Roman style (i, ii, iii, iv...) page numbering
 % Set up the Title Page
-\title  {Multi Segmented Image Transfer (and fusion) in Delay Tolerant Networks using Bandwidth Reduction Technique}
+\title  {Multi Segmented Image Transfer in Delay Tolerant Networks using Bandwidth Reduction Technique}
 \authors  {\texorpdfstring
             {\href{pratyush.anand@st.com
 }
@@ -33,7 +34,7 @@
 \maketitle
 %% ----------------------------------------------------------------
 
-\setstretch{1.3}  % It is better to have smaller font and larger line spacing than the other way round
+\setstretch{2.0}  % It is better to have smaller font and larger line spacing than the other way round
 
 % Define the page headers using the FancyHdr package and set up for one-sided printing
 \fancyhead{}  % Clears all page headers and footers
@@ -54,7 +55,7 @@
 %% ----------------------------------------------------------------
 \frontmatter	  % Begin Roman style (i, ii, iii, iv...) page numbering
 
-\setstretch{1.3}  % It is better to have smaller font and larger line spacing than the other way round
+%\setstretch{1.3}  % It is better to have smaller font and larger line spacing than the other way round
 
 % Define the page headers using the FancyHdr package and set up for one-sided printing
 \fancyhead{}  % Clears all page headers and footers
@@ -64,32 +65,7 @@
 \pagestyle{plain}  % Finally, use the "fancy" page style to implement the FancyHdr headers
 
 %% ----------------------------------------------------------------
-% Declaration Page required for the Thesis, your institution may give you a different text to place here
-\begin{sloppypar}
-\certificate{
-
-\addtocontents{toc}{\vspace{1em}}  % Add a gap in the Contents, for aesthetics
-This is to certify that the thesis titled
-``Multi Segmented Image Transfer (and fusion) in Delay Tolerant Networks using Bandwidth Reduction Technique''
- being submitted by PRATYUSH ANAND, Entry Number 2010EEY7515, in partial fulfillment of the requirements for
- the award of the degree of MS(R) Part Time, in Department of Electrical Engineering, Indian Institute of 
-Technology Delhi, is a bonafide record of the work carried out by him under my supervision.
-The matter submitted in this dissertation has not been admitted for an award of any other degree anywhere.
-\\ \\ \\
- \\
-Signed:\\
-\rule[1em]{25em}{0.25pt}\\  % This prints a line for the signature
-Date:\\
-Prof. Subrat Kar\\
-Department of Electrical Engg\\
-Indian Institute Of Technology Delhi\\
-New Delhi-110016 India  % This prints a line to write the date
-}
-\end{sloppypar}
-\cleardoublepage  % Declaration ended, now start a new page
-
-
-\setstretch{1.5}  % Reset the line-spacing to 1.3 for body text (if it has changed)
+%\setstretch{1.5}  % Reset the line-spacing to 1.3 for body text (if it has changed)
 
 % The Acknowledgements page, for thanking everyone
 \acknowledgements{
@@ -110,6 +86,35 @@ Date:\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \\
 \cleardoublepage  % End of the Acknowledgements
 
 %% ----------------------------------------------------------------
+
+
+
+%% ------------------------------------------------------------------------------------------------------
+% Declaration Page required for the Thesis, your institution may give you a different text to place here
+\begin{sloppypar}
+\certificate{
+
+\addtocontents{toc}{\vspace{1em}}  % Add a gap in the Contents, for aesthetics
+This is to certify that the thesis titled
+``Multi Segmented Image Transfer in Delay Tolerant Networks using Bandwidth Reduction Technique''
+ being submitted by PRATYUSH ANAND, Entry Number 2010EEY7515, in partial fulfillment of the requirements for
+ the award of the degree of MS(R) Part Time, in Department of Electrical Engineering, Indian Institute of 
+Technology Delhi, is a bonafide record of the work carried out by him under my supervision.
+The matter submitted in this dissertation has not been admitted for an award of any other degree anywhere.
+\\ \\ \\
+ \\
+Signed:\\
+\rule[1em]{25em}{0.25pt}\\  % This prints a line for the signature
+Date:\\
+Prof. Subrat Kar\\
+Department of Electrical Engg\\
+Indian Institute Of Technology Delhi\\
+New Delhi-110016 India  % This prints a line to write the date
+}
+\end{sloppypar}
+\cleardoublepage  % Declaration ended, now start a new page
+%% ------------------------------------------------------------------------------------------------------
+
 
 % The Abstract Page
 \addtotoc{Abstract}  % Add the "Abstract" page entry to the Contents
@@ -135,12 +140,22 @@ Date:\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \\
 
 
 %% ----------------------------------------------------------------
-\setstretch{1.5}  % Set the line spacing to 1.5, this makes the following tables easier to read
+%\setstretch{1.5}  % Set the line spacing to 1.5, this makes the following tables easier to read
 \clearpage  % Start a new page
 \lhead{\emph{Glossary}}  % Set the left side page header to "Abbreviations"
 \listofsymbols{ll}  % Include a list of Abbreviations (a table of two columns)
 {
 % \textbf{Acronym} & \textbf{W}hat (it) \textbf{S}tands \textbf{F}or \\
+\textbf{DTN} & \textbf{D}elay \textbf{T}olerant \textbf{N}etwork\\
+\textbf{WSN} & \textbf{W}ireless \textbf{S}ensor \textbf{N}etwork\\
+\textbf{PSNR} & \textbf{P}eak \textbf{S}ignal to \textbf{N}oise \textbf{R}atio\\
+\textbf{FOV} & \textbf{F}ield \textbf{O}f \textbf{V}iew\\
+\textbf{SIMD} & \textbf{S}ingle \textbf{I}nstruction  \textbf{M}ultiple \textbf{D}ata\\
+\textbf{PCA} & \textbf{P}rincipal \textbf{C}omponent  \textbf{A}nalysis\\
+\textbf{FG} & \textbf{F}ore\textbf{g}round\\
+\textbf{BG} & \textbf{B}ack\textbf{g}round\\
+\textbf{BGS} & \textbf{B}ack\textbf{g}round \textbf{S}ubtraction\\
+\textbf{LBP} & \textbf{L}ocal\textbf{B}inary \textbf{P}attern\\
 
 }
 
@@ -176,7 +191,8 @@ Date:\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \\
 \label{Bibliography}
 \addtotoc{Bibliography}
 \lhead{\emph{Bibliography}}  % Change the left side page header to "Bibliography"
-\bibliographystyle{ieeetr}  % Use the "unsrtnat" BibTeX style for formatting the Bibliography
+%\bibliographystyle{ieeetr}  % Use the "unsrtnat" BibTeX style for formatting the Bibliography
+\bibliographystyle{apalike}
 \bibliography{Bibliography}  % The references (bibliography) information are stored in the file named "Bibliography.bib"
 \cleardoublepage
 
