@@ -10,6 +10,7 @@ nodes with high data mobility in extreme environmental terrestrial
 conditions. Such network normally employees their own tailored routing
 algorithm for high throughput based on individual's environmental
 conditions~\cite{1}.\\
+
 Now if we need to transfer image over such wireless delay tolerant
 network, and that too from a live camera then it is going to become
 extremely difficult task.Complexity will increases further, if we need
@@ -21,6 +22,7 @@ need to deal that what minimum information about image allows us to
 reconstruct the scenario or to detect an event. If possible then we 
 need to detect event at the end DTN node itself and then to transmit
 only this event information over the network.\\
+
 Above discussed image pipeline system can also be extended to
 the existing video surveillance system which are still manual. Normally
 all the surveillance camera sends video to a monitoring base station,
@@ -43,6 +45,7 @@ other scene ambient light can be different. Detection of foreground
 objects becomes a trivial task in whole of this pipeline.Once we have
 foreground objects, we can save a lot of bandwidth if we can detect if
 object is of our interest or not.\\
+
 In the current work, we are targeting to detect moving person and
 then to send it's information such as location, time of detection etc to
 the monitoring station. We want to keep our pipeline computation cost
@@ -58,7 +61,7 @@ There has been no data available for the image transfer over terrestrial
 DTNs, however there has been several attempts ~\cite{2, 3, 4, 5} to transfer
 image over low bandwidth wireless sensor networks (WSN).
 
-Georgiy et al. ~\cite{2} have tried to transfer different versions of JEPG
+Pekhteryev et al. ~\cite{2} have tried to transfer different versions of JEPG
 images over zigbee network and then has done performance comparison.
 This works shows that there is an effect of compression coding algorithm
 on peak signal to noise ratio(PSNR). It has been observed that
@@ -69,7 +72,7 @@ resolution cameras are used for stereo matching and to identify any
 moving object in the camera's field of view (FOV). If a moving object is
 found then only high resolution camera is triggered. Such system is
 power efficient in  comparison to the camera mote continuously
-transmitting JPEG frames. Chen et al. ~\cite{4} have used xetal parallel
+transmitting JPEG frames. Wu et al. ~\cite{4} have used xetal parallel
 processors for image processing. After subtracting background, ellipse
 fitting has been done on the foreground object. This elliptical
 information is collected from different camera and 3D view is
@@ -113,7 +116,7 @@ coding techniques ~\cite{7, 8} including MPEG-4 provides substantially
 better compression. Chaudhury et al. ~\cite{7} have used principal
 component analysis (PCA) method for object segmentation.Further, they
 have reused tracking subspace for object coding which substantially
-reduced computational time. Babu et al. ~\cite{8} have calculated motion
+reduced computational time. Babu and Makur ~\cite{8} have calculated motion
 between current and previous frame. Further motion compensated error and
 other object parameters such as boundary, location and motion
 information has been coded using suitable source coding techniques.  
@@ -130,6 +133,7 @@ other cases lighting condition can vary a lot.In some cases even all the
 moving objects might not be of interest. For example, escalator is the
 part of BG in a scene where a person is standing on a moving
 escalator.\\
+
 Many methods ~\cite{9, 10, 11, 12, 13, 14} have been developed for the background
 subtraction (BGS), having strength and weakness in terms of computation
 complexities and performance. Frame differencing is of lowest
@@ -142,24 +146,35 @@ consist of almost uniformly distributed intensities, then internal
 portion of the object is considers as BG. However, there is one biggest
 advantage of this method is that, it is quickly adaptable to the change
 in scene, as it depends on only last frame.\\
-BGS algorithm ~\cite{10, 12, 13, 14} based on Gaussian average or median of
+
+BGS algorithm ~\cite{10, 12, 13, 14, 15} based on Gaussian average or median of
 last couple of frames, comes in the category of middle level of
 computational cost. Wren et al. ~\cite{12} have used running average of
 last n frames as BG model. Algorithms based on median filter show better
 performance, but it has more memory requirement compared to running
 average. Here, median of last n pixel is considers as BG model.
-McFarlane et al. ~\cite{14} have used modified version as average median
+McFarlane and Schofield ~\cite{14} have used modified version as average median
 filter, which has memory requirement same as that of frame differencing.
 Here, if a pixel value is greater than the corresponding BG pixel, then
 BG pixel value is incremented by 1, and if it is less then decremented
 by 1.\\
-Yao et al. ~\cite{11} have used a method based on local texture features
+
+ Stauffer and Gromson proposed to use Gaussian mixture model (GMM)
+~\cite{15} to create a background model.In this method, BG is
+represented by Gaussian mixtures which is actually a probability that a
+pixel value m is observed at time t. GMM model works fine in removing BG
+noise in multi-modal situations such as wavering tree. Since, it assumes
+that BG is more frequently visible than the FG and , variance of BG is
+significantly low, so it fails to adapt with sudden illumination
+changes.Also it is computationally very expensive.\\ 
+
+Yao and Odobez ~\cite{11} have used a method based on local texture features
 represented by local binary patterns (LBP) and photometric invariant
 color measurements in RGB color space. Texture is an important
 characteristic of images and video. LBP is invariant to any monotonic
 gray level change. Also, it is computationally very simple. LBP operator
 labels image pixel of a cell by thresholding the neighborhood of each pixel
-with the center value and considering the result as a binary number.
+with the center value and considering the result as a binary number.\\
 
 LBP binary code of a pixel is calculated as follows:
 \begin{equation}
@@ -169,20 +184,149 @@ LBP_{NR} = \Sigma _{n = 0} ^{N - 1} f(I_c - I_n) 2^n \hspace{20 mm} where f(x) =
      0 & \quad \text{otherwise}
    \end{array} \right.
 \end{equation}
-Here, $I_c$ is the gray value of central pixel and I$_n$ are the gray
-value of pixels at a distance of radius R.  On a multi channel color
+Here, $I_c$ is the gray value of central pixel and $I_n$ are the gray
+value of pixels at a distance of radius $R$.  On a multi channel color
 image LBP can be calculated at each pixel separately.LBP works well with
 local illumination changes, however there can be issues in case of
 global illumination change.LBP fails when both background and foreground
-of an image shares same texture information. Yao et al. have used
+of an image shares same texture information. Yao and Odobez have used
 photometric invariant color features in RGB color space to overcome this
-limitation of LBP.
+limitation of LBP.\\
+
+Visual background extractor(Vibe) is another important implementation
+which need to be discussed before completing this section. Vibe decides
+about background pixel value after comparison with closest samples
+selected randomly. Lets say $N$ is the number of sample corresponding to
+each background pixel.One of the sample out of $N$ sample is selected
+randomly and is replaced by current pixel value.Furthermore, this
+updated values of sample is diffused to its randomly selected
+neighbouring pixel.Thus sample data base is created. Euclidean distance
+is calculated between current pixel value and samples corresponding to
+current pixel. If at least $m$ samples has euclidean distance less than
+a threshold say $T$, then that pixel is assigned to BG, else assigned to
+FG.\\
 
 \subsection{Object detection techniques}
+So, with the procedure till now discussed, we are able to reduce image
+size a lot by going with object centric methods.However, output is still
+in image form. To reduce the output size further, this image data need
+to be converted into information. We wish that our system is able to
+answer question about the image data, such as, is there any moving
+person in the image data? First task for object detection from any image
+is to extract features of the objects. Features could be intensity,
+edges, color, size, texture, motion pattern, contour etc. Most of the
+detection method works with two steps: Preparing a statistical model of
+training set images and then compare features of test object with that
+of model.  Training data set is prepared using both positive and
+negative objects.\\
+
+Person Finder(PFinder) developed by wren et.al. ~\cite{12} seems first
+attempt to recognize human and its behavior in a practical scenario. It
+works with Maximum A Posteriori Probability (MAP) method for human
+detection and tracking. It uses color and shape based descriptor for
+distinguishing different body parts such as hand and head.\\
+
+Next to PFinder, Viola and Jones $[VJ]$ method ~\cite{16, 17} seems most
+popular. Their method is based on haar like features. To find these
+features in any detection window, adjacent rectangular regions are
+created at a specific location. Pixel intensities of each region is
+added together and then difference of sum is calculated. This difference
+is used as haar descriptor. Further, Authors have provided new concept
+of image representation as integral image.  Pixel value at any location
+in an integral image is sum of all the pixels above and left of that
+pixel.  These can be computed with very few operations per pixel.
+Integral image representation helps in computation of haar like features
+in constant time.\\
+
+Work in ~\cite{17} was used for face detection.  Above work of VJ with
+motion information was further used for human detection in ~\cite{16}.
+AdaBoost has been used to select a small set of features out of all haar
+like features and to train the classifier.They have used rectangular
+features which are sensitive to edges, bars but are quite
+coarse.However, these features in association with integral image
+provides sufficient compensation for the above limitations.Jones and
+snow ~\cite{26} have further improved the performance of above method by
+using 10 frames instead of 2 frames for motion analysis.They divide
+detector into 8 direction specific detectors.\\
+
+Authors of ~\cite{20, 21} have shown that histogram of oriented gradient
+(HOG) descriptor has better performance than Haar based descriptors.Edge
+or gradient are very specific property of local shape. An image is
+divided into small cells and histogram of edge/gradient direction is
+calculated for each cell. This is called HOG descriptor. Since this
+descriptor works with localised cells, therefore they are invariant to
+geometric and photometric transformations.Further these descriptors are
+fed to support vector machine(SVM) classifier for human detection
+purpose.\\
+
+In continuation of above method, Zhu et al. did some modifications for
+performance improvements. In stead of fixed size blocks, they have used
+variable sized block and then Adaboost has been used to detect the best
+block suited for detection. They have used integral image (a concept
+provided by $VJ$ in ~\cite{17})for faster computation of HOG features.\\
+
+Some work ~\cite{30} have also been done for human motion detection
+using multiple cameras. Multiple cameras allow depth view calculation of
+different body parts, which assist further in detection.\\
+
+Yao and Odobez have used covariance feature with cascade of logitboost
+classifier as human descriptor ~\cite{19}.\\
+
+Image skeltonization followed by motion pattern analysis ~\cite{32, 22,
+31} is computationally very fast way to detect about a human . Authors
+have used this method for human motion analysis. Change in angle between
+legs is periodic. So an autocorrelation tells about cyclic nature of
+angle between legs.  However, autocorrelation induces noise due to the
+bias of this angle signal.  To overcome this issue, high frequency
+pre-emphasis filter to the angle signal is applied before
+autocorrelation operation. We have used similar method for human
+detection in our approach with the slight variation at autocorrelation
+steps, which allowed us to not go for pre-emphasis step and save
+computation time.\\
 
 \subsection{Outstanding issues}
+Methods based on haar, HOG or covariance feature descriptor works with
+even single image frame , however they are computationally very slow and
+still not viable for low cost embedded applications. So further research
+is needed to optimize these methods to fit into viable embedded
+applications. Skeltonization followed by motion pattern analysis is not
+a generic method for all types of object detection. However, it can be
+successfully used for moving human. It seems that they have lower
+computational cost, which need to be evaluated. These algorithm need to
+be tested with multiple frames having multiple human. They also need to
+be tested with false moving objects. Complete pipeline need to be tested
+with a low cost embedded solution.\\
 
 \section{Motivation}
-what and why I will do?
+Low bandwidth along with low power augmented surveillance system is
+going to be hot research area in coming years. Ultra low bandwidth
+surveillance system will fit into ubiquitous low power delay tolerant
+home network (such as Zigbee).So, the evaluation of a complete image
+pipeline which can cater such needs will be a contribution in this
+direction. Overall it seems that there are two important steps in the
+complete pipeline which need to be evaluated before selecting final one
+for the proposed framework. We need to find computationally efficient
+BGS algorithm. We also need to see that which algorithm is suitable for
+pedestrian detection in embedded environment.  In our work, we will
+first evaluate few important BGS and human detection algorithm.
+If possible, we will try to optimize finally selected algorithm and will
+try to see if complete pipeline execution time is suitable for an
+embedded application or not.\\
 
 \section{Organisation of thesis}
+
+In chapter 1 we have discussed about important work done in the area of
+background subtraction and human detection. We have also discussed about
+outstanding issues and the issues which we are going to address with our
+work.\\
+
+In chapter 2, we will discuss in detail about how other authors have
+done similar job. We will also talk about our approach and framework for
+a low bandwidth augmented surveillance system.\\
+
+In chapter 3 we will discuss about summary of the work done. We will
+also analyze the results obtained in our approach.\\
+
+At the end in chapter 4 we will try to address remaining issues and
+direction for the future work in continuation with our approach.\\
+

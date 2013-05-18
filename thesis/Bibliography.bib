@@ -1,6 +1,38 @@
 % This file was created with JabRef 2.7b.
 % Encoding: UTF-8
 
+@INPROCEEDINGS{19,
+  author = {Yao, Jian and Odobez, Jean-Marc},
+  title = {Fast human detection from videos using covariance features},
+  booktitle = {European Conference on Computer Vision, workshop on Visual Surveillance
+	(ECCV-VS)},
+  year = {2008},
+  month = {10},
+  abstract = {In this paper, we present a fast method to detect humans from videos
+	captured in surveillance applications. It is based on a cascade of
+	LogitBoost classifiers relying on features mapped from the Riemanian
+	manifold of region covariance matrices computed from input image
+	features. The method was extended in several ways. First, as the
+	mapping process is slow for high dimensional feature space, we propose
+	to select weak classifiers based on subsets of the complete image
+	feature space. In addition, we propose to combine these sub-matrix
+	covariance features with the means of the image features computed
+	within the same subwindow, which are readily available from the covariance
+	extraction process. Finally, in the context of video acquired with
+	stationary cameras, we propose to fuse image features from the spatial
+	and temporal domains in order to jointly learn the correlation between
+	appearance and foreground information based on background subtraction.
+	Our method evaluated on a large set of videos coming from several
+	databases (CAVIAR, PETS, ...,',','),
+	
+	and can process from 5 to 20 frames/sec (for a 384x288 video) while
+	achieving similar or better performance than existing methods.},
+  crossref = {11},
+  location = {Marseille},
+  pdf = {http://publications.idiap.ch/downloads/papers/2008/Yao_ECCV-VS_2008.pdf},
+  projects = {Idiap, CARETAKER}
+}
+
 @ARTICLE{9,
   author = {Barnich, O. and Van Droogenbroeck, M.},
   title = {ViBe: A Universal Background Subtraction Algorithm for Video Sequences},
@@ -108,6 +140,201 @@
   url = {http://dx.doi.org/10.1109/tpami.2003.1233909}
 }
 
+@INPROCEEDINGS{21,
+  author = {Dalal, N. and Triggs, B.},
+  title = {Histograms of Oriented Gradients for Human Detection},
+  year = {2005},
+  volume = {1},
+  pages = {886--893},
+  abstract = {{We study the question of feature sets for robust visual object recognition,
+	adopting linear SVM based human detection as a test case. After reviewing
+	existing edge and gradient based descriptors, we show experimentally
+	that grids of Histograms of Oriented Gradient (HOG) descriptors significantly
+	outperform existing feature sets for human detection. We study the
+	influence of each stage of the computation on performance, concluding
+	that fine-scale gradients, fine orientation binning, relatively coarse
+	spatial binning, and high-quality local contrast normalization in
+	overlapping descriptor blocks are all important for good results.
+	The new approach gives near-perfect separation on the original MIT
+	pedestrian database, so we introduce a more challenging dataset containing
+	over 1800 annotated human images with a large range of pose variations
+	and backgrounds.}},
+  citeulike-article-id = {335784},
+  citeulike-linkout-0 = {http://ieeexplore.ieee.org/xpls/abs\_all.jsp?arnumber=1467360},
+  journal = {Computer Vision and Pattern Recognition, 2005. CVPR 2005. IEEE Computer
+	Society Conference on},
+  keywords = {detection, vision},
+  posted-at = {2007-03-13 17:24:40},
+  priority = {2},
+  url = {http://ieeexplore.ieee.org/xpls/abs\_all.jsp?arnumber=1467360}
+}
+
+@INPROCEEDINGS{30,
+  author = {Daniels, M. and Muldawer, K. and Schlessman, J. and Ozer, B. and
+	Wolf, W.},
+  title = {Real-Time Human Motion Detection with Distributed Smart Cameras},
+  booktitle = {Distributed Smart Cameras, 2007. ICDSC '07. First ACM/IEEE International
+	Conference on},
+  year = {2007},
+  pages = {187-194},
+  abstract = {Many smart camera security systems employ a single camera model; this
+	makes depth perception impossible and the occlusion of objects (either
+	by fixtures or by other body parts of the subject) prevents meaningful
+	task automation. Multi-camera systems have significant overhead in
+	communication and three-dimensional modeling. We have developed a
+	multi-camera system capable of overcoming this issue. Two cameras
+	observing the same space from different vantage points provide depth
+	perception of a subject so that the positions of the hands and face
+	can be mapped in three dimensions. Unlike other three-dimensional
+	modeling programs, we use an ultra-compression method and build on
+	existing message passing interface (MPI) middleware for communication,
+	allowing for real-time performance. Our application provides a framework
+	for robust motion detection and gesture recognition.},
+  doi = {10.1109/ICDSC.2007.4357523},
+  keywords = {cameras;image motion analysis;message passing;middleware;object detection;MPI
+	middleware;distributed smart cameras;gesture recognition;message
+	passing interface middleware;multicamera systems;real-time human
+	motion detection;robust motion detection;smart camera security;three-dimensional
+	modeling;Automation;Biological system modeling;Communication system
+	security;Face detection;Fixtures;Humans;Message passing;Middleware;Motion
+	detection;Smart cameras}
+}
+
+@INPROCEEDINGS{27,
+  author = {Dollar, Piotr and Belongie, Serge and Perona, Pietro},
+  title = {The Fastest Pedestrian Detector in the West},
+  booktitle = {Proceedings of the British Machine Vision Conference},
+  year = {2010},
+  publisher = {BMVA Press},
+  citeulike-article-id = {8482496},
+  citeulike-linkout-0 = {http://bmvc10.dcs.aber.ac.uk/proc/conference/paper68/index.html},
+  citeulike-linkout-1 = {http://dx.doi.org/10.5244/C.24.68},
+  comment = {doi:10.5244/C.24.68},
+  doi = {10.5244/C.24.68},
+  posted-at = {2010-12-24 08:23:55},
+  priority = {2},
+  url = {http://bmvc10.dcs.aber.ac.uk/proc/conference/paper68/index.html}
+}
+
+@ARTICLE{25,
+  author = {Dollar, P. and Wojek, C. and Schiele, B. and Perona, P.},
+  title = {Pedestrian Detection: An Evaluation of the State of the Art},
+  journal = {Pattern Analysis and Machine Intelligence, IEEE Transactions on},
+  year = {2012},
+  volume = {34},
+  pages = {743-761},
+  number = {4},
+  abstract = {Pedestrian detection is a key problem in computer vision, with several
+	applications that have the potential to positively impact quality
+	of life. In recent years, the number of approaches to detecting pedestrians
+	in monocular images has grown steadily. However, multiple data sets
+	and widely varying evaluation protocols are used, making direct comparisons
+	difficult. To address these shortcomings, we perform an extensive
+	evaluation of the state of the art in a unified framework. We make
+	three primary contributions: 1) We put together a large, well-annotated,
+	and realistic monocular pedestrian detection data set and study the
+	statistics of the size, position, and occlusion patterns of pedestrians
+	in urban scenes, 2) we propose a refined per-frame evaluation methodology
+	that allows us to carry out probing and informative comparisons,
+	including measuring performance in relation to scale and occlusion,
+	and 3) we evaluate the performance of sixteen pretrained state-of-the-art
+	detectors across six data sets. Our study allows us to assess the
+	state of the art and provides a framework for gauging future efforts.
+	Our experiments show that despite significant progress, performance
+	still has much room for improvement. In particular, detection is
+	disappointing at low resolutions and for partially occluded pedestrians.},
+  doi = {10.1109/TPAMI.2011.155},
+  issn = {0162-8828},
+  keywords = {computer vision;object detection;traffic engineering computing;computer
+	vision;monocular image;partially occluded pedestrian;pedestrian detection;quality
+	of life;state-of-the-art detector;urban scene;Cameras;Detectors;Heating;Labeling;Pixel;Testing;Training;Caltech
+	Pedestrian data set.;Pedestrian detection;benchmark;data set;evaluation;object
+	detection;Automatic Data Processing;Humans;Image Enhancement;Image
+	Interpretation, Computer-Assisted;Pattern Recognition, Automated;Sensitivity
+	and Specificity}
+}
+
+@INPROCEEDINGS{24,
+  author = {Dollar, P. and Wojek, C. and Schiele, B. and Perona, P.},
+  title = {Pedestrian detection: A benchmark},
+  booktitle = {Computer Vision and Pattern Recognition, 2009. CVPR 2009. IEEE Conference
+	on},
+  year = {2009},
+  pages = {304-311},
+  abstract = {Pedestrian detection is a key problem in computer vision, with several
+	applications including robotics, surveillance and automotive safety.
+	Much of the progress of the past few years has been driven by the
+	availability of challenging public datasets. To continue the rapid
+	rate of innovation, we introduce the Caltech Pedestrian Dataset,
+	which is two orders of magnitude larger than existing datasets. The
+	dataset contains richly annotated video, recorded from a moving vehicle,
+	with challenging images of low resolution and frequently occluded
+	people. We propose improved evaluation metrics, demonstrating that
+	commonly used per-window measures are flawed and can fail to predict
+	performance on full images. We also benchmark several promising detection
+	systems, providing an overview of state-of-the-art performance and
+	a direct, unbiased comparison of existing methods. Finally, by analyzing
+	common failure cases, we help identify future research directions
+	for the field.},
+  doi = {10.1109/CVPR.2009.5206631},
+  issn = {1063-6919},
+  keywords = {computer vision;image resolution;object detection;traffic engineering
+	computing;video signal processing;Caltech Pedestrian Dataset;annotated
+	video;computer vision;image resolution;occluded people;pedestrian
+	detection;Application software;Automotive engineering;Computer vision;Failure
+	analysis;Image resolution;Robot vision systems;Safety;Surveillance;Technological
+	innovation;Vehicles}
+}
+
+@INPROCEEDINGS{22,
+  author = {Murat EKINCI},
+  title = {Human Identification Using Gait},
+  booktitle = {Turk J Elec Engin},
+  year = {2006},
+  volume = {14},
+  number = {2},
+  abstract = {Gait refers to the style of walking of an individual. This paper presents
+	a view-invariant approach
+	
+	for human identication at a distance, using gait recognition. Recognition
+	of a person from their gait is
+	
+	a biometric of increasing interest. Based on principal component analysis
+	(PCA), this paper describes a
+	
+	simple, but ecient approach to gait recognition. Binarized silhouettes
+	of a motion object are represented
+	
+	by 1-D signals, which are the basic image features called distance
+	vectors. The distance vectors are
+	
+	dierences between the bounding box and silhouette, and are extracted
+	using 4 projections of the silhouette.
+	
+	Based on normalized correlation of the distance vectors, gait cycle
+	estimation is rst performed to extract
+	
+	the gait cycle. Second, eigenspace transformation, based on PCA, is
+	applied to time-varying distance
+	
+	vectors and Mahalanobis distances-based supervised pattern classication
+	are then performed in the lower-dimensional eigenspace for human
+	identication. A fusion strategy is nally executed to produce anal
+	
+	decision. Experimental results on 3 main databases demonstrate that
+	the right person in the top 2 matches
+	
+	100% of the time for the cases where training and testing sets corresponds
+	to the same walking styles,
+	
+	and in the top 3-4 matches 100% of the time when training and testing
+	sets do not correspond to the
+	
+	same walking styles.},
+  owner = {pratyush},
+  timestamp = {2013.05.16}
+}
+
 @INPROCEEDINGS{1,
   author = {Fall, Kevin},
   title = {A delay-tolerant network architecture for challenged internets},
@@ -142,6 +369,42 @@
   posted-at = {2008-05-23 07:08:55},
   priority = {2},
   url = {http://dx.doi.org/10.1145/863955.863960}
+}
+
+@MISC{32,
+  author = {Fujiyoshi, H. and Lipton, A.},
+  title = {Real-time human motion analysis by image skeletonization},
+  year = {1998},
+  abstract = {{In this paper, a process is described for analysing the motion of
+	a human target in a video stream. Moving targets are detected and
+	their boundaries extracted. From these, a \&quot;star\&quot; skeleton
+	is produced. Two motion cues are determined from this skeletonization:
+	body posture, and cyclic motion of skeleton segments. These cues
+	are used to determine human activities such as walking or running,
+	and even potentially, the target's gait. Unlike other methods, this
+	does not require an a priori human...}},
+  citeulike-article-id = {1996845},
+  citeulike-linkout-0 = {http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.40.4400},
+  keywords = {action\_recognition, background\_subtraction, monocular, no\_full\_body\_model,
+	only\_2d, tracking, uses\_silhouette},
+  posted-at = {2009-03-29 11:15:47},
+  priority = {0},
+  url = {http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.40.4400}
+}
+
+@INPROCEEDINGS{29,
+  author = {Gaszczak, A. and Breckon, T.P. and Han, J.W.},
+  title = {Real-time People and Vehicle Detection from UAV Imagery},
+  booktitle = {Proc. SPIE Conference Intelligent Robots and Computer Vision XXVIII:
+	Algorithms and Techniques},
+  year = {2011},
+  volume = {7878},
+  number = {78780B},
+  category = {robotic},
+  comment = {<a class="demolink" href="../demos/uavpeople">demo</a>},
+  doi = {10.1117/12.876663},
+  keywords = {UAV image analysis, people detection, aerial image analysis},
+  url = {http://www.cranfield.ac.uk/~toby.breckon/publications/papers/gaszczak11uavpeople.pdf}
 }
 
 @INPROCEEDINGS{5,
@@ -210,6 +473,30 @@
 	systems;Machine vision;Smart cameras;Stereo vision;Surveillance;Algorithms;Design;Distributed
 	Intelligence;Experimentation;Measurement;Mote Architecture;Performance;Power
 	Efficiency;Smart Cameras;Wireless Sensor Networks}
+}
+
+@INPROCEEDINGS{26,
+  author = {Jones, M.J. and Snow, D.},
+  title = {Pedestrian detection using boosted features over many frames},
+  booktitle = {Pattern Recognition, 2008. ICPR 2008. 19th International Conference
+	on},
+  year = {2008},
+  pages = {1-4},
+  abstract = {A scanning window type pedestrian detector is presented that uses
+	both appearance and motion information to find walking people in
+	surveillance video. We extend the work of Viola, Jones and Snow (2005)
+	to use many more frames as input to the detector thus allowing a
+	much more detailed analysis of motion. The resulting detector is
+	about an order of magnitude more accurate than the detector of Viola,
+	Jones and Snow. It is also computationally efficient, processing
+	frames at the rate of 5 Hz on a 3 GHz Pentium processor.},
+  doi = {10.1109/ICPR.2008.4761703},
+  issn = {1051-4651},
+  keywords = {image motion analysis;object detection;traffic engineering computing;video
+	surveillance;appearance information;motion analysis;motion information;pedestrian
+	detection;video surveillance;walking people;Cameras;Computer vision;Detectors;Face
+	detection;Legged locomotion;Motion analysis;Motion detection;Optical
+	computing;Snow;Surveillance}
 }
 
 @INPROCEEDINGS{13,
@@ -314,6 +601,38 @@
   timestamp = {2013.05.10}
 }
 
+@INPROCEEDINGS{15,
+  author = {Stauffer, Chris and Grimson, W. E L},
+  title = {Adaptive background mixture models for real-time tracking},
+  booktitle = {Computer Vision and Pattern Recognition, 1999. IEEE Computer Society
+	Conference on.},
+  year = {1999},
+  volume = {2},
+  pages = {-252 Vol. 2},
+  abstract = {A common method for real-time segmentation of moving regions in image
+	sequences involves “background subtraction“, or thresholding the
+	error between an estimate of the image without moving objects and
+	the current image. The numerous approaches to this problem differ
+	in the type of background model used and the procedure used to update
+	the model. This paper discusses modeling each pixel as a mixture
+	of Gaussians and using an on-line approximation to update the model.
+	The Gaussian, distributions of the adaptive mixture model are then
+	evaluated to determine which are most likely to result from a background
+	process. Each pixel is classified based on whether the Gaussian distribution
+	which represents it most effectively is considered part of the background
+	model. This results in a stable, real-time outdoor tracker which
+	reliably deals with lighting changes, repetitive motions from clutter,
+	and long-term scene changes. This system has been run almost continuously
+	for 16 months, 24 hours a day, through rain and snow},
+  doi = {10.1109/CVPR.1999.784637},
+  issn = {1063-6919},
+  keywords = {image segmentation;image sequences;real-time systems;tracking;adaptive
+	background mixture models;background subtraction;image sequences;real-time
+	segmentation;real-time tracking;thresholding;Adaptive systems;Artificial
+	intelligence;Gaussian distribution;Image segmentation;Image sequences;Laboratories;Layout;Robustness;Tracking;Vehicle
+	detection}
+}
+
 @INPROCEEDINGS{8,
   author = {Venkatesh Babu, R. and Makur, A.},
   title = {Object-based Surveillance Video Compression using Foreground Motion
@@ -341,6 +660,130 @@
 	compensation;Object detection;Object segmentation;Patient monitoring;Road
 	safety;Video compression;Video surveillance;Surveillance;Video Compression;Video
 	Object Segmentation}
+}
+
+@MISC{17,
+  author = {Viola, P. and Jones, M.},
+  title = {Rapid object detection using a boosted cascade of simple features},
+  year = {2001},
+  abstract = {{This paper describes a machine learning approach for visual object
+	detection which is capable
+	
+	of processing images extremely rapidly and achieving high detection
+	rates. This work is distinguished
+	
+	by three key contributions. The first is the introduction of a new
+	image representation
+	
+	called the Integral Image which allows the features used by our detector
+	to be computed very
+	
+	quickly. The second is a learning algorithm, based on AdaBoost, which
+	selects a small number
+	
+	of critical visual...}},
+  citeulike-article-id = {820130},
+  citeulike-linkout-0 = {http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.6.2036},
+  keywords = {2004, vision},
+  posted-at = {2012-11-21 18:26:48},
+  priority = {2},
+  url = {http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.6.2036}
+}
+
+@INPROCEEDINGS{16,
+  author = {Viola, Paul and Jones, Michael J. and Snow, Daniel},
+  title = {Detecting Pedestrians Using Patterns of Motion and Appearance},
+  booktitle = {ICCV '03: Proceedings of the Ninth IEEE International Conference
+	on Computer Vision},
+  year = {2003},
+  address = {Washington, DC, USA},
+  publisher = {IEEE Computer Society},
+  abstract = {{This paper describes a pedestrian detection system that integratesimage
+	intensity information with motion information.We use a detection
+	style algorithm that scans a detectorover two consecutive frames
+	of a video sequence. Thedetector is trained (using AdaBoost) to take
+	advantage ofboth motion and appearance information to detect a walkingperson.
+	Past approaches have built detectors based onmotion information or
+	detectors based on appearance information,but ours is the first to
+	combine both sources ofinformation in a single detector. The implementation
+	describedruns at about 4 frames/second, detects pedestriansat very
+	small scales (as small as 20x15 pixels), and has avery low false
+	positive rate.Our approach builds on the detection work of Viola
+	andJones. Novel contributions of this paper include: i) developmentof
+	a representation of image motion which is extremelyefficient, and
+	ii) implementation of a state of theart pedestrian detection system
+	which operates on low resolutionimages under difficult conditions
+	(such as rain andsnow).}},
+  citeulike-article-id = {3504592},
+  citeulike-linkout-0 = {http://portal.acm.org/citation.cfm?id=946247.946719},
+  isbn = {0-7695-1950-4},
+  keywords = {detection, pedestrian},
+  posted-at = {2009-12-30 11:26:20},
+  priority = {2},
+  url = {http://portal.acm.org/citation.cfm?id=946247.946719}
+}
+
+@INPROCEEDINGS{28,
+  author = {Waechter, Christian A L and Pustka, D. and Klinker, G.J.},
+  title = {Vision based people tracking for ubiquitous Augmented Reality applications},
+  booktitle = {Mixed and Augmented Reality, 2009. ISMAR 2009. 8th IEEE International
+	Symposium on},
+  year = {2009},
+  pages = {221-222},
+  abstract = {The task of vision based people tracking is a major research problem
+	in the context of surveillance applications or human behavior estimation,
+	but it has had only minimal impact on (Ubiquitous) Augmented Reality
+	applications thus far. Deploying stationary infrastructural cameras
+	within indoor environments for the purpose of Augmented Reality could
+	provide a users' devices with additional functionality that a small
+	device and mobile sensors cannot provide to its user. Therefore people
+	tracking could be expected to become an ubiquitously available infrastructural
+	element in buildings since surveillance cameras are widely used.
+	The use for scenarios indoors or close to buildings is obvious. We
+	present and discuss several different ways where people tracking
+	in real-time could influence the fields of Augmented Reality and
+	further vision based applications.},
+  doi = {10.1109/ISMAR.2009.5336452},
+  keywords = {augmented reality;cameras;computer vision;sensor fusion;surveillance;tracking;ubiquitous
+	computing;human behavior estimation;mobile sensors;sensor fusion;stationary
+	infrastructural cameras;surveillance;ubiquitous augmented reality;vision
+	based people tracking;Augmented reality;Cameras;Fuses;Global Positioning
+	System;Image analysis;Particle filters;Sensor fusion;Sensor systems;Surveillance;Target
+	tracking;Augmented Reality;People Tracking;Sensor Fusion}
+}
+
+@INPROCEEDINGS{23,
+  author = {Walk, S. and Majer, N. and Schindler, K. and Schiele, B.},
+  title = {New features and insights for pedestrian detection},
+  booktitle = {Computer Vision and Pattern Recognition (CVPR), 2010 IEEE Conference
+	on},
+  year = {2010},
+  pages = {1030-1037},
+  abstract = {Despite impressive progress in people detection the performance on
+	challenging datasets like Caltech Pedestrians or TUD-Brussels is
+	still unsatisfactory. In this work we show that motion features derived
+	from optic flow yield substantial improvements on image sequences,
+	if implemented correctly - even in the case of low-quality video
+	and consequently degraded flow fields. Furthermore, we introduce
+	a new feature, self-similarity on color channels, which consistently
+	improves detection performance both for static images and for video
+	sequences, across different datasets. In combination with HOG, these
+	two features outperform the state-of-the-art by up to 20%. Finally,
+	we report two insights concerning detector evaluations, which apply
+	to classifier-based object detection in general. First, we show that
+	a commonly under-estimated detail of training, the number of bootstrapping
+	rounds, has a drastic influence on the relative (and absolute) performance
+	of different feature/classifier combinations. Second, we discuss
+	important intricacies of detector evaluation and show that current
+	benchmarking protocols lack crucial details, which can distort evaluations.},
+  doi = {10.1109/CVPR.2010.5540102},
+  issn = {1063-6919},
+  keywords = {image colour analysis;image motion analysis;image sequences;object
+	detection;HOG;classifier-based object detection;color channel;image
+	sequences;motion feature;optic flow;pedestrian detection;static image;Cascading
+	style sheets;Detectors;Feature extraction;Histograms;Humans;Image
+	motion analysis;Image sequences;Object detection;Optical saturation;Optical
+	sensors}
 }
 
 @INPROCEEDINGS{12,
@@ -431,5 +874,83 @@
 	flickering;video stream;Data mining;Filters;Layout;Lighting;Object
 	detection;Photometry;Recursive estimation;Robustness;Statistics;Subtraction
 	techniques}
+}
+
+@INPROCEEDINGS{31,
+  author = {Zarka, N. and Alhalah, Z. and Deeb, R.},
+  title = {Real-Time Human Motion Detection and Tracking},
+  booktitle = {Information and Communication Technologies: From Theory to Applications,
+	2008. ICTTA 2008. 3rd International Conference on},
+  year = {2008},
+  pages = {1-6},
+  abstract = {This paper describes a real-time system for human detection, tracking
+	and motion analysis. The system is an automated video surveillance
+	system for detecting and monitoring people in both indoor and outdoor
+	environments. Detection and tracking are achieved through several
+	steps: First, we design a robust, adaptive background model that
+	can deal with lightning changes, long term changes in the scene and
+	objects occlusions. This model is used to get foreground pixels using
+	the background subtraction method. Afterwards, noise cleaning and
+	object detection are applied, followed by human modeling to recognize
+	and monitor human activity in the scene such as human walking or
+	running.},
+  doi = {10.1109/ICTTA.2008.4530098},
+  keywords = {image motion analysis;image recognition;object detection;real-time
+	systems;tracking;video surveillance;automated video surveillance
+	system;background subtraction method;human activity monitoring;human
+	activity recognition;human motion analysis;human motion tracking;indoor-outdoor
+	environment;noise cleaning;object detection;object occlusion;real-time
+	human motion detection;robust adaptive background model;Computerized
+	monitoring;Humans;Layout;Motion analysis;Motion detection;Noise robustness;Object
+	detection;Real time systems;Tracking;Video surveillance;Human Model;Image
+	Processing;Motion Analysis;Motion Detection;Surveillance;Tracking}
+}
+
+@INPROCEEDINGS{18,
+  author = {Yan Zhao and Jiao-Min Liu},
+  title = {An improved method for human motion detection and application},
+  booktitle = {Image and Signal Processing (CISP), 2010 3rd International Congress
+	on},
+  year = {2010},
+  volume = {1},
+  pages = {258-260},
+  abstract = {This paper presents an improved human detection algorithm of motion
+	images. Differences of the two successive frames and background were
+	calculated, then the multiplication of the two differences was obtained;
+	from these results; we can separate the motion human object from
+	the background image and get a motion template which included the
+	motion information. It improved the result of human motion detection.
+	An application example is given at the last.},
+  doi = {10.1109/CISP.2010.5648300},
+  keywords = {image motion analysis;human motion detection;motion images;motion
+	information;motion template;Computer vision;Humans;Motion detection;Noise;Pixel;Presses;Real
+	time systems;Binarization;Human Motion Detection;Image Processing;Video
+	surveillance}
+}
+
+@INPROCEEDINGS{20,
+  author = {Zhu, Qiang and Avidan, Shai and Yeh, Mei-chen and Cheng, Kwang-ting},
+  title = {Fast human detection using a cascade of histograms of oriented gradients},
+  booktitle = {In CVPR06},
+  year = {2006},
+  volume = {2006},
+  pages = {1491--1498},
+  abstract = {{We integrate the cascade-of-rejectors approach with the Histograms
+	of Oriented Gradients (HoG) features to achieve a fast and accurate
+	human detection system. The features used in our system are HoGs
+	of variable-size blocks that capture salient features of humans automatically.
+	Using AdaBoost for feature selection, we identify the appropriate
+	set of blocks, from a large set of possible blocks. In our system,
+	we use the integral image representation and a rejection cascade
+	which significantly speed up the computation. For a 320 × 280 image,
+	the system can process 5 to 30 frames per second depending on the
+	density in which we scan the image, while maintaining an accuracy
+	level similar to existing methods. 1}},
+  citeulike-article-id = {7071454},
+  citeulike-linkout-0 = {http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.110.1995},
+  keywords = {adaboost, hog, pedestrian\_detection},
+  posted-at = {2011-03-22 00:14:51},
+  priority = {2},
+  url = {http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.110.1995}
 }
 
