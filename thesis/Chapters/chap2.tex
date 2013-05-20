@@ -3,17 +3,58 @@
 \chapter{Methodology and approach} % Write in your own chapter title
 \label{Chapter2}
 
-We have implemented our pipeline in C and on Linux platform, so that it
-can easily be ported from a PC to embedded environment. Wherever
-possible, we have used opencv library to carry intended job. Our top
-level pipeline can be explained as in figure ~\ref{image_pipeline}.
-\begin{figure}[!b]
+Matlab and OpenCV are two highly used image processing tools. Matlab
+comes with rich image processing and analysis libraries. It supports
+most of the work discussed in introduction chapter. Matlab also provides
+interface to convert the code into a C code. However, generated C code
+is normally very bulky and takes higher execution time. OpenCV is an
+open source computer vision library initiated by intel. It is available
+at http://SourceForge.net/projects/opencvlibrary. It can be used for
+research or even commercial purposes. Unlike GNU Public License (GPL),
+it's licensing does not force that modifications to the library be made
+public. \\
+
+It has been mainly developed in C and C++ on Linux platform. However,
+interfaces for other scripting language such as Python, Ruby etc are
+also being developed. OpenCV libraries have been used in many
+applications since its first release in 1999\\
+
+OpenCV design goal is to build computer vision library with
+computational efficiency which can work with real time applications.It
+contains functions in almost all the area of image processing  and
+computer vision like, histogram processing, morphological processing,
+segmentation, detection tracking, camera calibration etc. Therefore,
+selection of OpenCV libraries allows faster development of real embedded
+application.\\
+
+OpenCV libraries are also available for embedded architecture CPUs like
+ARM. This will allow easy porting of applications developed on x86
+platform to ARM or other embedded platforms.\\
+
+\pagebreak
+
+\section{Image Pipeline}
+
+\begin{figure}[!t]
 \centering
-\includegraphics[scale=0.60]{Figures/image_pipeline}
+\includegraphics[height=300pt]{Figures/image_pipeline}
 \caption{Low BW surveillance Image Pipeline}
 \label{image_pipeline}
 \end{figure}
 
+Thus we decided to implement our image pipeline in C and on Linux
+platform, so that it can easily be ported from a PC to embedded
+environment. Wherever possible, we have used OpenCV library to carry
+intended job. Our top level pipeline can be explained as in figure
+~\ref{image_pipeline}.\\
+
+\subsection{Frame acquisition}
+
+OpenCV provides a way to grab frames either from a camera or from a
+file. cvCaptureFromFile or cvCaptureFromCAM returns CvCapture * struct
+which can further be used to query frame from either a test video file
+or from camera respectively.cvQueryFrame function reads one frame and
+returns its pointer. 
 
 Since background subtraction has key role in accomplishing intended job,
 therefore we have compared two recently developed efficient background
