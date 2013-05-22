@@ -1,4 +1,4 @@
-#include "vibe-background.h"
+//#include "vibe-background.h"
 #include <cv.h>
 #include <cxtypes.h>
 #include <highgui.h>
@@ -407,6 +407,193 @@ cleanup:
 	cvDestroyWindow("SKELETON");
 #endif
 }
+
+#define MAX_SAMPLE	20
+typedef struct vibeModel {
+	int N;
+	int R;
+	int psimin;
+	int phi;
+	int width;
+	int height;
+	IplImage *sample[MAX_SAMPLE];
+	int background;
+	int foreground;
+} vibeModel_t;
+
+void libvibeModelFree(vibeModel_t **model)
+{
+	int i;
+
+	if (!*model)
+		return;
+	for (i = 0; i < MAX_SAMPLE; i++) {
+		if ((*model)->sample[i])
+			cvReleaseImage(&(*model)->sample[i]);
+	}
+	free(*model);
+	*model = NULL;
+}
+
+vibeModel_t * libvibeModelNew()
+{
+	vibeModel_t *model;
+
+	model = (vibeModel_t *)malloc(sizeof(*model));
+	if (!model)
+		return NULL;
+	return model;
+}
+
+int libvibeModelAllocInit_8u_C1R(vibeModel_t *model, IplImage *gray)
+{
+	int i;
+
+	model->N = MAX_SAMPLE;
+	model->R = 20;
+	model->psimin = 2;
+	model->phi = 16;
+	model->width = gray->width;
+	model->height = gray->height;
+	model->background = 0;
+	model->foreground = 255;
+	for (i = 0; i < MAX_SAMPLE; i++) {
+		model->sample[i] = cvCreateImage(cvSize(model->width, model->height), IPL_DEPTH_8U, 1);
+		if (!model->sample[i])
+			goto error_lib_init;
+		cvCopy(gray, model->sample[i]);
+	}
+	return 0;
+error_lib_init:
+	pr_error("Error in %s\n", __func__);
+	for (i = 0; i < MAX_SAMPLE; i++) {
+		if (model->sample[i])
+			cvReleaseImage(&model->sample[i]);
+	}
+	return -1;
+}
+
+int getRandomNumber(CvRNG rng, int seed)
+{
+	return (cvRandInt(&rng) % seed);
+}
+
+int getRandomNeighbrXCoordinate(CvRNG rng, int x, int width)
+{
+	int ng = getRandomNumber(rng, 8);
+	int xng;
+
+	switch (ng) {
+	case 0:
+	case 7:
+	case 6:
+		xng = x--;
+		if (xng < 0)
+			xng = 0;
+		break;
+	case 1:
+	case 5:
+		xng = x;
+		break;
+	case 2:
+	case 3:
+	case 4:
+		xng = x++;
+		if (xng >= width)
+			xng = width - 1;
+		break;
+	}
+
+	return xng;
+}
+
+int getRandomNeighbrYCoordinate(CvRNG rng, int y, int height)
+{
+	int ng = getRandomNumber(rng, 8);
+	int yng;
+
+	switch (ng) {
+	case 0:
+	case 1:
+	case 2:
+		yng = y--;
+		if (yng < 0)
+			yng = 0;
+		break;
+	case 3:
+	case 7:
+		yng = y;
+		break;
+	case 4:
+	case 5:
+	case 6:
+		yng = y++;
+		if (yng >= height)
+			yng = height - 1;
+		break;
+	}
+
+	return yng;
+}
+
+int libvibeModelUpdate_8u_C1R(vibeModel_t *model, IplImage *gray,
+		IplImage *map)
+{
+	int width = model->width;
+	int height = model->height;
+	int psimin = model->psimin;
+	int N = model->N;
+	int R = model->R;
+	int bg = model->background;
+	int fg = model->foreground;
+	int phi = model->phi;
+	CvRNG rng = cvRNG(-1);
+	uint8_t *gray_data, *sample_data, *map_data;
+	int rand, xng, yng;
+
+	map_data = (uint8_t *)map->imageData;
+	gray_data = (uint8_t *)gray->imageData;
+
+	cvZero(map);
+	for (int x = 0 ; x < width ; x++) {
+		for (int y = 0 ; y < height ; y++) {
+			int count = 0, index = 0, dist = 0;
+			/* compare pixel to the BG model */
+			while ((count < psimin) && (index < N)) {
+				sample_data = (uint8_t *)model->sample[index]->imageData;
+				dist = abs(*(gray_data + y * height + x) - *(sample_data + y * height + x));
+				if (dist < R)
+					count++;
+				index++;
+			}
+			//printf("count %d index %d\n", count, index);
+			/* classify pixel and update model */
+			if (count >= psimin) {
+				*(map_data + y * height + x) = bg;
+				/* update current pixel model */
+				rand = getRandomNumber(rng, phi - 1);
+			//	printf("rand %d\n", rand);
+				if (rand == 0) {
+					rand = getRandomNumber(rng, N - 1);
+					sample_data = (uint8_t *)model->sample[rand]->imageData;
+					*(sample_data + y * height + x) = *(gray_data + y * height + x);
+				}
+				/* update neighbouring pixel model */
+				rand = getRandomNumber(rng, phi - 1);
+				if (rand == 0) {
+					xng = getRandomNeighbrXCoordinate(rng, x, width);
+					yng = getRandomNeighbrYCoordinate(rng, y, height);
+					rand = getRandomNumber(rng, N - 1);
+					sample_data = (uint8_t *)model->sample[rand]->imageData;
+					*(sample_data + yng * height + xng) = *(gray_data + y * height + x);
+				}
+			} else {
+				*(map_data + y * height + x) = fg;
+			}
+		}
+	}
+}
+
 int main(int argc, char **argv)
 {
 	CTimer Timer;
@@ -472,6 +659,7 @@ int main(int argc, char **argv)
 	cvNamedWindow("FINAL", 1);
 #endif
 
+#if 0
 	/* Get a model data structure */
 	/*
 	 * Library for background detection from following paper.
@@ -479,6 +667,7 @@ int main(int argc, char **argv)
 	 * ViBe: A universal background subtraction algorithm for video sequences.
 	 * In IEEE Transactions on Image Processing, 20(6):1709-1724, June 2011.
 	*/
+#endif
 	model = libvibeModelNew();
 	if (!model) {
 		pr_error("Vibe Model could not be created\n");
@@ -514,24 +703,29 @@ int main(int argc, char **argv)
 
 	/* Acquires your first image */
 	acquire_grayscale_image(stream, gray);
-
+#if 0
 	/* Allocates the model and initialize it with the first image */
 	libvibeModelAllocInit_8u_C1R(model, (const uint8_t *)gray->imageData,
-			width, height, stride);
+		width, height, stride);
+#endif
+	libvibeModelAllocInit_8u_C1R(model, gray);
 
 	/* Processes all the following frames of your stream:
 		results are stored in "segmentation_map" */
 	while(!acquire_grayscale_image(stream, gray)) {
 		Timer.Start();
 		frame++;
-		if (frame < 20)
+		if (frame < 0)
 			continue;
 #ifdef DEBUG_GRAY
 		cvShowImage("GRAY", gray);
 #endif
+#if 0
 		/* Get FG image in temp */
 		libvibeModelUpdate_8u_C1R(model, (const uint8_t *)gray->imageData,
 				(uint8_t *)map->imageData);
+#endif
+		libvibeModelUpdate_8u_C1R(model, gray, map);
 #ifdef DEBUG_FG
 		cvShowImage("FG", map);
 #endif
@@ -581,7 +775,7 @@ int main(int argc, char **argv)
 			}
 		}
 		cvShowImage("FINAL", temp);
-		cvWaitKey(0);
+		cvWaitKey(5);
 #endif
 	}
 cleanup:
@@ -599,7 +793,7 @@ cleanup:
 	if (gray)
 		cvReleaseImage(&gray);
 	if (model)
-		libvibeModelFree(model);
+		libvibeModelFree(&model);
 	if (storage)
 		cvReleaseMemStorage(&storage);
 	if (stream)

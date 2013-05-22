@@ -35,6 +35,7 @@
 #include "time.h"
 #include <sys/time.h>
 #include "math.h"
+#include <stdio.h>
 
 //#ifndef CLOCKS_PER_SEC                          /* define clocks-per-second if needed */
 //#define CLOCKS_PER_SEC 1000000
