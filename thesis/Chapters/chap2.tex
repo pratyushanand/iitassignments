@@ -54,7 +54,10 @@ OpenCV provides a way to grab frames either from a camera or from a
 file. cvCaptureFromFile or cvCaptureFromCAM returns CvCapture * struct
 which can further be used to query frame from either a test video file
 or from camera respectively.cvQueryFrame function reads one frame and
-returns its pointer. 
+returns its pointer. If camera's output or test video is in RGB mode
+then, it need to converted into gray scale image for further processing.
+
+\subsection{Background removal}
 
 Since background subtraction has key role in accomplishing intended job,
 therefore we have compared two recently developed efficient background

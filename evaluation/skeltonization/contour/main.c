@@ -234,7 +234,7 @@ int skeltonize(IplImage *img, char **argv)
 			cvDrawContours(temp, c,
 					cvScalar(255, 255, 255, 0),
 					cvScalar(0, 0, 0, 0),
-					-1, CV_FILLED, 8,
+					-1, 1, 8,
 					cvPoint(0, 0));
 			cvShowImage("CONTOUR", temp);
 			cvWaitKey(10);
