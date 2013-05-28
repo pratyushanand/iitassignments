@@ -61,7 +61,7 @@ then, it need to converted into gray scale image for further processing.
 
 Since background subtraction has key role in accomplishing intended job,
 therefore we have compared two recently developed efficient background
-subtraction algorithm and then choosed one of them in our final
+subtraction algorithm and then selected one of them in our final
 work.First one ~\cite{11} is based on use of texture features present in
 Local Binary Pattern(LBP). LBP works well with local illumination
 changes, however there can be issues in case of global illumination
@@ -73,13 +73,16 @@ uses.  It is based on unique way of replacing background pixel value
 over the time.It replaces background values for last N frames
 randomly.Furthermore, it diffuses updated values to neighbouring pixels,
 and again that too on random basis. So far selected algorithm surpasses
-other existing algorithm in computation complexities. Figure
-\ref{bg_compare} shows the comparison of execution time of these two
-algorithm.
+other existing algorithm in computation complexities. Authors of
+~\cite{9} have provided object library which can be linked to our own
+code for further processing. But, library is only available for x86
+platform. So, we have coded Vibe algorithm on our own, so that it can be
+compiled for other platform say ARM. Figure \ref{bg_compare} shows the
+comparison of execution time of these two algorithm.
 
 \begin{figure}[!b]
 \centering
-\includegraphics[scale=0.60]{Figures/bg_compare}
+\includegraphics[height=300pt]{Figures/bg_compare}
 \caption{Variation of background subtraction execution time of ~\cite{11}
 and ~\cite{9} with frame number. This timing was observed with a system
 having having DMIPS = 800.}

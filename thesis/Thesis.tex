@@ -15,6 +15,8 @@
 \usepackage{setspace} 
 \hypersetup{urlcolor=black, colorlinks=true}  % Colours hyperlinks in blue, but this can be distracting if there are many links.
 \usepackage{times}
+\usepackage{missing_packages/lineno}
+\linenumbers
 %% ----------------------------------------------------------------
 \begin{document}
 \frontmatter	  % Begin Roman style (i, ii, iii, iv...) page numbering
@@ -32,9 +34,10 @@
 \keywords   {}
 
 \maketitle
+
 %% ----------------------------------------------------------------
 
-\setstretch{1.0}  % It is better to have smaller font and larger line spacing than the other way round
+\setstretch{2.0}  % It is better to have smaller font and larger line spacing than the other way round
 
 % Define the page headers using the FancyHdr package and set up for one-sided printing
 \fancyhead{}  % Clears all page headers and footers
@@ -119,8 +122,27 @@ New Delhi-110016 India  % This prints a line to write the date
 % The Abstract Page
 \addtotoc{Abstract}  % Add the "Abstract" page entry to the Contents
 \abstract{
+For a video surveillance system, image transfer over a low bandwidth
+channel has always been challenging task. Specially, if image is taken
+from a live camera and it has to be transmitted over a wireless delay
+tolerant network, then the task is twisted a bit more.Complexity
+increases further, if we need to build a viable low cost system with a
+low power solution. Such solution is only possible if we extract only
+relevant information from the video frame and transmit it over the
+network.This work is an attempt to frame such a low data rate image
+pipeline with considerably minimal computational cost. We have reviewed
+all important background subtraction algorithm with their merits and
+demerits. One of the efficient background subtraction algorithm called
+Visual background extractor (Vibe)has been coded in 'C' and has been
+compared with another important algorithm based on texture and motion.
+We have also evaluated various human detection algorithms.  We have
+selected a skeleton based detection algorithm. Various skeletonization
+algorithm has been compared and found that star skeleton based approach
+is best suited for our pipeline. Finally we have compared our pipeline
+computation time with some other detection algorithm.So overall, We are
+stripping down each moving object to few pixel, mainly the skeleton
+endpoints and then recognize moving object based on motion information.
 \addtocontents{toc}{\vspace{1em}}  % Add a gap in the Contents, for aesthetics
- Add Abstract
 }
 
 \cleardoublepage  % Abstract ended, start a new page
