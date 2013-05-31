@@ -1,6 +1,5 @@
 //#include "vibe-background.h"
 #include <cv.h>
-#include <cxtypes.h>
 #include <highgui.h>
 #include <sys/queue.h>
 #include <error.h>
@@ -763,7 +762,7 @@ int main(int argc, char **argv)
 			update_tracker(&obj_table, height, width);
 		Timer.Stop();
 		Timer.PrintElapsedTimeMsg(msg);
-		//printf("%s\n", msg);
+		printf("%s\n", msg);
 #ifdef DEBUG_IMAGES
 		cvZero(temp);
 #endif
