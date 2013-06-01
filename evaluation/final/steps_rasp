@@ -1,2 +1,0 @@
-make rasp
-./build/main ../../../test_video/pedestrian.avi
