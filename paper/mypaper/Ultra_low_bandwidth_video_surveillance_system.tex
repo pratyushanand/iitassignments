@@ -302,13 +302,13 @@
 %
 % paper title
 % can use linebreaks \\ within to get better formatting as desired
-\title{Ultra Low Bandwidth Video Surveillance System}
+\title{Image Analysis for Ultra Low Bandwidth Video Surveillance System}
 
 
 % author names and affiliations
 % use a multiple column layout for up to three different
 % affiliations
-\author{\IEEEauthorblockN{Pratyush Anand, Prof. Subrat Kar$^*$}
+\author{\IEEEauthorblockN{Pratyush Anand, Subrat Kar$^*$}
 \IEEEauthorblockA{Dept. of Electrical Engineering,\\
  Indian Institute of Technology Delhi, \\
 Hauz Khas, New Delhi \\
@@ -354,16 +354,22 @@ email: eey107515@ee.iitd.ac.in, subrat@ee.iitd.ac.in}}
 For a video surveillance system, image transfer over a low bandwidth
 channel has always been challenging task. Specially, if image is taken
 from a live camera and it has to be transmitted over a wireless delay
-tolerant network, then the task is twisted a bit more.Complexity
-increases further, if we need to build a viable low cost system with a
-low power solution. Such solution is only possible if we extract only
-relevant information from the video frame and transmit it over the
-network.This work is an attempt to frame such a low data rate
-image pipeline with considerably minimal computational cost.
-We are stripping down each moving object to few pixel,
-mainly the skeleton endpoints and then also recognize moving
-object based on motion information.We have also compared execution time
-of our pipeline with some other implementations.
+tolerant network, then the task is twisted a bit more. If we need to
+build a viable low cost system with a low power solution, then
+complexity increases further. Such solution is only possible if we
+extract only relevant information from the video frame and transmit it
+over the network.This work is an attempt to frame such a low data rate
+image pipeline with considerably minimal computational cost. We are
+evaluating different algorithms at each stage of surveillance pipeline
+and then selecting best one suited for low cost embedded scenario.  We
+are stripping down each moving object to few pixel, mainly the skeleton
+endpoints and then also recognize moving object based on motion
+information.We have also compared execution time of our pipeline with
+previous implementations.  We have done all developments on x86 PC with
+Linux operating system.  Once validated at x86, we have ported our
+application to an ARM11 based system and compared performance. Our
+result says that this implementation is quite suitable for low cost real
+time embedded environment.
 \end{abstract}
 % IEEEtran.cls defaults to using nonbold math in the Abstract.
 % This preserves the distinction between vectors and scalars. However,
@@ -394,26 +400,26 @@ of our pipeline with some other implementations.
 Image based surveillance systems are ubiquitous, still number of such
 nodes are increasing everyday. Most of them transmit compressed video
 frames to a base station, where it is monitored by a person or a group
-of person. But such an arrangement can not be foolproof. So, any
-attempt in the direction of its automation can be of great use in
-application areas, such as traffic monitoring, elderly care, security
-etc.\\
+of people. But such an arrangement cannot be foolproof, because a manual
+scanning might miss some important event. Therefore, any attempt in the
+direction of its automation can be of great use in application areas,
+such as traffic monitoring, elderly care, security etc.\\
 \indent There had been lot of advancement with low power wireless home
 network eg. ZigBee, DASH-7 etc which are used in smart home
 technologies. Video surveillance system can be integrated with existing
 home network, but it will be very important to achieve, reduction in
 amount of data to be transmitted due to lack of end to end
-connectivity.A low data rate node will also allow the system to remain
+connectivity. A low data rate node will also allow the system to remain
 in sleep mode for longer duration and hence to have longer battery
 life.\\
 \indent For surveillance data, entire image need not be transmitted.
-Only a few segments of image need to be transmitted(the fast changing
+Only a few segments of image need to be transmitted (the fast changing
 scenes).Transmitting only significant features pre-extracted locally
-from the image can reduce transmission requirement
-significantly.However, we will need to ensure that this minimization of
-content allows us to reconstruct the image with relevant details at the
-other end.Extraction of such image information is possible if end node
-is intelligent. If we go to the level of extracting semantic information
+from the image can reduce transmission requirement significantly.
+However, we will need to ensure that this minimization of content allows
+us to reconstruct the image with relevant details at the other end.
+Extraction of such image information is possible if end node is
+intelligent. If we go to the level of extracting semantic information
 from deduced features, then it can reduce data rate even further.\\
 \indent Automatic analysis of scene and then to infer desired
 information out of it can be a lot complex because of the complexity of
@@ -426,12 +432,16 @@ addressed up to a lot extent. Care must be taken in selecting algorithm,
 so that it allows information extraction almost in real time. With
 latest research in computer vision ~\cite{3} ~\cite{5}, it seems that
 such task could be viable with low cost embedded system.\\
-\indent This works has been done by choosing one of best background
+\indent \textbf{Problem Statement:} We have to find suitable image
+analysis algorithms for a surveillance pipeline which can work with low
+cost embedded solutions.
+\indent This works has been done by selecting one of best background
 subtraction algorithm. Skeletonization and further information about
-selected object ontology has been used as the recognition method.When
+selected object ontology has been used as the recognition method. When
 object is at distance from the camera then motion features are very
-helpful in object recognition. 
-\indent Organization of the paper is as follows: In the next section we
+helpful in object recognition. Pipeline has been executed on x86 as well
+as on ARM11 platform and result has been compared. \\
+\indent Organization of the paper is as follows: In the  section II we
 provide a survey of related work done in recent past. After this, we
 have provided our proposed framework, followed by result and conclusion.
 At the end, we have also provided future work to be done in this line.
@@ -443,41 +453,39 @@ The most difficult part of such implementation is to find an
 efficient background estimation algorithm so that moving scene can be
 extracted. Features such as Gradient histogram, Gray Scale (Haar),
 color, texture, self-similarity and motion have been used by different
-researchers. \\ \indent ~\cite{1} and many other have used color
+researchers. \\
+ \indent Cucchiara et al. ~\cite{1} and many other have used color
 information as the feature for background estimation. But only color as
-feature might not be sufficient ~\cite{2} in surveillance applications
-where image resolution is very low.  Adding motion along with image
-intensities gives better result in moving bodies estimation. When
-background color is same as foreground color then texture features
-represented by local binary pattern ~\cite{3} provides interestingly
-nice result. Further, features computed at a single scale can be used to
-approximate feature at nearby scale. Such implementations ~\cite{4}
-accelerates the execution for practical applications.Methods based on
-Gaussian Mixtures Model(GMM) have also been widely used, but they are
-computationally very expensive.  There is one non-parametric
-implementation ~\cite{5} known as Vibe, which decides about background
-pixel value after comparison with closest samples selected
-randomly.Interesting part of this approach is that background model is
-getting initialized from a single frame itself.\\ \indent Once we have
-identified the foreground moving part, next important task is to reduce
-it's size or extract minimal useful information out of it. So far,
-object based video coding such as ~\cite{7}, ~\cite{8} seems to be the
-best compression techniques.  Commercial algorithms such as MPEG-4 also
-employees object based coding.Applications which we have targeted in
-this work is to identify moving with minimal computational cost.Shape or
-skeleton ~\cite{11} based based approach seems computationally efficient
-for object recognition.  Medial axis transform, distance transform,
-morphological and star skeletonization etc ~\cite{9} ~\cite{10} are
-different methods which can be used to find out skeleton of a moving
-object.\\
+feature might not be sufficient in surveillance applications, where image
+resolution is very low.  Viola and Jones ~\cite{2} have added motion
+along with image intensities, which gives better result in moving bodies
+estimation. When background color is same as foreground color, then
+texture features represented by local binary pattern (LBP) ~\cite{3}
+provides interestingly nice result. Further, features computed at a
+single scale can be used to approximate feature at nearby scale. Such
+implementations ~\cite{4} accelerates the execution for practical
+applications.Methods based on Gaussian Mixtures Model (GMM) have also
+been widely used, but they are computationally very expensive.  There is
+one non-parametric implementation ~\cite{5} known as Vibe, which decides
+about background pixel value after comparison with closest samples
+selected randomly. Interesting part of this approach is that background
+model is getting initialized from a single frame itself.\\
+ \indent Once we have identified the foreground moving part, next
+important task is to reduce it's size or extract minimal useful
+information out of it. So far, object based video coding such as
+~\cite{7}, ~\cite{8} seems to be the best compression techniques.
+Commercial algorithms such as MPEG-4 also employees object based coding.
+Applications which we have targeted in this work is to identify moving
+object with minimal computational cost. Shape or skeleton ~\cite{11}
+based approach seems computationally efficient for object recognition.
+Medial axis transform, distance transform, morphological and star
+skeletonization etc ~\cite{9}, ~\cite{10} are different methods which
+can be used to find out skeleton of an object.\\
 
 
 \section{Proposed Framework}
 % no \IEEEPARstart
-We have implemented our pipeline in C and on Linux platform, so that it
-can easily be ported from a PC to embedded environment. Wherever
-possible, we have used opencv library to carry intended job. Our top
-level pipeline can be explained as in figure ~\ref{image_pipeline}.
+Our top level pipeline can be explained as in Figure ~\ref{image_pipeline}.
 \begin{figure}[!h]
 \centering
 \includegraphics[scale=0.35]{figures/image_pipeline}
@@ -485,52 +493,62 @@ level pipeline can be explained as in figure ~\ref{image_pipeline}.
 \label{image_pipeline}
 \end{figure}
 
-
-Since background subtraction has key role in accomplishing intended job,
-therefore we have compared two recently developed efficient background
-subtraction algorithm and then choosed one of them in our final
-work.First one ~\cite{3} is based on use of texture features present in
-Local Binary Pattern(LBP). LBP works well with local illumination
-changes, however there can be issues in case of global illumination
-change.Author of this paper has done several improvements by using
-photometric invariant color measurement and flexible weight updating for
-background modes. However, computationally it is not so efficient
-compared to second one ~\cite{5} which we have also selected for our
-uses.  It is based on unique way of replacing background pixel value
-over the time.It replaces background values for last N frames
-randomly.Furthermore, it diffuses updated values to neighbouring pixels,
-and again that too on random basis. So far selected algorithm surpasses
+\indent Since background subtraction has key role in accomplishing
+intended job, therefore we have compared two recently developed
+efficient background subtraction algorithm and then selected one of them
+in our final work.  The method described by Yao and Odobez ~\cite{3}
+(IDIAP) is based on use of texture features present in Local Binary
+Pattern (LBP).  LBP works well with local illumination changes, however
+there can be issues in case of global illumination change. They have
+carried out several improvements by using photometric invariant color
+measurement and flexible weight updating for background modes. However,
+computationally it is not so efficient compared to the method by Barnich
+and Van Droogenbroeck ~\cite{5} (Vibe) which we have also selected for
+our uses. It replaces background values for last N frames randomly.
+Furthermore, it diffuses updated values to neighbouring pixels, and
+again that too on random basis. So far selected algorithm surpasses
 other existing algorithm in computation complexities. Figure
 \ref{bg_compare} shows the comparison of execution time of these two
 algorithm.
+
+We have implemented our pipeline through C programming in Linux
+platform, so that it can easily be ported from a PC to embedded
+environment. We have used OpenCV library for input and output, i.e.  for
+the image frame extraction from a video file or camera and to show the
+output result. Vibe object library for background subtraction has been
+made available by the author for x86 platform. However, C code has not
+been released. Therefore, we have developed our own C code for Vibe so
+that we can compile it to be used for ARM platform. Once foreground
+frame is extracted, we use OpenCV library function to clean and separate
+out each moving object. Rest of all core pipeline code has been done by
+us in C. 
+
 
 \begin{figure}[!h]
 \centering
 \includegraphics[scale=0.35]{figures/bg_compare}
 \caption{Variation of background subtraction execution time of ~\cite{3}
 and ~\cite{5} with frame number. This timing was observed with a system
-having having DMIPS = 800.}
+having DMIPS = 800.}
 \label{bg_compare}
 \end{figure}
 
 None of the background subtraction algorithm allows pure foreground
 extraction. There would always be several noise object in the extracted
-image. These are cleaned by morphological erosion operation followed by
-dilation operation.Further all moving contours are separated out by
-using opencv library ~\cite{12} function cvFindContours.This function
-gives us boundary point of moving object.
+image. These are cleaned by morphological operations of erosion followed
+by dilation. Further all moving contours are separated out by using
+OpenCV library ~\cite{12} function cvFindContours. Output of
+cvFindContours gives us boundary point of each moving object.
 
 Star skeletonization method has been used to find extreme point on
 moving contours. This method plots distance of each boundary point from
 the centroid and then uses peaks of the curve as skeleton
-point.Following steps have been used to identify types of each moving
+point. Following steps have been used to identify types of each moving
 contours.
 \begin{enumerate}
 \item Centroid of each object is found out using following formula.\\
 	\begin{equation}
-	C_x = {1 \over N} \Sigma ^N _{i = 1} X_i 
-	\end{equation}
-	\begin{equation}
+	C_x = {1 \over N} \Sigma ^N _{i = 1} X_i,
 	C_y = {1 \over N} \Sigma ^N _{i = 1} Y_i 
 	\end{equation}
 Here X$_i$ and Y$_i$ are (X,Y) co-ordinate of i$_{th}$ point on the contour
@@ -545,45 +563,50 @@ array.
 \begin{figure}[!h]
 \centering
 \includegraphics[scale=0.35]{figures/distance}
-\caption{Distance plot of human contour points from its centroid}
+\caption{A.Separated human contour. B. Distance plot of human contour
+points from its centroid.}
 \label{distance}
 \end{figure}
 
 \item Distance vector array is smoothed to remove noise peaks using
-cvSmooth.If these distances are plotted then it looks like fig
-\ref{distance}. Now local maxima of distance vector is
-calculated by finding zero crossing of difference vectors.\\ However,
-even after smoothing operation there are some peaks which is not of our
-interest.In our algorithm, we are using 2 most relevant peaks which are
-nearest to each bottom corner of bounding box of contour respectively.
-Only these two peaks along with centroid will give us sufficient information
-to distinguish human among human, vehicle or animal etc.\\
-In case of human these two peaks depicts two legs.For vehicle these are
-just two extrema points of lower portion of back and front.In case of
-animal these will correspond to front first leg and back last leg.
-\item Let P$_1$(X$_1$, Y$_1$), P$_2$(X$_2$, Y$_2$) and C(C$_x$, C$_y$) are two peaks
-nearest to bottom right and bottom left corner and centroid
-respectively. Let $\theta$ is the angle between P$_1$C and P$_2$C, then
-$\theta$ can be calculated as follows.\\
+cvSmooth. If these distances are plotted is as shown in Figure
+\ref{distance}.$B$. Now local maxima of distance vector is calculated by
+finding zero crossing of difference vectors.\\
+\indent However, even after smoothing operation there are some peaks which is
+not of our interest.  In our algorithm, we are using 2 most relevant
+peaks which are nearest to each bottom corner of bounding box of contour
+respectively.  Only these two peaks along with centroid will give us
+sufficient information to distinguish human from human, vehicle or
+animal etc. \\
+\indent When the case considered is human, then the two peaks correspond to
+the two legs of human. When case considered is vehicle, then the peaks
+correspond to the two extrema points of lower portion of back and front.
+When it is an animal, then peaks correspond to front and back leg of
+animal.\\
+\item Let P$_1$(X$_1$, Y$_1$), P$_2$(X$_2$, Y$_2$) and C(C$_x$, C$_y$)
+are two peaks nearest to bottom right and bottom left corner and
+centroid respectively. Let $\theta$ is the angle between the line
+segments P$_1$C and P$_2$C, then $\theta$ can be calculated as
+follows.\\
 %
 	\begin{equation}
 	\theta = tan^{-1}[(Y_2 - C_y) / (X_2 - C_x)] \\ - tan^{-1}[(Y_1 - C_y) / (X_1 - C_x)]
 	\end{equation}
 %
 If variation of this $\theta$ is plotted in respective frames for human
-and vehicle then it looks like as shown in fig \ref{angle_plot}. There
-are few points noticeable in the plot for human. First that, angle
-variation pattern is repeatable. Second, It touches to 0 at some point.
-For vehicle, it is almost constant as expected. We have not tried with a
-video with animal. But, for animal there would be variation with
-repeatable pattern but would never touch to zero.These criterion can be
-the basis to identify about an object, whether it is a human, vehicle or
-animal.
+and vehicle then the resultant plot is as shown in fig \ref{angle_plot}.
+The observations from this plot is that for human, angle variation
+pattern is repeatable, and it is zero for almost at regular intervals.
+For vehicle, it is constant. The experiment with images containing
+animal is to be carried out. For images with animal in it, there would
+be variation with repeatable pattern but would never touch to  zero.
+These criterion can be the basis to identify about an object, whether it
+is a human,vehicle or animal.
 
 \begin{figure}[!h]
 \centering
 \includegraphics[scale=0.35]{figures/angle_plot}
-\caption{Variation of angle between legs with frame number for human and
+\caption{Plot of variation of angle $\theta$ with frame number for human and
 vehicle.}
 \label{angle_plot}
 \end{figure}
@@ -593,9 +616,9 @@ view of camera, a structure is created and added to the list.This new
 object is tracked and value of (C$_x$, C$_y$), $\theta$ in each frame is
 stored. 
 \begin{enumerate} 
-\item We track value of $\theta$ until it goes to '0' three times.
-\item Now consider $\theta$ values between first and second '0' as
-vector T$_1$ and $\theta$ values between second and third '0' as vector
+\item We track value of $\theta$ until it goes to zero three times.
+\item Now consider $\theta$ values between first and second zero as
+vector T$_1$ and $\theta$ values between second and third zero as vector
 T$_2$.
 \item Find mean m$_1$ and m$_2$ of vector T$_1$ and T$_2$ respectively.
 \item If n is the length of vector T$_1$ then calculate correlation value
@@ -605,7 +628,7 @@ between these two vectors to find similarities as follows.
 \over {\sqrt {\Sigma ^n _{i = 1} (T_{1i} - m_1)^2 * \Sigma ^n _{i = 1} (T_{2i}
 - m_2)^2}}}
 	\end{equation}
-\item If correlation value is greater than a threshold value TH$_1$ then we say
+\item If correlation value is greater than a threshold value TH$_1$, then we say
 that it is a human.
 
 \end{enumerate} 
@@ -613,7 +636,7 @@ that it is a human.
 \section{Results}
 % no \IEEEPARstart
 We observe that with our implementation, code is able to detect a moving
-person after it's 3 steps move. Figure  \ref{pipeline_images} shows
+person after it has moved 3 steps. Figure  \ref{pipeline_images} shows
 output images at different stages of pipeline.
 
 \begin{figure}[!h]
@@ -644,33 +667,43 @@ not recognize them as human.
 
 Comparison of proposed framework with HAAR and IDIAP detection algorithm
 in figure \ref{pipeline_execution_time} shows that, this is quite
-faster. Our pipeline takes just 3.6 mS on the average, while HARR and
-IDIAP takes around 20mS and 248 mS respectively per frame. This timing
-was observed with a system having DMIPS = 800.
+faster. Our pipeline takes just 3.6 ms on the average, while HARR and
+IDIAP takes around 20ms and 248 ms respectively per frame. This timing
+was observed with a x86 system having DMIPS = 800.
 
 \begin{figure}[!h]
 \centering
 \includegraphics[scale=0.30]{figures/pipeline_execution_time}
-\caption{Variation of different pipeline execution time with a system
+\caption{Variation of different pipeline execution time with a x86 system
 having DMIPS=800}
 \label{pipeline_execution_time}
 \end{figure}
 
-So if a surveillance application requires to identify moving person,
-then we might not need to use complex algorithm. Processor like Coretx
-M3/M4 are used in an embedded environment with a low power application.
-Such processors have DMIPS of 1.25 dmips/Mhz. If we use such processors
-at 300 MHz, our pipeline will be able to process one frame in less than
-8 mS, and therefore system can go in sleep mode for longer time and
-hence can save a lot of powers.
+We have also implemented above pipelines with ARM11 platform with DMIPS
+= 44.  Comparison of timing at ARM11 platform has been shown in figure
+\ref{arm11_pipeline_execution_time}. Our pipeline takes just 182 ms on
+the average, while HARR and IDIAP takes around 942ms and 4.65 ms
+respectively per frame. 
+
+\begin{figure}[!h]
+\centering
+\includegraphics[scale=0.30]{figures/arm11_pipeline_execution_time}
+\caption{Variation of different pipeline execution time with an ARM11 system
+having DMIPS=44}
+\label{arm11_pipeline_execution_time}
+\end{figure}
+
+Therefore, if a surveillance application requires to identify moving person,
+then we might not need to use complex algorithm to get real time
+performance with low cost embedded platform. By using proposed
+algorithm, we can save a lot of computational power.
 
 \section{Future Work}
 % no \IEEEPARstart
 
-Porting of this pipeline on an ARM platform would be a nice idea.We also
-need to see that how does this pipeline behaves with exiting home
+We need to see that how does this pipeline behaves with exiting home
 network like zigbee. Vibe algorithm has one issue that it is not able to
-remove shadow.So, an improvement in Vibe for ghost and shadow removal
+remove shadow. So, an improvement in Vibe for ghost and shadow removal
 will make this pipeline more robust.
 
 
@@ -762,9 +795,10 @@ will make this pipeline more robust.
 \section{Conclusion}
 
 We have taken unique property of human leg motion, that it is periodic
-and also angle between two legs varies between 0 and some maximum value.
+and also angle between two legs varies between zero and some maximum value.
 We have demonstrated that with our proposed framework one can achieve
-almost real time pedestrian detection.
+almost real time pedestrian detection even with low cost embedded
+platforms.
 
 
 
