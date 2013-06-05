@@ -1,0 +1,4 @@
+make
+#./build/main ../../../test_video/OneStopNoEnter1cor.mpeg
+#./build/main ../../../test_video/highway.avi
+./build/main ../../../test_video/pedestrian.avi

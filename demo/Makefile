@@ -1,6 +1,7 @@
-all: main.cpp
-	g++ -c -g main.cpp -I /usr/include/opencv/ -I /usr/include/python2.7
-	g++ -o main vibe-background.o main.o `pkg-config opencv --cflags --libs` `pkg-config python --cflags --libs`
+all: main.c
+	rm -rf build out
+	mkdir build out
+	g++ -O3 -o build/main main.c `pkg-config opencv --cflags --libs`
 
 clean:
-	rm -rf *.pyc main.o main
+	rm -rf build out
