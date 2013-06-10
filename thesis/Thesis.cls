@@ -114,6 +114,7 @@
 \usepackage{rotating}
 \usepackage{listings}
 \usepackage{missing_packages/lstpatch}
+\usepackage{listings}
 \lstset{captionpos=b,
         frame=tb,
         basicstyle=\scriptsize\ttfamily,

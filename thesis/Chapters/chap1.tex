@@ -208,7 +208,7 @@ of an image shares same texture information. Yao and Odobez have used
 photometric invariant color features in RGB color space to overcome this
 limitation of LBP.\\
 
-\indent Visual background extractor(Vibe) is another important
+\indent Visual background extractor(Vibe) \cite{9} is another important
 implementation which need to be discussed before completing this
 section. There is a common strategy to use first in first out method to
 update background model. Large number of samples is included in the
@@ -293,8 +293,18 @@ detection using multiple cameras. Multiple cameras allow depth view
 calculation of different body parts, which assist further in
 detection.\\
 
-\indent Yao and Odobez have used covariance feature with cascade of logitboost
-classifier as human descriptor ~\cite{19}.\\
+\indent Yao and Odobez have used covariance feature with cascade of
+logitboost classifier as human descriptor ~\cite{19}. Covariance matrix
+encodes information about variance of features, their corelation with
+each other, and special layout. Integral image concept is used here too
+for faster computation. Covariancematrix $C_R$ of the features are
+computed as follows:\\
+\begin{eqnarray}
+C_R = {1 \over {(|R| - 1)}} \Sigma _{x \in R} (H(x) - m_R) (H(x) - m_R)^T \nonumber \\
+m_R = {1 \over {(|R|)}} \Sigma _{x \in R} H(x)
+\end{eqnarray}
+
+Here, $m_R$ is the mean vector in region R.
 
 \indent Image skeltonization followed by motion pattern analysis
 ~\cite{32, 22, 31} is computationally very fast way to detect a human .
