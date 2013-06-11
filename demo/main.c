@@ -444,6 +444,7 @@ cleanup:
 	}
 }
 
+/* free resource for vibe model and free model */
 static void libvibeModelFree(vibeModel_t **model)
 {
 	int i;
@@ -458,6 +459,7 @@ static void libvibeModelFree(vibeModel_t **model)
 	*model = NULL;
 }
 
+/* create vibe model */
 static vibeModel_t * libvibeModelNew()
 {
 	vibeModel_t *model;
@@ -468,6 +470,7 @@ static vibeModel_t * libvibeModelNew()
 	return model;
 }
 
+/* allocate resource for vibe model and initialize model*/
 static int libvibeModelAllocInit_8u_C1R(vibeModel_t *model, IplImage *gray)
 {
 	int i;
@@ -496,11 +499,13 @@ error_lib_init:
 	return -1;
 }
 
+/* generate random number with given seed */
 static int getRandomNumber(CvRNG rng, int seed)
 {
 	return (cvRandInt(&rng) % seed);
 }
 
+/* get random neighbour coordinate in X direction */
 static int getRandomNeighbrXCoordinate(CvRNG rng, int x, int width)
 {
 	int ng = getRandomNumber(rng, 8);
@@ -530,6 +535,7 @@ static int getRandomNeighbrXCoordinate(CvRNG rng, int x, int width)
 	return xng;
 }
 
+/* get random neighbour coordinate in Y direction */
 static int getRandomNeighbrYCoordinate(CvRNG rng, int y, int height)
 {
 	int ng = getRandomNumber(rng, 8);
@@ -559,6 +565,7 @@ static int getRandomNeighbrYCoordinate(CvRNG rng, int y, int height)
 	return yng;
 }
 
+/* update vibe model over time */
 static int libvibeModelUpdate_8u_C1R(vibeModel_t *model, IplImage *gray,
 		IplImage *map)
 {
@@ -589,13 +596,11 @@ static int libvibeModelUpdate_8u_C1R(vibeModel_t *model, IplImage *gray,
 					count++;
 				index++;
 			}
-			//printf("count %d index %d\n", count, index);
 			/* classify pixel and update model */
 			if (count >= psimin) {
 				*(map_data + y * height + x) = bg;
 				/* update current pixel model */
 				rand = getRandomNumber(rng, phi - 1);
-				//	printf("rand %d\n", rand);
 				if (rand == 0) {
 					rand = getRandomNumber(rng, N - 1);
 					sample_data = (uint8_t *)model->sample[rand]->imageData;
