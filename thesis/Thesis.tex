@@ -15,8 +15,8 @@
 \usepackage{setspace} 
 \hypersetup{urlcolor=black, colorlinks=true}  % Colours hyperlinks in blue, but this can be distracting if there are many links.
 \usepackage{times}
-\usepackage{missing_packages/lineno}
-\linenumbers
+%\usepackage{missing_packages/lineno}
+%\linenumbers
 %% ----------------------------------------------------------------
 \begin{document}
 \frontmatter	  % Begin Roman style (i, ii, iii, iv...) page numbering
@@ -37,7 +37,7 @@
 
 %% ----------------------------------------------------------------
 
-\setstretch{2.0}  % It is better to have smaller font and larger line spacing than the other way round
+\setstretch{1.0}  % It is better to have smaller font and larger line spacing than the other way round
 
 % Define the page headers using the FancyHdr package and set up for one-sided printing
 \fancyhead{}  % Clears all page headers and footers
@@ -174,18 +174,6 @@ New Delhi-110016 India  % This prints a line to write the date
 \input{./Chapters/chap4} %future work
 
 %% ----------------------------------------------------------------
-
-\cleardoublepage
-\label{Apendix}
-\addtotoc{Apendix}
-\lhead{\emph{Apendix}}  
-\huge\textbf{Apendix}
-
-\begin{sloppypar}
-\normalsize
-\input{./Chapters/apendix.tex}
-\end{sloppypar}
-\cleardoublepage
 
 \label{Bibliography}
 \addtotoc{Bibliography}

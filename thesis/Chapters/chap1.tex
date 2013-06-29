@@ -3,58 +3,50 @@
 \chapter{Introduction} % Write in your own chapter title
 \label{Chapter1}
 
-\indent Delay tolerant network(DTN) architecture lacks continuous end to end
-connectivity. It works under some constraints like long delays and
-extreme losses. For example, military network having large number of
-nodes with high data mobility in extreme environmental terrestrial
-conditions. Such network normally employees their own tailored routing
-algorithm for high throughput based on individual's environmental
-conditions ~\cite{1}.\\
-
-\indent Now if we need to transfer image over such wireless delay tolerant
-network, and that too from a live camera then it is going to become
-extremely difficult task. Complexity will increase further, if we need
-to build a viable low cost system with a low power battery operated
-solution.  In any such cases, it would be wise to transmit
-information only. We need to extract information out of image and then to
-send it over the network.  Information can be of various type. So, we
-need to deal, that what minimum information about image allows us to
-reconstruct the scenario or to detect an event. If possible then we 
-need to detect event at the end DTN node itself and then to transmit
-only this event information over the network.\\
-
-\indent Above discussed image pipeline system can also be extended to the
-existing video surveillance system which are still manual. Normally all
-the surveillance camera sends video to a monitoring base station, where
-it is monitored by a person or a group of people. But such arrangement
-can not be foolproof, because it needs continuous manual observation.
-Also such surveillance camera can not be battery operated.  So, there
-would be difficulty in keeping them at strategic locations.  Any attempt
-in the direction of its automation can be of great use in application
-areas such as:\\
-\begin{enumerate}
- \item  Traffic Monitoring
-  \item Elderly care
-  \item Security
-  \item Troops monitoring
-\end{enumerate}
-\indent End goal of such an intelligent system would be to offer an
-automatic analysis of scene and then to infer desired information out of
-it. These systems can be lot complex because of the complexity of the
-scene, specially when application is targeted for outdoor monitoring.
-Sometime background of the scene can be moving, while in some other
-scene ambient light can be different. Detection of foreground objects
-becomes a trivial task in whole of this pipeline. Once we have
-foreground objects, we can save a lot of bandwidth if we can detect if
-object is of our interest or not.\\
-
-\textbf{Problem statement:} We are targeting to detect moving person and
-then to send it's information such as location, time of detection etc to
-the monitoring station. Only sending such event information would lead
-to design a ultra low bandwidth surveillance system. We want to keep our
-pipeline computation cost very low, at the same time with high genuine
-detection rate and low false detection rate. We also want to run this
-pipeline with low power cpu like arm and to see it's performance.\\
+\indent Surveillance systems are ubiquitous and find many applications
+in areas such as traffic monitoring, elderly care etc. Therefore, there
+is a pressing need to evolve methods for conserving bandwidth while the
+video data is transported from the point of acquisition to the point of
+observation. Moreover, an increasing number of video sources rely on
+resource constrained (bandwidth-limited, delay-tolerant) networks.\\
+\indent Delay tolerant network(DTN) architecture lacks continuous end to
+end connectivity. It works under some constraints like long delays,
+extreme losses, etc. For example, Zigbee, DASH7 specially used in smart
+home applications, military networks having large number of nodes with
+high data mobility in extreme environmental terrestrial conditions. Such
+networks normally employ their own tailored routing algorithm for high
+throughput based on individual's environmental conditions ~\cite{1}.\\
+\indent Current generation video surveillance node sends video to a
+monitoring base station, where it is monitored by a person or a group of
+people. But such arrangement can not be foolproof, because it needs
+continuous manual observation.  Also such surveillance node can not be
+battery operated.  So, there would be difficulty in keeping them at
+strategic locations.  With DTNs at layer 1 and 2, there is tremendous
+need to conserve/preserve the bandwidth needed by each video stream /
+all video streams collectively. We propose a method by which a few
+pre-processing operations allow us to still carry out the primary
+objective - surveillance - while achieving large and impressive savings
+on the required bandwidth.\\
+\indent Video surveillance system can be integrated with existing DTNs,
+but it is very important to achieve, reduction in amount of data to be
+transmitted due to lack of end to end connectivity. A low data rate node
+also allows the system to remain in sleep mode for longer durations and
+hence prolongs longer battery life.\\
+\indent For surveillance data, only a few segments of image need to be
+transmitted (the fast changing scenes). Transmitting only significant
+features pre-extracted locally from the image can reduce transmission
+requirement significantly. However, this minimization of content must
+allow reconstruction of the image with relevant details at the other
+end. By extracting semantic information from deduced features, we
+reduce the data rate even further.\\
+\indent We have to find suitable image analysis algorithms for a
+surveillance pipeline which can work with low cost embedded solutions.
+We have selected one of best ~\cite{9} background subtraction algorithm.
+Skeletonization and information about selected object ontology has been
+used as the recognition method. When object is at distance from the
+camera then motion features are very helpful in object recognition.
+Proposed method has been executed on x86 as well as on ARM11 platform
+and the result has been compared. \\
 
 \pagebreak
 
