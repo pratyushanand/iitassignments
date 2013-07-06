@@ -48,7 +48,7 @@
 \onehalfspacing
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{2.0ex plus0.5ex minus0.2ex}
-\usepackage{vmargin}
+\usepackage{missing_packages/vmargin}
 \setmarginsrb           { 1.5in}  % left margin
                         { 1.0in}  % top margin
                         { 1.0in}  % right margin
@@ -64,7 +64,7 @@
 \widowpenalty=9999                % Almost no widows at bottom of page.
 \clubpenalty=9999                 % Almost no orphans at top of page.
 \interfootnotelinepenalty=9999    % Almost never break footnotes.
-\usepackage{fancyhdr}
+\usepackage{missing_packages/fancyhdr}
 \lhead[\rm\thepage]{\fancyplain{}{\sl{\rightmark}}}
 \rhead[\fancyplain{}{\sl{\leftmark}}]{\rm\thepage}
 \chead{}\lfoot{}\rfoot{}\cfoot{}
@@ -89,7 +89,7 @@
 \newtheorem{definition}[theorem]{Definition}
 \theoremstyle{remark}
 \newtheorem{remark}[theorem]{Remark}
-\usepackage[centerlast,small,sc]{caption}
+\usepackage[centerlast,small,sc]{missing_packages/caption}
 \setlength{\captionmargin}{20pt}
 \newcommand{\fref}[1]{Figure~\ref{#1}}
 \newcommand{\tref}[1]{Table~\ref{#1}}
@@ -109,12 +109,12 @@
 \setcounter{dbltopnumber}{9}
 \usepackage{graphicx}
 \usepackage{epstopdf}
-\usepackage[scriptsize]{subfigure}
-\usepackage{booktabs}
-\usepackage{rotating}
-\usepackage{listings}
+\usepackage[scriptsize]{missing_packages/subfigure}
+\usepackage{missing_packages/booktabs}
+\usepackage{missing_packages/rotating}
+\usepackage{missing_packages/listings}
 \usepackage{missing_packages/lstpatch}
-\usepackage{listings}
+\usepackage{missing_packages/listings}
 \lstset{captionpos=b,
         frame=tb,
         basicstyle=\scriptsize\ttfamily,

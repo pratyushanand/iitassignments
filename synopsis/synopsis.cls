@@ -8,7 +8,7 @@
 \ProvidesClass{Thesis}
               [2007/22/02 v1.0
    LaTeX document class]
-\def\baseclass{book}
+\def\baseclass{article}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{\baseclass}}
 \def\@checkoptions#1#2{
   \edef\@curroptions{\@ptionlist{\@currname.\@currext}}
@@ -48,7 +48,7 @@
 \onehalfspacing
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{2.0ex plus0.5ex minus0.2ex}
-\usepackage{vmargin}
+\usepackage{missing_packages/vmargin}
 \setmarginsrb           { 1.5in}  % left margin
                         { 1.0in}  % top margin
                         { 1.0in}  % right margin
@@ -64,12 +64,12 @@
 \widowpenalty=9999                % Almost no widows at bottom of page.
 \clubpenalty=9999                 % Almost no orphans at top of page.
 \interfootnotelinepenalty=9999    % Almost never break footnotes.
-\usepackage{fancyhdr}
+\usepackage{missing_packages/fancyhdr}
 \lhead[\rm\thepage]{\fancyplain{}{\sl{\rightmark}}}
 \rhead[\fancyplain{}{\sl{\leftmark}}]{\rm\thepage}
 \chead{}\lfoot{}\rfoot{}\cfoot{}
 \pagestyle{fancy}
-\renewcommand{\chaptermark}[1]{\btypeout{\thechapter\space #1}\markboth{\@chapapp\ \thechapter\ #1}{\@chapapp\ \thechapter\ #1}}
+%\renewcommand{\chaptermark}[1]{\btypeout{\thechapter\space #1}\markboth{\@chapapp\ \thechapter\ #1}{\@chapapp\ \thechapter\ #1}}
 \renewcommand{\sectionmark}[1]{}
 \renewcommand{\subsectionmark}[1]{}
 \def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else
@@ -79,17 +79,17 @@
 \if@twocolumn\hbox{}\newpage\fi\fi\fi}
 \usepackage{amsmath,amsfonts,amssymb,amscd,amsthm,xspace}
 \theoremstyle{plain}
-\newtheorem{example}{Example}[chapter]
-\newtheorem{theorem}{Theorem}[chapter]
-\newtheorem{corollary}[theorem]{Corollary}
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{axiom}[theorem]{Axiom}
-\theoremstyle{definition}
-\newtheorem{definition}[theorem]{Definition}
-\theoremstyle{remark}
-\newtheorem{remark}[theorem]{Remark}
-\usepackage[centerlast,small,sc]{caption}
+%\newtheorem{example}{Example}[chapter]
+%\newtheorem{theorem}{Theorem}[chapter]
+%\newtheorem{corollary}[theorem]{Corollary}
+%\newtheorem{lemma}[theorem]{Lemma}
+%\newtheorem{proposition}[theorem]{Proposition}
+%\newtheorem{axiom}[theorem]{Axiom}
+%\theoremstyle{definition}
+%\newtheorem{definition}[theorem]{Definition}
+%\theoremstyle{remark}
+%\newtheorem{remark}[theorem]{Remark}
+\usepackage[centerlast,small,sc]{missing_packages/caption}
 \setlength{\captionmargin}{20pt}
 \newcommand{\fref}[1]{Figure~\ref{#1}}
 \newcommand{\tref}[1]{Table~\ref{#1}}
@@ -109,11 +109,12 @@
 \setcounter{dbltopnumber}{9}
 \usepackage{graphicx}
 \usepackage{epstopdf}
-\usepackage[scriptsize]{subfigure}
-\usepackage{booktabs}
-\usepackage{rotating}
-\usepackage{listings}
+\usepackage[scriptsize]{missing_packages/subfigure}
+\usepackage{missing_packages/booktabs}
+\usepackage{missing_packages/rotating}
+\usepackage{missing_packages/listings}
 \usepackage{missing_packages/lstpatch}
+\usepackage{missing_packages/listings}
 \lstset{captionpos=b,
         frame=tb,
         basicstyle=\scriptsize\ttfamily,
@@ -189,78 +190,30 @@
     \let\footnoterule\relax
     \let \footnote \thanks
     \setcounter{footnote}{0}
-    \null\vfil
-    \vskip 60\p@
-    \begin{center}
-      \setlength{\parskip}{0pt}
-  %    {\large\textbf{\UNIVNAME}\par}
-   %   \vfill
-      {\LARGE \bf \@title \par}
-      \vfill
-      \bigskip
-      \bigskip
-     % {\LARGE by \par}
-     % \smallskip
-      {\LARGE \textbf{\authornames} \par}
-      \vfill
-      {
-					\begin{figure}[htbp]
-					\centering
-					\includegraphics[width=2in]{./Figures/logo.png}
-					\end{figure}
-      }
-  %    {\large A thesis submitted in partial fulfillment for the \par}
-  %    {\large degree of Master Science (Research) \par}
-      \bigskip
-      \bigskip
-       % {\large in the \par}
-      %{\large \textbf{\facname} \par}
-      {\large \textbf{\deptname} \par}
-      {\large \textbf{\univname} \par}
-      \bigskip
-      \bigskip
-      {\Large \@date \par}
-      \bigskip
-    \end{center}
-    \par
-    \@thanks
-    \vfil\null
-  \cleardoublepage
- \thispagestyle{empty}
-  \vskip 60\p@
 \begin{center}
       \setlength{\parskip}{0pt}
+      {\LARGE \textbf{Synopsis}\\}
+      {\large of\\ }
       {\LARGE \bf \@title \par}
-      \vfill
-      \bigskip
-      \bigskip
-      \bigskip
-    % {\emph{A thesis submitted \\for the awared of the degree of}\\}
-   % \smallskip
-    % {\large \textbf{Master of Science (Research)\\}}
-      \vfill  
-      \bigskip
-      \bigskip
-      {\large By:\\ }
-      \smallskip
-      {\large \textbf{\authornames} \par}
-       {\large \textbf{\deptname} \par}
        \smallskip
        \bigskip
       \bigskip
       \bigskip
-      \bigskip
-     {\large Submitted\\}
-     {\large {in fulfilment of the requirement of the degree of\\}}
+     {\large Proposed to be submitted in partial fulfilment of the requirement of the degree of\\}
      {\large \textbf{Master of Science (Research)\\}}
- 		 {\large {to the\\}}
-     %{\large \textbf{(2010EEY7551)}  \par}
+ 		 {\large {of the\\}}
+      {\large \univname, \par}
    \vfill
 \bigskip
-\bigskip
-    % {\emph{Under the supervision of}\\}
-     % \smallskip
-     %{\large \textbf{\facname} \par}
+      \vfill
+      \vfill  
+      \bigskip
+      {\large By:\\ }
+      {\large \textbf{\authornames} \par}
+       {\large \textbf{\deptname} \par}
+      \smallskip
+      {\large Supervisor:Prof. Subrat Kar\\ }
+
       \bigskip
       {
 					\begin{figure}[htbp]
@@ -415,24 +368,24 @@
 \vfil\null
 \cleardoublepage
 }
-\newcommand\abstract[1]{
-\btypeout{Abstract}
-\addtotoc{Abstract}
-\thispagestyle{plain}
-\begin{center}{\huge{\textbf{ABSTRACT}} \par}\end{center}
-{\normalsize #1}
-\vfil\null
-\cleardoublepage
-}
-\renewcommand\backmatter{
-  \if@openright
-    \cleardoublepage
-  \else
-    \clearpage
-  \fi
-  \addtotoc{\bibname}
-  \btypeout{\bibname}
-  \@mainmatterfalse}
-\endinput
+%\newcommand\abstract[1]{
+%\btypeout{Abstract}
+%\addtotoc{Abstract}
+%\thispagestyle{plain}
+%\begin{center}{\huge{\textbf{ABSTRACT}} \par}\end{center}
+%{\normalsize #1}
+%\vfil\null
+%\cleardoublepage
+%}
+%\renewcommand\backmatter{
+%  \if@openright
+%    \cleardoublepage
+%  \else
+%    \clearpage
+%  \fi
+%  \addtotoc{\bibname}
+%  \btypeout{\bibname}
+%  \@mainmatterfalse}
+%\endinput
 %%
 %% End of file `Thesis.cls'.
