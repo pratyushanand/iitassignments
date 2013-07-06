@@ -5,7 +5,6 @@ set ytic auto                          # set ytics automatically
 set ylabel "Time (Sec)"
 set term png
 set output "pipeline_execution_time.png"
-set style boxplot
 set xrange [0:4]
 set yrange [0.001:0.5]
 set grid

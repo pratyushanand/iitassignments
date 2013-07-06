@@ -5,7 +5,6 @@ set ytic auto                          # set ytics automatically
 set ylabel "Time (Sec)"
 set term png
 set output "bg_compare.png"
-set style boxplot
 set xrange [0:3]
 set yrange [0.1:5.0]
 set grid
