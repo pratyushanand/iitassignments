@@ -624,15 +624,15 @@ static int libvibeModelUpdate_8u_C1R(vibeModel_t *model, IplImage *gray,
 
 int main(int argc, char **argv)
 {
-	CvCapture* stream;
-	CvMemStorage* storage;
+	CvCapture* stream = NULL;
+	CvMemStorage* storage = NULL;
 	int32_t width, height;
 	CvSeq* contours = NULL;
 	CvSeq* c = NULL;
-	IplImage *gray, *map, *eroded, *dilated, *out_img;
+	IplImage *gray = NULL, *map = NULL, *eroded = NULL, *dilated = NULL, *out_img = NULL;
 	int ret, count;
 	float area;
-	vibeModel_t *model;
+	vibeModel_t *model = NULL;
 	struct object_table obj_table;
 	char video_path[VIDEO_FILE_PATH_LENGTH];
 	CvFont font;
@@ -688,6 +688,16 @@ int main(int argc, char **argv)
 	/* Initialize tracker list */
 	LIST_INIT(&tracker_head);
 
+	cvNamedWindow("GRAY", 1);
+	if (debug_images) {
+		cvNamedWindow("FG", 1);
+		cvMoveWindow("FG", 2*width, 0);
+		cvNamedWindow("CLEANED", 1);
+		cvMoveWindow("CLEANED", 4 * width, 0);
+	}
+	cvNamedWindow("FINAL", 1);
+	cvMoveWindow("FINAL", 2*width, 0);
+
 	/*
 	 * Check if user has provided a test video input file. If test
 	 * input file has been provided then process frames from there,
@@ -721,15 +731,6 @@ int main(int argc, char **argv)
 		goto cleanup;
 	}
 
-	cvNamedWindow("GRAY", 1);
-	if (debug_images) {
-		cvNamedWindow("FG", 1);
-		cvMoveWindow("FG", 2*width, 0);
-		cvNamedWindow("CLEANED", 1);
-		cvMoveWindow("CLEANED", 4 * width, 0);
-	}
-	cvNamedWindow("FINAL", 1);
-	cvMoveWindow("FINAL", 2*width, 0);
 
 	model = libvibeModelNew();
 	if (!model) {
@@ -820,7 +821,10 @@ int main(int argc, char **argv)
 			}
 		}
 		cvShowImage("FINAL", out_img);
-		cvWaitKey(0);
+		if (wait_debug)
+			cvWaitKey(0);
+		else
+			cvWaitKey(5);
 	}
 cleanup:
 	/* Cleanup allocated memory */
