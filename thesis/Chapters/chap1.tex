@@ -3,64 +3,67 @@
 \chapter{Introduction} % Write in your own chapter title
 \label{Chapter1}
 
-\indent Surveillance systems are ubiquitous and find many applications
-in areas such as traffic monitoring, elderly care etc. Therefore, there
-is a pressing need to evolve methods for conserving bandwidth while the
-video data is transported from the point of acquisition to the point of
-observation. Moreover, an increasing number of video sources rely on
-resource constrained (bandwidth-limited, delay-tolerant) networks.\\
-\indent Delay tolerant network(DTN) architecture lacks continuous end to
-end connectivity. It works under some constraints like long delays,
-extreme losses, etc. For example, Zigbee, DASH7 specially used in smart
-home applications, military networks having large number of nodes with
-high data mobility in extreme environmental terrestrial conditions. Such
-networks normally employ their own tailored routing algorithm for high
-throughput based on individual's environmental conditions ~\cite{1}.\\
-\indent Current generation video surveillance node sends video to a
-monitoring base station, where it is monitored by a person or a group of
-people. But such arrangement can not be foolproof, because it needs
-continuous manual observation.  Also such surveillance node can not be
-battery operated.  So, there would be difficulty in keeping them at
-strategic locations.  With DTNs at layer 1 and 2, there is tremendous
-need to conserve/preserve the bandwidth needed by each video stream /
-all video streams collectively. We propose a method by which a few
-pre-processing operations allow us to still carry out the primary
-objective - surveillance - while achieving large and impressive savings
-on the required bandwidth.\\
-\indent Video surveillance system can be integrated with existing DTNs,
-but it is very important to achieve, reduction in amount of data to be
-transmitted due to lack of end to end connectivity. A low data rate node
-also allows the system to remain in sleep mode for longer durations and
-hence prolongs longer battery life.\\
-\indent For surveillance data, only a few segments of image need to be
-transmitted (the fast changing scenes). Transmitting only significant
-features pre-extracted locally from the image can reduce transmission
-requirement significantly. However, this minimization of content must
-allow reconstruction of the image with relevant details at the other
-end. By extracting semantic information from deduced features, we
-reduce the data rate even further.\\
-\indent We have to find suitable image analysis algorithms for a
-surveillance pipeline which can work with low cost embedded solutions.
-We have selected one of best ~\cite{9} background subtraction algorithm.
-Skeletonization and information about selected object ontology has been
-used as the recognition method. When object is at distance from the
-camera then motion features are very helpful in object recognition.
-Proposed method has been executed on x86 as well as on ARM11 platform
-and the result has been compared. \\
+\indent A delay tolerant network(DTN) architecture lacks continuous end
+to end connectivity. It works under some constraints like long delays
+and extreme losses. For example, a military network having large number
+of nodes with high data mobility in extreme environmental terrestrial
+conditions is a DTN network. Such network normally employs their own
+tailored routing algorithm for high throughput based on a individual
+environmental conditions ~\cite{1}.\\
 
-\pagebreak
+\indent If we need to transfer image or live video over such delay
+tolerant network, then it is a difficult task. The complexity will
+increase further, if we need to build a viable low cost system with a
+low power battery operated solution.  In any such case, it would be wise
+to transmit feature information only. We need to extract this feature
+information out of image and then send it over the network.  Ideally, we
+need to send the minimum information about the image which allows us to
+reconstruct the scenario or to detect an event. If possible then we need
+to detect the event at the source node itself and then to transmit only
+this event information over the DTN network.\\
+
+\indent This approach can also be extended to existing video
+surveillance system which are still largely manual.  Normally, a
+surveillance camera sends video to a monitoring base station, where it
+is monitored by a person or a group of people. Such an arrangement is
+not foolproof, because it needs continuous manual observation.  Any
+attempt in the direction of its automation can be of great use in
+application areas such as:\\
+\begin{itemize}
+	 \item  Traffic Monitoring
+	  \item Elderly care
+	    \item Security
+	    \item Monitoring of troops
+\end{itemize}
+\indent The end goal of such an intelligent system would be to offer an
+automatic analysis of scene and then to infer desired information out of
+it. These systems can be complex because of the complexity of the scene,
+specially when application is targeted for outdoor monitoring.  Sometime
+background of the scene can move, while in some other scene ambient
+light can be different. Detection of foreground objects becomes a
+non-trivial task.  Once we have foreground objects, we can save a lot of
+bandwidth if we can detect if object has any significance of our
+interest or not.\\
+\textbf{Problem statement:} We intend to detect moving person and then
+to send only it's feature information such as location, time of
+detection etc to the monitoring station. Only sending such event
+information would lead to design a ultra low bandwidth surveillance
+system.  We want to keep our computation cost very low, at the same time
+with high genuine detection rate and low false detection rate. We also
+want to run this application on low power cpu like ARM and to evaluate
+the performance.\\
 
 
 \section{Past Work and Literature Survey}
 
-\subsection{Image transfer over DTN/Low BW networks}
+\subsection{Image transfer over delay tolerant / Low bandwidth networks}
 
 \indent There has been no data available for the image transfer over
 terrestrial DTNs, however there has been several attempts ~\cite{2, 3,
 4, 5} to transfer image over low bandwidth wireless sensor networks
-(WSN). Zigbee is the most commonly used WSN protocol. It is based om IEEE
-802.15.4 standard mainly suited for low power home network. It's power
-requirement is in range of 125-400 uW and data rate is 250 Kbps.\\
+(WSN). Zigbee is the most commonly used WSN protocol. It is based on IEEE
+802.15.4 standard which is mainly suited for low power home network. It's power
+requirement is in range of 125-400 \miew W and data rate is 250 Kbps.\\
 
 \indent Pekhteryev et al. ~\cite{2} have tried to transfer different
 versions of JEPG images over zigbee network and then has done
@@ -240,21 +243,21 @@ descriptor for distinguishing different body parts such as hand and
 head.\\
 
 \indent Next to PFinder, Viola and Jones $[VJ]$ method ~\cite{16, 17}
-seems most popular. Their method is based on haar like features. To find
+seems most popular. Their method is based on HAAR like features. To find
 these features in any detection window, adjacent rectangular regions are
 created at a specific location. Pixel intensities of each region is
 added together and then difference of sum is calculated. This difference
-is used as haar descriptor. Further, Authors have provided new concept
+is used as HAAR descriptor. Further, Authors have provided new concept
 of image representation as integral image.  Pixel value at any location
 in an integral image is sum of all the pixels above and left of that
 pixel.  These can be computed with very few operations per pixel.
-Integral image representation helps in computation of haar like features
+Integral image representation helps in computation of HAAR like features
 in constant time.\\
 
 \indent Work by Viola and Jones in ~\cite{17} was used for face
 detection.  Above work of VJ with motion information was further used
 for human detection in ~\cite{16}.  AdaBoost has been used to select a
-small set of features out of all haar like features and to train the
+small set of features out of all HAAR like features and to train the
 classifier. They have used rectangular features which are sensitive to
 edges, bars but are quite coarse. However, these features in association
 with integral image provides sufficient compensation for the above
@@ -264,7 +267,7 @@ motion analysis. They divide detector into 8 direction specific
 detectors.\\
 
 \indent Authors of ~\cite{20, 21} have shown that histogram of oriented
-gradient (HOG) descriptor has better performance than Haar based
+gradient (HOG) descriptor has better performance than HAAR based
 descriptors.Edge or gradient are very specific property of local shape.
 An image is divided into small cells and histogram of edge/gradient
 direction is calculated for each cell. This is called HOG descriptor.
@@ -275,7 +278,7 @@ detection purpose.\\
 
 \indent In continuation of above method, Zhu et al. did some
 modifications for performance improvements. In stead of fixed size
-blocks, they have used variable sized block and then Adaboost has been
+blocks, they have used variable sized block and then AdaBoost has been
 used to detect the best block suited for detection. They have used
 integral image (a concept provided by $VJ$ in ~\cite{17})for faster
 computation of HOG features.\\
@@ -287,9 +290,9 @@ detection.\\
 
 \indent Yao and Odobez have used covariance feature with cascade of
 logitboost classifier as human descriptor ~\cite{19}. Covariance matrix
-encodes information about variance of features, their corelation with
+encodes information about variance of features, their correlation with
 each other, and special layout. Integral image concept is used here too
-for faster computation. Covariancematrix $C_R$ of the features are
+for faster computation. Covariance matrix $C_R$ of the features are
 computed as follows:\\
 \begin{eqnarray}
 C_R = {1 \over {(|R| - 1)}} \Sigma _{x \in R} (H(x) - m_R) (H(x) - m_R)^T \nonumber \\
@@ -298,7 +301,7 @@ m_R = {1 \over {(|R|)}} \Sigma _{x \in R} H(x)
 
 Here, $m_R$ is the mean vector in region R.
 
-\indent Image skeltonization followed by motion pattern analysis
+\indent Image Skeletonization followed by motion pattern analysis
 ~\cite{32, 22, 31} is computationally very fast way to detect a human .
 Authors have used this method for human motion analysis. Change in angle
 between legs is periodic. So an autocorrelation tells about cyclic
@@ -311,17 +314,17 @@ steps, which allowed us to not go for pre-emphasis step and save
 computation time.\\
 
 \subsection{Outstanding issues}
-\indent Methods based on haar, HOG or covariance feature descriptor
+\indent Methods based on HAAR, HOG or covariance feature descriptor
 works with even single image frame , however they are computationally
 very slow and still not viable for low cost embedded applications. So
 further research is needed to optimize these methods to fit into viable
-embedded applications. Skeltonization followed by motion pattern
+embedded applications. Skeletonization followed by motion pattern
 analysis is not a generic method for all types of object detection.
 However, it can be successfully used for moving human. It seems that
 they have lower computational cost, which need to be evaluated. These
 algorithm need to be tested with multiple frames having multiple human.
-They also need to be tested with false moving objects. Complete pipeline
-need to be tested with a low cost embedded solution.\\
+They also need to be tested with false moving objects. Complete
+implementation need to be tested with a low cost embedded solution.\\
 
 \pagebreak
 
