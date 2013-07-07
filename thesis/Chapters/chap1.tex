@@ -9,7 +9,7 @@ and extreme losses. For example, a military network having large number
 of nodes with high data mobility in extreme environmental terrestrial
 conditions is a DTN network. Such network normally employs their own
 tailored routing algorithm for high throughput based on a individual
-environmental conditions ~\cite{1}.\\
+environmental conditions ~\cite[]{1}.\\
 
 \indent If we need to transfer image or live video over such delay
 tolerant network, then it is a difficult task. The complexity will
@@ -51,11 +51,8 @@ information would lead to design a ultra low bandwidth surveillance
 system.  We want to keep our computation cost very low, at the same time
 with high genuine detection rate and low false detection rate. We also
 want to run this application on low power cpu like ARM and to evaluate
-the performance.\\
-
-
+the performance.
 \section{Past Work and Literature Survey}
-
 \subsection{Image transfer over delay tolerant / Low bandwidth networks}
 
 \indent There has been no data available for the image transfer over
@@ -63,26 +60,27 @@ terrestrial DTNs, however there has been several attempts ~\cite{2, 3,
 4, 5} to transfer image over low bandwidth wireless sensor networks
 (WSN). Zigbee is the most commonly used WSN protocol. It is based on IEEE
 802.15.4 standard which is mainly suited for low power home network. It's power
-requirement is in range of 125-400 \miew W and data rate is 250 Kbps.\\
+requirement is in range of 125-400 $\mu$W and data rate is 250 Kbps.\\
 
 \indent Pekhteryev et al. ~\cite{2} have tried to transfer different
-versions of JEPG images over zigbee network and then has done
-performance comparison.  This works shows that there is an effect of
-compression coding algorithm on peak signal to noise ratio(PSNR). It has
-been observed that compression technique with scalable coding is more
-error tolerant in WSN environment. Hengstler et al. ~\cite{3, 5} have
-gone step ahead and have used 3 cameras. One high resolution camera and
-two low resolution cameras. Low resolution cameras have been used for
-stereo matching and to identify any moving object in the camera's field
-of view (FOV). If a moving object is found then only high resolution
-camera is triggered. Such system is power efficient in  comparison to
-the camera mote continuously transmitting JPEG frames. Wu et al.
-~\cite{4} have used xetal parallel processors for image processing.
-After subtracting background, ellipse fitting has been done on the
-foreground object. This elliptical information is collected from
-different camera and 3D view is reconstructed from it.\\
+versions of JPEG images over Zigbee network and compared their
+performance. This works shows that there is an effect of compression
+coding algorithm on peak signal to noise ratio(PSNR). It has been
+observed that compression technique with scalable coding is more error
+tolerant in WSN environment. Hengstler et al. ~\cite{3, 5} have used 3
+cameras. One high resolution camera and two low resolution cameras. Low
+resolution cameras have been used for stereo matching and to identify
+any moving object in the camera's field of view (FOV). If a moving
+object is found then only high resolution camera is triggered. Such a
+system is power efficient in  comparison to the camera mote continuously
+transmitting JPEG frames. Wu et al.  ~\cite{4} have used xetal parallel
+processors for image processing.  Philips research laboratory had
+conceived idea of xetal by putting CMOS image sensors and image
+processing logic on a single integrated circuit.  After subtracting the
+background, ellipse fitting has been done on the foreground object. This
+elliptical information is collected from different camera and the 3D
+view is reconstructed from it.\\
 
-\pagebreak
 
 \begin{figure}[!t]
 \centering
@@ -94,16 +92,15 @@ different camera and 3D view is reconstructed from it.\\
 \indent Figure ~\ref{image_tr_level} shows different level of
 intelligence at which data can be transmitted in an augmented video
 surveillance system. As we go above in the hierarchy, we attain higher
-level of intelligence and save lot of bandwidth. But all these come at
-the cost of computational power of mote node.\\
-
+level of intelligence and save lot of bandwidth. But this is achieved at
+the cost of increased computational power required at the mote node.\\
 \subsection{Image size reduction techniques}
-\indent Most of the image intensity information are not distinguishable
-by human eye, so they are irrelevant. Normally, neighbouring pixel of an
-image are co-related to each other, so they are redundant. Such
-redundancy is called spatial redundancy. Coming to the video, they are
-composed of large number of still images , which have been taken at very
-short interval of time. So, it is expected that there would be lot of
+\indent Most of the image intensity information is not distinguishable
+by human eye, so it is not relevant. Normally, neighbouring pixels of
+the image are co-related to each other, so they are redundant. Such
+redundancy is called spatial redundancy. Video may be thought of as a
+large number of still images , which have been taken at very short
+intervals of time. So, it is expected that there would be lot of
 temporal redundancy between two neighbouring frames.  Therefore an image
 compression technique is developed around basic principal of reducing
 irrelevancy and redundancy. Broadly, compression techniques are
@@ -115,66 +112,70 @@ provide good amount of compression. We do not need to reconstruct exact
 image for surveillance applications. So maximum possible compression
 would reduce a lot of bandwidth on network.\\
 
-\indent Most of the video coding method are based on transform coding
+\indent Most of the video coding methods are based on transform coding
 followed by predictive coding based on motion estimation. Such methods
 are called block based method, where prediction is implemented on a
-complete block.  MPEG-1,2 come in this category. However,algorithm based
+complete block such as  MPEG-1,2. However,algorithm based
 on object based coding techniques ~\cite{7, 8} including MPEG-4 provides
 substantially better compression. Chaudhury et al. ~\cite{7} have used
 principal component analysis (PCA) method for object
 segmentation. Further, they have reused tracking subspace for object
-coding which substantially reduced computational time. Babu and Makur
+coding which substantially reduced computational time. Babu et al.
 ~\cite{8} have calculated motion between current and previous frame.
-Further motion compensated error and other object parameters such as
+Further, motion compensated error and other object parameters such as
 boundary, location and motion information has been coded using suitable
-source coding techniques. \\
-
+source coding techniques. 
 \subsection{Background subtraction techniques}
-\indent In any object based method, focus is on foreground object (FG)
-which is part of actual information. The most simple way of getting FG
-objects is to find difference with the previous frame. Offcourse it is
+\indent In any object based method, the focus is on a foreground object
+(FG) which is part of actual information. Simple way of getting FG
+objects is to find difference with the previous frame. It is
 computationally least expensive , but does not work for most of the
-practical cases. Basic of all background (BG) modeling algorithm is to
-find an image pattern which does not have any moving object. However,
-this is a very complex task, as sometimes camera itself might be moving,
-in some other cases lighting condition can vary a lot. In some cases
-even all the moving objects might not be of interest. For example,
-escalator is the part of BG in a scene where a person is standing on a
-moving escalator.\\
+practical cases, unless following constraints are met.
+\begin{itemize}
+	\item Background is completely still.
+	\item There is no variation in ambient light.
+	\item Still camera has been used for image acquisition.
+\end{itemize}
+Most background (BG) modeling algorithm find an image pattern which does
+not have any moving object. However, this is a very complex task, as
+sometimes camera itself might be moving, in some other cases lighting
+condition can vary a lot. In some cases even all the moving objects
+might not be of interest. For example, an escalator is the part of BG in
+a scene where a person is standing on a moving escalator.\\
 
 \indent Many methods ~\cite{9, 10, 11, 12, 13, 14} have been developed
 for the background subtraction (BGS), having strength and weakness in
 terms of computation complexities and performance. Frame differencing is
-of lowest computational complexity. Here simply current frame is
-subtracted with the last frame, and if absolute of the subtracted value
-is less than a threshold value, then that pixel is made part of BG.
-Biggest drawback of this method is that if an FG object stays for more
-than a frame time at any position then that is made part of BG. Further,
-if an FG object is consist of almost uniformly distributed intensities,
-then internal portion of the object is considered as BG. However, there
-is one advantage of this method, it is quickly adaptable to the change
-in scene, as it depends on only last frame.\\
+of lowest computational complexity. The current frame is subtracted from
+the last frame. If absolute value of resultant is less than a threshold
+value, then that pixel is made part of BG.  The biggest drawback of this
+method is that if an FG object stays for more than a frame time at any
+position then that is made part of BG. Further, if an FG object consists
+of almost uniformly distributed intensities, then internal portion of
+the object is considered as BG. However, there is one advantage of this
+method, it is quickly adaptable to the change in scene, as it depends on
+only last frame.\\
 
 \indent BGS algorithm ~\cite{10, 12, 13, 14, 15} based on Gaussian
 average or median of last couple of frames, comes in the category of
 middle level of computational cost. Wren et al. ~\cite{12} have used
 running average of last n frames as BG model. Algorithms based on median
-filter show better performance, but it has more memory requirement
-compared to running average. Here, median of last n pixel is considered
-as BG model.  McFarlane and Schofield ~\cite{14} have used modified
-version as average median filter, which has memory requirement same as
-that of frame differencing.  Here, if a pixel value is greater than the
-corresponding BG pixel, then BG pixel value is incremented by 1, and if
-it is less, then decremented by 1.\\
+filter show better performance, but it requires more memory compared to
+the running average method. Here, median of last n pixel is considered
+as BG model.  McFarlane et al. ~\cite{14} have used modified version as
+average median filter, which has memory requirement same as that of
+frame differencing.  Here, if a pixel value is greater than the
+corresponding BG pixel, then BG pixel value is incremented by one, and
+if it is less, then decremented by one.\\
 
-\indent  Stauffer and Grimson proposed to use Gaussian mixture model
-(GMM) ~\cite{15} to create a background model. In this method, BG is
+\indent  Stauffer et al. ~\cite{15} proposed to use Gaussian mixture
+model (GMM) to create a background model. In this method, BG is
 represented by Gaussian mixtures which is actually a probability that a
 pixel value m is observed at time t. GMM model works fine in removing BG
 noise in multi-modal situations such as wavering tree. Since, it assumes
 that BG is more frequently visible than the FG and , variance of BG is
 significantly low, so it fails to adapt with sudden illumination
-changes. Also it is computationally very expensive.\\ 
+changes. It is also computationally very expensive.\\ 
 
 \indent Yao and Odobez ~\cite{11} have used a method based on local
 texture features represented by local binary patterns (LBP) and
@@ -220,7 +221,6 @@ is calculated between current pixel value and samples corresponding to
 current pixel. If at least $m$ samples has euclidean distance less than
 a threshold say $T$, then that pixel is assigned to BG, else assigned to
 FG.\\
-
 \subsection{Object detection techniques}
 \indent So, with the procedure till now discussed, we are able to reduce
 image size a lot by going with object centric methods. However, output
@@ -312,7 +312,6 @@ autocorrelation operation. We have used similar method for human
 detection in our approach with the slight variation at autocorrelation
 steps, which allowed us to not go for pre-emphasis step and save
 computation time.\\
-
 \subsection{Outstanding issues}
 \indent Methods based on HAAR, HOG or covariance feature descriptor
 works with even single image frame , however they are computationally
@@ -324,10 +323,7 @@ However, it can be successfully used for moving human. It seems that
 they have lower computational cost, which need to be evaluated. These
 algorithm need to be tested with multiple frames having multiple human.
 They also need to be tested with false moving objects. Complete
-implementation need to be tested with a low cost embedded solution.\\
-
-\pagebreak
-
+implementation need to be tested with a low cost embedded solution.
 \section{Motivation}
 \indent Low bandwidth along with low power augmented surveillance system
 is going to be hot research area in coming years. Ultra low bandwidth
@@ -343,9 +339,6 @@ first evaluate few important BGS and human detection algorithm.  Where
 ever possible, we will try to optimize finally selected algorithm and
 will try to see if complete pipeline execution time is suitable for an
 embedded application or not.\\
-
-\pagebreak
-
 \section{Organisation of thesis}
 
 \indent In chapter 1 we have discussed about important work done in the
