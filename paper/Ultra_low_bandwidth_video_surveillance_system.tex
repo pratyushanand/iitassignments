@@ -418,7 +418,7 @@ information extraction almost in real time. With latest research in
 computer vision ~\cite{3} ~\cite{5}, it seems that such a task could be
 viable with low cost embedded system.\\
 \indent We have to find suitable image analysis algorithms for a
-surveillance pipeline which can work with low cost embedded solutions.
+surveillance application which can work with low cost embedded solutions.
 We have selected one of best ~\cite{5} background subtraction algorithm.
 Skeletonization and information about selected object ontology
 has been used as the recognition method. When object is at distance from
@@ -471,11 +471,11 @@ which can be used to find out the skeleton of an object.\\
 
 \section{Proposed Framework}
 % no \IEEEPARstart
-Our top level pipeline can be explained as in Fig. ~\ref{image_pipeline}.
+Our top level application flow can be explained as in Fig. ~\ref{image_pipeline}.
 \begin{figure}[!h]
 \centering
 \includegraphics[scale=0.45]{figures/image_pipeline}
-\caption{Low BW surveillance Image Pipeline}
+\caption{Low BW surveillance image application flow}
 \label{image_pipeline}
 \end{figure}
 
@@ -574,7 +574,10 @@ segments P$_1$C and P$_2$C, then $\theta$ can be calculated as
 follows.\\
 %
 	\begin{equation}
-	\theta = tan^{-1}[(Y_2 - C_y) / (X_2 - C_x)] \\ - tan^{-1}[(Y_1 - C_y) / (X_1 - C_x)]
+	\begin{split}
+	\theta = tan^{-1}[(Y_2 - C_y) / (X_2 - C_x)] \\
+	 - tan^{-1}[(Y_1 - C_y) / (X_1 - C_x)]
+	\end{split}
 	\end{equation}
 %
 \indent If variation of $\theta$ is plotted in respective frames for
@@ -617,15 +620,21 @@ then we conclude that it is a human.
 \end{enumerate}
 \section{Results}
 % no \IEEEPARstart
-We observe that with our implementation, we are able to detect a moving
-person after a movement of 3 steps. Fig.  \ref{pipeline_images} shows
-output images at different stages of the process.
-
+Since we have used \textbf{S}keleton \textbf{M}otion \textbf{A}nalyzer
+for object detection, therefore we name our implementation as SMA.\\
+\indent We observe that with SMA, we are able to detect a moving person
+after a movement of 3 steps. Fig.  \ref{pipeline_images} shows output
+images at different stages of the implementation.\\
+\indent We have also done experiments with negative images like a person
+moving on bicycle, or a vehicle moving on road. SMA is successfully able
+to discriminate between these objects. Fig. \ref{negative_inputs} shows
+how it rejects moving vehicle and bicycle and  does not detect them as
+human.\\
 \begin{figure}[!h]
 \centering
 \includegraphics[scale=0.30]{figures/pipeline_images}
 \caption{Images at different stages of processing. (From top left in
-clockwise order) \textbf{(a.)} Gray Scale input frame to pipeline
+clockwise order) \textbf{(a.)} Gray Scale input frame 
 \textbf({b.)}Foreground extracted image using Vibe \textbf{(c.)} Cleaned
 image \textbf{(d.)} Contour of moving object \textbf{(e.)} Plot of three points
 of interest, centroid and two distance peaks nearer to bottom left and
@@ -634,47 +643,30 @@ of scene}
 \label{pipeline_images}
 \end{figure}
 
-\indent We have also done experiments with negative images like a person moving
-on bicycle, or a vehicle moving on road. Our algorithm is successfully
-able to discriminate between these objects. Fig. \ref{negative_inputs} shows
-how this implementation rejects moving vehicle and bicycle and  does
-not detect them as human.
 \begin{figure}[!h]
 \centering
 \includegraphics[scale=0.30]{figures/negative_inputs}
-\caption{Input and output of pipeline in case of negative images}
+\caption{Input and output images in case of negative images}
 \label{negative_inputs}
 \end{figure}
 
-
-\indent Comparison of proposed framework with HAAR ~\cite{2} and covariance
-~\cite{19} feature based detection algorithm in Fig.
-\ref{pipeline_execution_time} shows a definite improvement in execution
-speed. Our pipeline takes just 3.6 ms on the average, while HAAR and
-covariance feature based algorithm take around 20 ms and 248 ms
-respectively per frame. This timing was observed with a x86 system
-having DMIPS = 800.
-
+\indent We have implemented and executed SMA, HAAR ~\cite{2} and
+covariance ~\cite{19} feature based detection algorithm on both x86
+desktop computer and embedded ARM platform. Comparison of execution time
+has been shown in Fig.  \ref{pipeline_execution_time}. It shows a
+definite improvement in execution speed of SMA over HAAR and covariance
+feature based approach.  SMA takes just 3.6 ms on the average, while
+HAAR and covariance feature based algorithm take around 20 ms and 248 ms
+respectively per frame at x86 platform having DMIPS = 800. Comparison of
+timing at ARM platform with DMIPS = 44 shows that SMA takes 182 ms
+on the average, while HAAR and covariance feature based algorithm take
+around 942 ms and 4.65 s respectively per frame.  \\
 \begin{figure}[!h]
 \centering
 \includegraphics[scale=0.30]{figures/pipeline_execution_time}
-\caption{Variation of execution time with a x86 system
-having DMIPS=800}
+\caption{Execution time of evaluated algorithms with a ARM and x86
+platform}
 \label{pipeline_execution_time}
-\end{figure}
-
-\indent We have also implemented above algorithms with ARM11 platform
-with DMIPS = 44.  Comparison of timing at ARM11 platform has been shown
-in Fig.  \ref{arm11_pipeline_execution_time}. Our algorithm takes just
-182 ms on the average, while HAAR and covariance feature based algorithm
-take around 942 ms and 4.65 ms respectively per frame. 
-
-\begin{figure}[!h]
-\centering
-\includegraphics[scale=0.30]{figures/arm11_pipeline_execution_time}
-\caption{Variation of execution time with an ARM11 system
-having DMIPS=44}
-\label{arm11_pipeline_execution_time}
 \end{figure}
 
 Therefore, if a surveillance application requires to identify moving person,
@@ -685,10 +677,10 @@ algorithm, we need far less computational power.
 \section{Future Work}
 % no \IEEEPARstart
 
-We need to see that how does this pipeline behaves with existing home
+We need to see that how does this implementation behaves with existing home
 networks like zigbee. Vibe algorithm has one issue that it is not able to
 remove shadow. So, an improvement in Vibe for ghost and shadow removal
-will make this pipeline more robust.
+will make it more robust.
 
 
 % An example of a floating figure using the graphicx package.
@@ -811,7 +803,7 @@ vision/surveillance platform.
 % http://www.ctan.org/tex-archive/biblio/bibtex/contrib/doc/
 % The IEEEtran BibTeX style support page is at:
 % http://www.michaelshell.org/tex/ieeetran/bibtex/
-%\bibliographystyle{IEEEtran}
+\bibliographystyle{IEEEtran}
 % argument is your BibTeX string definitions and bibliography database(s)
 %\bibliography{IEEEabrv,../bib/paper}
 %
