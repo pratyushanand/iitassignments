@@ -302,7 +302,8 @@
 %
 % paper title
 % can use linebreaks \\ within to get better formatting as desired
-\title{Image Analysis for Ultra Low Bandwidth Video Surveillance System}
+\title{Modifying Open Source Tools for Video Pre-processing to achieve
+Ultra Low Bandwidth for Video Surveillance over Delay Tolerant Networks}
 
 
 % author names and affiliations
@@ -390,7 +391,7 @@ observation. Moreover, an increasing number of video sources rely on
 resource constrained (bandwidth-limited, delay-tolerant) networks
 such as Zigbee, DASH7 specially in smart home applications for the video
 transport. With such networks at layer 1 and 2, there is tremendous
-need to conserve/preserve the bandwidth needed by each video stream /
+need to conserve / preserve the bandwidth needed by each video stream /
 all video streams collectively. We propose a method by which a few
 pre-processing operations allow us to still carry out the primary
 objective - surveillance - while achieving large and impressive savings
@@ -398,7 +399,7 @@ on the required bandwidth.\\
 \indent Video surveillance system can be integrated with existing home
 network, but it is very important to achieve, reduction in amount
 of data to be transmitted due to lack of end to end connectivity. A low
-data rate node also allows the system to remain in sleep mode for
+data rate node also allow the system to remain in sleep mode for
 longer durations and hence prolongs longer battery life.\\
 \indent For surveillance data, only a few segments of image need to be
 transmitted (the fast changing scenes). Transmitting only significant
@@ -414,12 +415,12 @@ changing, while in some other scene ambient light can be different.
 Similarly, there can be many other hurdles in the process of automation.
 But if an efficient background detection algorithm is chosen then, these
 issues can be addressed. Further, the selected algorithm must allow
-information extraction almost in real time. With latest research in
-computer vision ~\cite{3, 5}, it seems that such a task could be
+information extraction almost in real time. From~\cite{3, 5},
+it seems that such a task could be
 viable with low cost embedded system.\\
 \indent We have to find suitable image analysis algorithms for a
 surveillance application which can work with low cost embedded solutions.
-We have selected one of best ~\cite{5} background subtraction algorithm.
+We have selected one of best~\cite{5} background subtraction algorithm.
 Skeletonization and information about selected object ontology
 has been used as the recognition method. When object is at distance from
 the camera then motion features are very helpful in object recognition.
@@ -435,43 +436,43 @@ work to be done.
 % no \IEEEPARstart
 The most difficult part of such an implementation is to find an
 efficient background estimation algorithm so that moving scene can be
-extracted. Features such as Gradient histogram, Gray Scale (HAAR),
+extracted. Features such as Gradient histogram, Gray Scale,
 color, texture, self-similarity and motion have been used by different
-researchers ~\cite{3, 5, 1, 6, 13}. \\
-\indent Cucchiara et al. ~\cite{1} and many other have used color
+researchers~\cite{3, 5, 1, 6, 13}. \\
+\indent Cucchiara et al.~\cite{1} and many other have used color
 information as the feature for background estimation. But using only
 color as a feature might not be sufficient in surveillance applications,
-where image resolution is very low. Viola and Jones ~\cite{2} have added
+where image resolution is very low. Viola and Jones~\cite{2} have added
 motion along with image intensities, which gives better result in moving
 bodies estimation. It works even when foreground image size is low.
-Methods based on Gaussian Mixtures Model (GMM) ~\cite{15} have also been
+Methods based on Gaussian Mixtures Model (GMM)~\cite{15} have also been
 widely used, but they are computationally very expensive.  When
 background color is same as foreground color, then texture features
-represented by local binary pattern (LBP) ~\cite{3} provides better
+represented by local binary pattern (LBP)~\cite{3} provides better
 result compared to GMM. It is able to extract foreground of a person
 standing on moving escalator. Further, features computed at a single
 scale can be used to approximate feature at nearby scale. Such
-implementations ~\cite{4} accelerate the execution for practical
-applications. There is one non-parametric implementation ~\cite{5} known
+implementations~\cite{4} accelerate the execution for practical
+applications. There is one non-parametric implementation~\cite{5} known
 as Vibe, which decides the background pixel value after comparison with
 closest sample selected randomly. In this approach the background model
 gets initialized from a single frame itself.\\
 \indent Once we have identified the foreground moving part, next
-important task is to reduce it's size or extract minimal useful
-information out of it. So far, object based video coding such as
-~\cite{7}, ~\cite{8} seem to be the best compression techniques.
-Commercial algorithms such as MPEG-4 also employ object based coding.
-Applications which we have targeted in this work identify the moving
-object with minimal computational cost. Shape or skeleton ~\cite{11}
-based approach are computationally efficient for such object
-recognition. Medial axis transform, distance transform, morphological
-and star skeletonization etc ~\cite{9, 10} are different methods
-which can be used to find out the skeleton of an object.\\
+important task is to reduce its size or extract minimal useful
+information out of it. So far, object based video coding such
+as~\cite{7, 8} seem to be the best compression techniques.  Commercial
+algorithms such as MPEG-4 also employ object based coding.  Applications
+which we have targeted in this work identify the moving object with
+minimal computational cost. Shape or skeleton~\cite{11} based approach
+are computationally efficient for such object recognition. Medial axis
+transform, distance transform, morphological and star skeletonization
+etc~\cite{9, 10} are different methods which can be used to find out
+the skeleton of an object.\\
 
 
 \section{Proposed Framework}
 % no \IEEEPARstart
-Our top level application flow can be explained as in Fig. ~\ref{image_pipeline}.
+
 \begin{figure}[!h]
 \centering
 \includegraphics[scale=0.45]{figures/image_pipeline}
@@ -479,23 +480,33 @@ Our top level application flow can be explained as in Fig. ~\ref{image_pipeline}
 \label{image_pipeline}
 \end{figure}
 
-\indent Since background subtraction has key role in accomplishing
-intended job, therefore we have compared two recently developed
-~\cite{3, 5} efficient background subtraction algorithm and then
-selected one of them ~\cite{5} in our final work.  The method described
-by Yao and Odobez ~\cite{3} is based on use of texture features present
-in Local Binary Pattern (LBP).  LBP works well with local illumination
-changes, however there can be issues in case of global illumination
-change. They have carried out several improvements by using photometric
-invariant color measurement and flexible weight updating for background
-modes. However, computationally it is not so efficient compared to the
-method by Barnich and Van Droogenbroeck ~\cite{5} (Vibe) which we have
-used. This algorithm replaces background values for last N frames
-randomly.  Furthermore, it diffuses updated values to neighbouring
-pixels, and again that too on random basis. So far selected algorithm
-surpasses other existing algorithm in computation complexities. Fig.
-\ref{bg_compare} shows the comparison of execution times of these two
-algorithms.\\
+
+\indent Our top level application flow can be explained as in
+Fig.~\ref{image_pipeline}.  Since background subtraction has key role in
+accomplishing intended job, therefore we have compared two recently
+developed~\cite{3, 5} efficient background subtraction algorithm and
+then selected one of them~\cite{5} in our final work.  The method
+described by Yao and Odobez~\cite{3} is based on use of texture features
+present in Local Binary Pattern (LBP).  LBP works well with local
+illumination changes, however there can be issues in case of global
+illumination change. They have carried out several improvements by using
+photometric invariant color measurement and flexible weight updating for
+background modes. However, computationally it is not so efficient
+compared to the method by Barnich and Van Droogenbroeck~\cite{5} (Vibe)
+which we have used. This algorithm replaces background values for last N
+frames randomly.  Furthermore, it diffuses updated values to
+neighbouring pixels, and again that too on random basis. So far selected
+algorithm surpasses other existing algorithm in computation
+complexities. Fig.\ref{bg_compare} shows the comparison of execution
+times of these two algorithms.\\
+\begin{figure}[!h]
+\centering
+\includegraphics[scale=0.35]{figures/bg_compare}
+\caption{Background subtraction average execution time of~\cite{3}
+and~\cite{5}. This timing was observed with a x86 system having DMIPS =
+800.}
+\label{bg_compare}
+\end{figure}
 \indent We have used OpenCV library for input and output, i.e.  for
 the image frame extraction from a video file or camera and to show the
 output result. Vibe object library for background subtraction has been
@@ -504,21 +515,11 @@ been released. Therefore, we have developed our own C code for Vibe so
 that we can compile it to be used for ARM platform. Once foreground
 frame is extracted, we use OpenCV library function to clean and extract
 each moving object.\\
-
-\begin{figure}[!h]
-\centering
-\includegraphics[scale=0.35]{figures/bg_compare}
-\caption{Background subtraction average execution time of ~\cite{3} and
-~\cite{5}. This timing was observed with a x86 system having DMIPS =
-800.}
-\label{bg_compare}
-\end{figure}
-
 \indent None of the background subtraction algorithms allow complete
 foreground extraction. There are always several noise artefacts in the
 extracted image. These are removed by morphological operations of
 erosion followed by dilation. Further all moving contours are separated
-by using standard OpenCV library ~\cite{12} function (cvFindContours)
+by using standard OpenCV library~\cite{12} function (cvFindContours)
 which gives us boundary points of each moving object.\\
 
 \indent Star skeletonization method has been used to find extreme points
@@ -540,10 +541,16 @@ boundary. N is total number of points on contour.
 point as follows. This calculated distance vector d$_i$ are stored in an
 array.
 	\begin{equation}
-	d_i = \sqrt{(C_x - X_i)^2 + (C_y - Y_i)^2}, \hspace{10 mm} i =
-1,2,3,.....,N
+	\begin{split}
+	d_i = \sqrt{(C_x - X_i)^2 + (C_y - Y_i)^2}, \\
+	\hspace{10 mm} i = 1,2,3,.....,N
+	\end{split}
 	\end{equation}
 
+\item The distance vector array is smoothed to remove noise peaks (using
+cvSmooth). These distances are plotted  as shown in Fig.\ref{distance}($B$).
+Now local maxima of distance vector is calculated
+by finding zero crossing of difference vectors.\\
 \begin{figure}[!h]
 \centering
 \includegraphics[scale=0.35]{figures/distance}
@@ -552,20 +559,17 @@ points from its centroid.}
 \label{distance}
 \end{figure}
 
-\item The distance vector array is smoothed to remove noise peaks (using
-cvSmooth). These distances are plotted  as shown in Fig.
-\ref{distance}($B$). Now local maxima of distance vector is calculated
-by finding zero crossing of difference vectors.\\
+
 \indent However, even after smoothing operation there are some peaks which is
 not of our interest.  In our algorithm, we are using two most relevant
 peaks which are nearest to each bottom corner of bounding box of contour
 respectively.  Only these two peaks along with centroid will give us
 sufficient information to distinguish human from human, vehicle or
 animal etc. \\
-\indent When the case considered is human, then the two peaks correspond to
-the two legs of human. When case considered is vehicle, then the peaks
+\indent For human subjects, the two peaks correspond to
+the two legs of human. iFor vehicles, the peaks
 correspond to the two extrema points of lower portion of back and front.
-When it is an animal, then peaks correspond to front and back leg of
+When it is an animal, the peaks correspond to front and back leg of
 animal.\\
 \item Let P$_1$(X$_1$, Y$_1$), P$_2$(X$_2$, Y$_2$) and C(C$_x$, C$_y$)
 are two peaks nearest to bottom right and bottom left corner and
@@ -581,8 +585,8 @@ follows.\\
 	\end{equation}
 %
 \indent If variation of $\theta$ is plotted in respective frames for
-human and vehicle then the resultant plot is as shown in Fig.
-\ref{angle_plot}.  The observations from this plot is that for a  human
+human and vehicle then the resultant plot is as shown in Fig.\ref{angle_plot}.
+The observations from this plot is that for a  human
 subject, angle variation pattern is repeatable, and it is zero for
 almost at regular intervals.  For vehicle, it is constant. The
 experiment with images containing animal is yet to be done. For images
@@ -620,14 +624,13 @@ then we conclude that it is a human.
 \end{enumerate}
 \section{Results}
 % no \IEEEPARstart
-Since we have used \textbf{S}keleton \textbf{M}otion \textbf{A}nalyzer
-for object detection, therefore we name our implementation as SMA.\\
-\indent We observe that with SMA, we are able to detect a moving person
-after a movement of 3 steps. Fig.  \ref{pipeline_images} shows output
+\indent Using \textbf{Skel}etonized \textbf{M}otion \textbf{A}nalysis
+(SKELMOT) for object detection, we are able to detect a moving person
+after a movement of 3 steps. Fig.\ref{pipeline_images} shows output
 images at different stages of the implementation.\\
 \indent We have also done experiments with negative images like a person
-moving on bicycle, or a vehicle moving on road. SMA is successfully able
-to discriminate between these objects. Fig. \ref{negative_inputs} shows
+moving on bicycle, or a vehicle moving on road. SKELMOT is successfully able
+to discriminate between these objects. Fig.\ref{negative_inputs} shows
 how it rejects moving vehicle and bicycle and  does not detect them as
 human.\\
 \begin{figure}[!h]
@@ -646,25 +649,25 @@ of scene}
 \begin{figure}[!h]
 \centering
 \includegraphics[scale=0.30]{figures/negative_inputs}
-\caption{Input and output images in case of negative images}
+\caption{Input and output images in case of negative objects}
 \label{negative_inputs}
 \end{figure}
 
-\indent We have implemented and executed SMA, HAAR ~\cite{2} and
-covariance ~\cite{19} feature based detection algorithm at both x86
+\indent We have implemented and executed SKELMOT, HAAR~\cite{2} and
+covariance~\cite{19} feature based detection algorithm on both x86
 desktop computer and embedded ARM platform. Comparison of execution time
-has been shown in Fig.  \ref{pipeline_execution_time}. It shows a
-definite improvement in execution speed of SMA over HAAR and covariance
-feature based approach.  SMA takes just 3.6 ms on the average, while
+has been shown in Fig.\ref{pipeline_execution_time}. It shows a
+definite improvement in execution speed of SKELMOT over HAAR and covariance
+feature based approach.  SKELMOT takes just 3.6 ms on the average, while
 HAAR and covariance feature based algorithm take around 20 ms and 248 ms
-respectively per frame at x86 platform having DMIPS = 800. Comparison of
-timing at ARM platform with DMIPS = 44 shows that SMA takes 182 ms
+respectively per frame on x86 platform having DMIPS = 800. Comparison of
+timing on ARM platform with DMIPS = 44 shows that SKELMOT takes 182 ms
 on the average, while HAAR and covariance feature based algorithm take
 around 942 ms and 4.65 s respectively per frame.  \\
 \begin{figure}[!h]
 \centering
 \includegraphics[scale=0.30]{figures/pipeline_execution_time}
-\caption{Execution time of evaluated algorithms at ARM and x86
+\caption{Execution time of evaluated algorithms on ARM and x86
 platform}
 \label{pipeline_execution_time}
 \end{figure}
@@ -677,7 +680,7 @@ algorithm, we need far less computational power.
 \section{Future Work}
 % no \IEEEPARstart
 
-We need to see that how does this implementation behaves with existing home
+We need to see that how does this implementation performs with existing home
 networks like zigbee. Vibe algorithm has one issue that it is not able to
 remove shadow. So, an improvement in Vibe for ghost and shadow removal
 will make it more robust.
