@@ -126,6 +126,7 @@ Further, motion compensated error and other object parameters such as
 boundary, location and motion information has been coded using suitable
 source coding techniques. 
 \subsection{Background subtraction techniques}
+\label{bg_subs_technique}
 \indent In any object based method, the focus is on a foreground object
 (FG) which is part of actual information. Simple way of getting FG
 objects is to find difference with the previous frame. It is
@@ -177,18 +178,17 @@ that BG is more frequently visible than the FG and , variance of BG is
 significantly low, so it fails to adapt with sudden illumination
 changes. It is also computationally very expensive.\\ 
 
-\indent Yao and Odobez ~\cite{11} have used a method based on local
-texture features represented by local binary patterns (LBP) and
-photometric invariant color measurements in RGB color space. Texture is
-an important characteristic of images and video. LBP is invariant to any
-monotonic gray level change. Also, it is computationally very simple.
-LBP operator labels image pixel of a cell by thresholding the
-neighborhood of each pixel with the center value and considering the
-result as a binary number.\\
+\indent Yao et al. ~\cite{11} have used a method based on local texture
+features represented by local binary patterns (LBP) and photometric
+invariant color measurements in RGB color space. Texture is an important
+characteristic of images and video. LBP is invariant to any monotonic
+gray level change.  LBP operator labels image pixel of a cell by
+thresholding the neighborhood of each pixel with the center value and
+considering the result as a binary number.\\
 
 LBP binary code of a pixel is calculated as follows:
 \begin{equation}
-LBP_{NR} = \Sigma _{n = 0} ^{N - 1} f(I_c - I_n) 2^n \hspace{20 mm} where f(x) = \left\{ 
+LBP_{NR} = \Sigma _{n = 0} ^{N - 1} f(I_c - I_n) 2^n \hspace{20 mm} \mathrm{where} f(x) = \left\{ 
   \begin{array}{l l}
      1 & \quad \text{if $x$ $\geq$  $0$}\\
      0 & \quad \text{otherwise}
@@ -200,7 +200,7 @@ value of pixels at a distance of radius $R$.  On a multi channel color
 image LBP can be calculated at each pixel separately. LBP works well with
 local illumination changes, however there can be issues in case of
 global illumination change. LBP fails when both background and foreground
-of an image shares same texture information. Yao and Odobez have used
+of an image shares same texture information. Yao et al. ~\cite{11} have used
 photometric invariant color features in RGB color space to overcome this
 limitation of LBP.\\
 
@@ -210,30 +210,31 @@ section. There is a common strategy to use first in first out method to
 update background model. Large number of samples is included in the
 background model to cater varied events. However, computation time
 increases with each increment in number of samples of background model.
-Vibe takes unique way to overcome these issues. It decides about
+Vibe has a unique way to overcome these issues. It decides about
 background pixel value after comparison with closest samples selected
-randomly. Lets say $N$ is the number of sample corresponding to each
-background pixel. One of the sample out of $N$ sample is selected
+randomly. Say, $N$ is the number of samples corresponding to each
+background pixel. One out of $N$ samples is selected
 randomly and is replaced by current pixel value. Furthermore, this
 updated values of sample is diffused to its randomly selected
 neighbouring pixel. Thus sample data base is created. Euclidean distance
 is calculated between current pixel value and samples corresponding to
-current pixel. If at least $m$ samples has euclidean distance less than
-a threshold say $T$, then that pixel is assigned to BG, else assigned to
+current pixel. If at least $m$ samples have euclidean distance less than
+a threshold (say $T$), then that pixel is assigned to BG, else assigned to
 FG.\\
 \subsection{Object detection techniques}
-\indent So, with the procedure till now discussed, we are able to reduce
-image size a lot by going with object centric methods. However, output
-is still in image form. To reduce the output size further, this image
-data need to be converted into information. We wish that our system is
-able to answer question about the image data, such as, is there any
-moving person in the image data? First task for object detection from
-any image is to extract features of the objects. Features could be
-intensity, edges, color, size, texture, motion pattern, contour etc.
-Most of the detection method works with two steps: Preparing a
-statistical model of training set images and then compare features of
-test object with that of the model.  Training data set is prepared using
-both positive and negative objects.\\
+\indent With the procedure discussed earlier in section
+~\ref{bg_subs_technique}, we are able to reduce image size significantly
+going with object centric methods. However, the output is still an
+image. To reduce the output size further, this image data need to be
+converted into information. We wish that our system is able to answer
+question about the image data, such as, is there any moving person in
+the image data? The first task for object detection from the image is to
+extract features of the objects. These features could be intensity, edges,
+color, size, texture, motion pattern, contour etc.  Most of the
+detection method works with two steps: Preparing a statistical model of
+training set images and then compare features of test object with that
+of the model.  Training data set is prepared using both positive and
+negative objects.\\
 
 \indent Person Finder(PFinder) developed by wren et.al. ~\cite{12} seems
 first attempt to recognize human and its behavior in a practical
@@ -288,7 +289,7 @@ detection using multiple cameras. Multiple cameras allow depth view
 calculation of different body parts, which assist further in
 detection.\\
 
-\indent Yao and Odobez have used covariance feature with cascade of
+\indent Yao et al. have used covariance feature with cascade of
 logitboost classifier as human descriptor ~\cite{19}. Covariance matrix
 encodes information about variance of features, their correlation with
 each other, and special layout. Integral image concept is used here too
