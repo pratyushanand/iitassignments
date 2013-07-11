@@ -2,36 +2,51 @@
 
 \chapter{Introduction} % Write in your own chapter title
 \label{Chapter1}
-\indent A delay tolerant network(DTN) architecture lacks continuous end
-to end connectivity. It works under some constraints like long delays
-and extreme losses. For example, a military network having large number
-of nodes with high data mobility in extreme environmental terrestrial
-conditions is a DTN network. Such network normally employs their own
-tailored routing algorithm for high throughput based on a individual
-environmental conditions~\cite{1}.\\
-\indent If we need to transfer image or live video over such delay
-tolerant network, then it is a difficult task. The complexity will
-increase further, if we need to build a viable low cost system with a
-low power battery operated solution.  In any such case, it would be wise
-to transmit feature information only. We need to extract this feature
-information out of image and then send it over the network.  Ideally, we
-need to send the minimum information about the image which allows us to
-reconstruct the scenario or to detect an event. If possible then we need
-to detect the event at the source node itself and then to transmit only
-this event information over the DTN network.\\
-\indent This approach can also be extended to existing video
-surveillance system which are still largely manual.  Normally, a
-surveillance camera sends video to a monitoring base station, where it
-is monitored by a person or a group of people. Such an arrangement is
-not foolproof, because it needs continuous manual observation.  Any
-attempt in the direction of its automation can be of great use in
-application areas such as:
+\indent Surveillance systems are ubiquitous and find many applications.
+Existing video surveillance systems are still largely manual.
+Normally, a surveillance camera sends video to a monitoring base
+station, where it is monitored by a person or a group of people. Such an
+arrangement is not foolproof, because it needs continuous manual
+observation.  Any attempt in the direction of its automation can be of
+great use in application areas such as:
 \begin{itemize}
 	 \item  Traffic Monitoring
 	  \item Elderly care
 	    \item Security
 	    \item Monitoring of troops
 \end{itemize}
+\indent Moreover, an increasing number of video sources rely on resource
+constrained (bandwidth-limited, delay-tolerant) networks.  Therefore,
+there is a pressing need to evolve methods for conserving bandwidth
+while the video data is transported from the point of acquisition to the
+point of observation.\\ 
+\indent A delay tolerant network(DTN) architecture lacks continuous end
+to end connectivity. It works under some constraints like long delays
+and extreme losses. For example, a military network having large number
+of nodes with high data mobility in extreme environmental terrestrial
+conditions is a DTN network. Such network normally employs their own
+tailored routing algorithm for high throughput based on a individual
+environmental conditions~\cite{1}. Smart home applications uses Zigbee,
+DASH7 which are also DTNs.\\
+\indent Zigbee and DASH7 networks have data rate of 200-250Kbits/sec.
+With such networks at layer 1 and 2, there is tremendous need to conserve /
+preserve the bandwidth needed by each video stream / all video streams
+collectively.\\
+\indent Video surveillance system can be integrated with existing home
+network, but it is very important to achieve, reduction in amount of
+data to be transmitted due to lack of end to end connectivity. A low
+data rate node also allow the system to remain in sleep mode for longer
+durations and hence prolongs longer battery life. Therefore a method
+will be very useful by which, a few pre-processing operations allow us to
+still carry out the primary objective - surveillance - while achieving
+large and impressive savings on the required bandwidth.\\
+\indent  For such implementation, it would be wise to transmit feature
+information only. We need to extract this feature information out of
+image and then send it over the network.  Ideally, we need to send the
+minimum information about the image which allows us to reconstruct the
+scenario or to detect an event. If possible then we need to detect the
+event at the source node itself and then to transmit only this event
+information over the DTN network.\\
 \indent The end goal of such an intelligent system would be to offer an
 automatic analysis of scene and then to infer desired information out of
 it. These systems can be complex because of the complexity of the scene,
@@ -76,6 +91,7 @@ processing logic on a single integrated circuit.  After subtracting the
 background, ellipse fitting has been done on the foreground object. This
 elliptical information is collected from different camera and the 3D
 view is reconstructed from it.
+
 \begin{figure}[!b]
 \centering
 \includegraphics[height=300pt]{Figures/image_tr_level}
@@ -97,7 +113,7 @@ intervals of time. So, it is expected that there would be lot of
 temporal redundancy between two neighbouring frames.  Therefore an image
 compression technique is developed around basic principal of reducing
 irrelevancy and redundancy. Broadly, compression techniques are
-categorised in lossless and lossy as explained by Shi and Sun in his
+categorised in lossless and lossy as explained by Shi et al. in his
 book~\cite{6}. In a lossless compression, original image can be
 retrieved exactly, but it does not give much compression.  Reconstructed
 image after a lossy compression degrades in quality, however they
@@ -232,29 +248,29 @@ for human detection and tracking. It uses color and shape based
 descriptor for distinguishing different body parts such as hand and
 head.\\
 \indent The Viola and Jones $[VJ]$ method~\cite{16, 17} is equally
-popular. Their method is based on HAAR like features. To find these
+popular. Their method is based on Haar-like like features. To find these
 features in any detection window, adjacent rectangular regions are
 created at a specific location. Pixel intensities of each region is
 added together and then difference of sum is calculated. This difference
-is used as HAAR descriptor. Further, the same authors have provided new
-concept of image representation as integral image.  Pixel value at any
-location in an integral image is sum of all the pixels above and left of
-that pixel.  These can be computed with very few operations per pixel.
-Integral image representation helps in computation of HAAR like features
-in constant time.\\
-\indent Work by Viola and Jones in~\cite{17} was primarily used for
+is used as Haar-like feature descriptor. Further, the same authors have
+provided new concept of image representation as integral image.  Pixel
+value at any location in an integral image is sum of all the pixels
+above and left of that pixel.  These can be computed with very few
+operations per pixel.  Integral image representation helps in
+computation of Haar-like like features in constant time.\\
+\indent Work by Viola et al. in~\cite{17} was primarily used for
 face detection.  Above work of VJ with motion information was further
 used for human detection in~\cite{16}.  AdaBoost has been used to
-select a small set of features out of all HAAR like features and to
+select a small set of features out of all Haar-like like features and to
 train the classifier. They have used rectangular features which are
 sensitive to edges, bars but are quite coarse. However, these features
 in association with integral image provides sufficient compensation for
-the above limitations. Jones and snow~\cite{26} have further improved
+the above limitations. Jones et al.~\cite{26} have further improved
 the performance of above method by using 10 frames instead of 2 frames
 for motion analysis. They divide detector into 8 direction specific
 detectors.\\
 \indent It~\cite{20, 21} it is shown that histogram of oriented
-gradient (HOG) descriptor has better performance than HAAR based
+gradient (HOG) descriptor has better performance than Haar-like based
 descriptors.Edge or gradient are very specific property of local shape.
 An image is divided into small cells and histogram of edge/gradient
 direction is calculated for each cell. This is called HOG descriptor.
@@ -297,7 +313,7 @@ detection in our approach with the slight variation at autocorrelation
 steps, which allowed us to not go for pre-emphasis step and save
 computation time.
 \subsection{Outstanding issues}
-\indent Methods based on HAAR, HOG or covariance feature descriptor
+\indent Methods based on Haar-like, HOG or covariance feature descriptor
 works with even single image frame , however they are computationally
 very slow and still not viable for low cost embedded applications. So
 further research is needed to optimize these methods to fit into viable
@@ -331,8 +347,8 @@ address with our work.\\
 \indent In chapter 2, we discuss in detail about how other authors
 have done similar job. We also talk about our approach and
 framework for a low bandwidth augmented surveillance system.\\
-\indent In chapter 3 we give a summary of the work done and have
-analyzed the results obtained in our approach.\\
-\indent At the end in chapter 4 we address remaining issues
-and direction for the future work.
-
+\indent In chapter 3, we provide details of embedded implementation of
+our approac discussed in chapter 2.
+\indent In chapter 4, we have analyzed the results obtained in our
+approach. At the end we address remaining issues and direction for the
+future work.

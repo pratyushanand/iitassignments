@@ -2,6 +2,7 @@
 
 \chapter{Methodology and approach} % Write in your own chapter title
 \label{Chapter2}
+
 \section{Image analysis tools}
 \indent Matlab and OpenCV~\cite{34} are two highly used image
 processing tools.  Matlab comes with rich image processing and analysis
@@ -15,9 +16,16 @@ research or even commercial purposes. Unlike GNU Public License (GPL),
 it's licensing does not force that modifications to the library be made
 public. \\
 \indent OpenCV has been mainly developed in C and C++ on Linux platform.
-However, interfaces for other scripting language such as Python, Ruby
-etc are also being developed. OpenCV libraries have been used in many
-applications since its first release in 1999.\\
+However, interfaces for other scripting / programming language such as
+Python, Ruby, Java etc have also been developed. Libraries are also
+available for windows, Android and Mac OS plarform. OpenCV libraries
+have been used in many applications since its first release in 1999.
+Range of applications varies from stitching streetview images together,
+detecting intrusions in surveillance video, monitoring mine equipment,
+helping robots navigate and pick up objects, detection of swimming pool
+drowning accidents, running interactive art, checking runways for
+debris, inspecting labels on products in factories, to rapid face
+detection.\\
 \indent OpenCV design goal is to build computer vision library with
 computational efficiency which can work with real time applications. It
 contains functions in almost all the area of image processing  and
@@ -32,18 +40,19 @@ platform to ARM or other embedded platforms.\\
 algorithms in C and on Linux platform, so that it can easily be ported
 from a PC to embedded environment. Wherever possible, we have used
 OpenCV library.
-\section{Image Pipeline}
-\indent Top level surveillance pipeline is as shown in
-Fig.~\ref{image_pipeline}. End goal of low bandwidth pipeline would be
-to generate information such as human detected, their position and the
-time of detection. So, to implement above pipeline we have to decide on
-following items, computational efficiency and true detection for
-considered object has to be kept as primary objective while making any
-decision.
+\section{Surveillance image processing flow}
+\indent Top level surveillance image processing flow for a low bandwidth
+network is as shown in Fig.~\ref{image_pipeline}. End goal of low
+bandwidth implementation would be to generate information such as human
+detected, their position and the time of detection. So, for above
+implementation we have to decide on following items, computational
+efficiency and true detection for considered object has to be kept as
+primary objective while making any decision.
+
 \begin{figure}[!b]
 \centering
 \includegraphics[height=100pt]{Figures/image_pipeline}
-\caption{Low bandwidth surveillance Image Pipeline}
+\caption{Low BW surveillance image application flow}
 \label{image_pipeline}
 \end{figure}
 \begin{enumerate}
@@ -62,7 +71,7 @@ decision.
 	skeletonization, suitable for motion calculation. Performance of
 	detector based on such method need to be compared with other
 	methods based on covariance feature with cascade of logitboost
-	classifier~\cite{19}  and HAAR like features~\cite{17} for
+	classifier~\cite{19}  and Haar-like like features~\cite{17} for
 	which C codes are already available in public domain.
 \item \textbf{Embedded implementation:} It is very important to see
 	performance of pipeline based on different algorithm on real
@@ -82,23 +91,24 @@ processing. cvCvtColor function has been used to convert image from RGB
 to gray scale.
 \subsection{Background removal}
 \indent Since background subtraction has key role in accomplishing
-intended job, therefore we have compared two recently developed
-efficient background subtraction algorithm and then selected one of them
-in our final work. Yao et al.~\cite{11} used texture features
-present in Local Binary Pattern(LBP). LBP works well with local
-illumination changes, however there can be issues in case of global
-illumination change. They have done several improvements by using
-photometric invariant color measurement and flexible weight updating for
-background modes. However, our experiments says that, computationally it
-is very less efficient compared to method proposed by Barnich et al.~\cite{9}.
-It is based on unique way of replacing
-background pixel value over the time. It replaces background values for
-last N frames randomly.  Furthermore, it diffuses updated values to
-neighbouring pixels, and again that too on random basis. We have
-selected method by Barnich et al. in our final pipeline,
-because of its computational efficiency while maintaining quality.
-Fig.~\ref{bg_compare} shows the comparison of execution time of these
-two algorithm.
+intended job, therefore we have compared two recently developed~\cite{3,
+5} efficient background subtraction algorithm and then selected one of
+them~\cite{5} in our final work.  The method described by Yao and
+Odobez~\cite{3} is based on use of texture features present in Local
+Binary Pattern (LBP).  LBP works well with local illumination changes,
+however there can be issues in case of global illumination change. They
+have carried out several improvements by using photometric invariant
+color measurement and flexible weight updating for background
+modes.However, our experiments says that, computationally it is very
+less efficient compared to method proposed by Barnich et al.~\cite{9},
+which is based on unique way of replacing background pixel value over
+the time. It replaces background values for last N frames randomly.
+Furthermore, it diffuses updated values to neighbouring pixels, and
+again that too on random basis. We have selected method by Barnich et
+al.~\cite{9} in our final pipeline, because of its computational
+efficiency while maintaining quality.  Fig.~\ref{bg_compare} shows the
+comparison of execution time of these two algorithm.
+
 \begin{figure}[!t]
 \centering
 \includegraphics[height=300pt]{Figures/bg_compare}
@@ -109,7 +119,7 @@ having having DMIPS = 800.}
 \end{figure}
 \subsection{Noise removal}
 \indent None of the background subtraction algorithm allows pure
-foreground extraction. There would always be several noise object in the
+foreground extraction. There would always be several noise objects in the
 extracted image. These are cleaned by morphological erosion operation
 (cvErode) followed by dilation (cvDilate) operation. Further all moving
 contours are separated out by using OpenCV library function
@@ -122,29 +132,33 @@ different skeletonization techniques, with their merits and demerits for
 suitability to our requirement.
 \begin{enumerate}
 \item \textbf{Contour skeleton:} It is obtained by finding outer
-boundary points of an object. It gives idea about global shape of an
-object. Boundary points obtained by function cvFindContours can further
-be converted into polygon by cvApproxPoly. Vertices of this polygon
-connected together gives an idea about outer shape of the object. An
-example of such skeleton has been shown in Fig.~\ref{contour_skeleton}.
-\begin{figure}[!b]
+	boundary points of an object. It gives idea about global shape
+	of an object. Boundary points obtained by function
+	cvFindContours can further be converted into polygon by
+	cvApproxPoly. Vertices of this polygon connected together gives
+	an idea about outer shape of the object. An example of such
+	skeleton has been shown in Fig.~\ref{skeletons}.A.
+
+\begin{figure}[!t]
 \centering
-\includegraphics[height=300pt]{Figures/contour_skeleton}
-\caption{An example of contour skeleton}
-\label{contour_skeleton}
+\includegraphics[height=220pt]{Figures/skeletons}
+\caption{Skeleton obtained by different methods. \textbf{A.} Contour
+skeleton \textbf{B.} Morphological skeleton \textbf{C.} Distance
+transform skeleton \textbf{D.} Star skeleton}
+\label{skeletons}
 \end{figure}
-\item \textbf{Morphological skeleton:} Gonzalez and Woods have provided a
-	set of morphological operations in their book Digital image
+\item \textbf{Morphological skeleton:} Gonzalez and Woods have provided
+	a set of morphological operations in their book Digital image
 	processing~\cite{35}, which has defined morphological
 	skeletonization as follows:
 	\begin{equation}
 	\begin{aligned}
-		S(A) &= \Sigma ^K _{k = 0} S_k(A) \nonumber \label{morph_skel}\\
-	\mathrm{where} \hspace{5 mm} S_k(A) &= (A \ominus kB) - (A \ominus kB) \circ B \nonumber\\
+		S(A) &= \Sigma ^K _{k = 0} S_k(A) \label{morph_skel}\\
+	\mathrm{where} \hspace{5 mm} S_k(A) &= (A \ominus kB) - (A \ominus kB) \circ B \\
 			  k &= max \{ K | (A \ominus kB) \neq \phi\}
 	\end{aligned}
 	\end{equation}
-Translating equation~\ref{morph_skel} into C code:
+Translating Eqn~\ref{morph_skel} into C code:
 \begin{lstlisting}
 
 	do
@@ -159,172 +173,143 @@ Translating equation~\ref{morph_skel} into C code:
 
 \end{lstlisting}
 \indent An example of skeleton obtained by morphological method has been
-shown in Fig.~\ref{morphological_skeleton}.
-\begin{figure}[!b]
-\centering
-\includegraphics[height=300pt]{Figures/morphological_skeleton}
-\caption{An example of morphological skeleton}
-\label{morphological_skeleton}
-\end{figure}
+shown in Fig.~\ref{skeletons}.B.
 \item \textbf{Skeleton by distance transform:} Distance transform of an
-input image is obtained by creating a new image where pixels are set to
-a value equal to the distance to the nearest zero value pixel in input
-image. We have seen that the contour skeleton provided outer shape of the
-object, where as distance transform method provides internal orientation
-of object. OpenCV provides a function cvDistTransform, which can be used
-to build a distance transformed image. An example of skeleton obtained
-by distance transform method has been shown in Fig.~\ref{dt_skeleton}.
-\begin{figure}[!b]
-\centering
-\includegraphics[height=300pt]{Figures/dt_skeleton}
-\caption{An example of skeleton obtained by distance transform}
-\label{dt_skeleton}
-\end{figure}
-
+	input image is obtained by creating a new image where pixels are
+	set to a value equal to the distance to the nearest zero value
+	pixel in input image. We have seen that the contour skeleton
+	provided outer shape of the object, where as distance transform
+	method provides internal orientation of object. OpenCV provides
+	a function cvDistTransform, which can be used to build a
+	distance transformed image. An example of skeleton obtained by
+	distance transform method has been shown in
+	Fig.~\ref{skeletons}.C.
 \item \textbf{Star Skeleton:} In this method we plot distance of each
-boundary point from the centroid and then uses peaks of the curve as
-skeleton point.
+	boundary point from the centroid and then use peaks of the curve
+	as skeleton point.
 \begin{enumerate}
 \item Centroid of each object is found out using following
-	equation~\ref{centroid_calc}.\\
+	Eqn~\ref{centroid_calc}.
 	\begin{eqnarray}
 	C_x = {1 \over N} \Sigma ^N _{i = 1} X_i \label{centroid_calc}
 \nonumber \\
 	C_y = {1 \over N} \Sigma ^N _{i = 1} Y_i 
 	\end{eqnarray}
-Here X$_i$ and Y$_i$ are (X,Y) co-ordinate of i$_{th}$ point on the contour
+Here X$_i$ and Y$_i$ are (X,Y) co-ordinates of i$_{th}$ point on the contour
 boundary.
 \item Distance d$_i$ is calculated between centroid and each boundary
-point as follows.This calculated distance vector are stored in a CvMat
-array.
+	point as follows.This calculated distance vector are stored in a
+	CvMat array.
 	\begin{equation}
 	d_i = \sqrt{(C_x - X_i)^2 + (C_y - Y_i)^2} \label{dist_calc}
 	\end{equation}
 
-\begin{figure}[!b]
+\begin{figure}[!t]
 \centering
 \includegraphics[height=200pt]{Figures/distance}
 \caption{Distance plot of human contour points from its centroid}
 \label{distance}
 \end{figure}
-
 \item Distance vector array is smoothed to remove noise peaks using
 	cvSmooth. If these distances are plotted then it looks like
 	Fig.~\ref{distance}. Now local maxima of distance vector is
 	calculated by finding zero crossing of difference vectors. These
 	local maxima provides a star form of skeleton centered at
 	centroid of the object. A typical star skeleton has been shown
-	in Fig.~\ref{star_skeleton}.
-
-\begin{figure}[!b]
-\centering
-\includegraphics[height=300pt]{Figures/star_skeleton}
-\caption{An example of star skeleton}
-\label{star_skeleton}
-\end{figure}
-
+	in Fig.~\ref{skeletons}.C.
 \end{enumerate}
-
 \end{enumerate}
-
 \subsection{Human detection methods}
-
-We have evaluated three methods of human detection technique mainly on the
+\indent We have evaluated three methods of human detection technique mainly on the
 basis of their computation efficiency.
 \begin{enumerate}
 \item \textbf{Detection using covariance features:} We have used method
-implemented by Yao and Odobez ~\cite{19}. We have selected this method,
-because it has been widely referenced and also C code by author is
-available in public domain.\\
-\item \textbf{Detection using haar features:} We have evaluated work by
-Viola and Jones in ~\cite{16, 17} which uses haar like features for
-human detection. Again, reason to evaluate this algorithm was same, that
-it has been widely discussed and referenced. It's implementation has
-been done in one of the demo example code of OpenCV.\\
+	implemented by Yao et al. ~\cite{19}. We have selected this
+	method, because it has been widely referenced and also the
+	source(C code) is available in public domain.\\
+\item \textbf{Detection using Haar-like features:} We have evaluated
+	work by Viola et al.~\cite{16, 17} which uses Haar-like like
+	features for human detection. Again, reason to evaluate this
+	algorithm was same, that it has been widely discussed and
+	referenced.
 \item \textbf{Detection using skeleton motion features:} We have
-evaluated this method as it seems to be computationally very efficient.
-We have provided C code for our complete pipeline in apendix
-~\ref{ApendixA}.  Human motion can be represented suitably by movement
-of legs. So, we use star skeletonization method which seems best
-suitable for human leg motion analysis. We have seen that star
-skeletonization gives us some peaks which is not of our interest. In our
-algorithm, we are using 2 most relevant peaks which are nearest to each
-bottom corner of bounding box of contour respectively. Only these two
-peaks along with centroid will give us sufficient information to
-distinguish human among human, vehicle or animal etc.\\
-\indent When the case considered is human, then the two peaks correspond to
-the two legs of human. When case considered is vehicle, then the peaks
-correspond to the two extrema points of lower portion of back and front.
-When it is an animal, then peaks correspond to front and back leg of
-animal.\\
-\indent Let P$_1$(X$_1$, Y$_1$), P$_2$(X$_2$, Y$_2$) and C(C$_x$, C$_y$)
+	evaluated this method as it seems to be computationally very
+	efficient.  We have done our own implementation in C to evaluate
+	this method.  Human motion can be represented suitably by
+	movement of legs. So, we use star skeletonization method which
+	seems best suitable for human leg motion analysis. We have seen
+	that star skeletonization gives us skeleton points in form of peak
+	distance from centroid. However, some of these peak points are
+	not of our interest. In our algorithm, we are using 2 most relevant
+	peaks which are nearest to each bottom corner of bounding box of
+	contour respectively. Only these two peaks along with centroid
+	will give us sufficient information to distinguish human among
+	human, vehicle or animal etc.\\
+\indent For human subjects, the two peaks correspond to the two legs of
+human. For vehicles, the peaks correspond to the two extrema points of
+lower portion of back and front.  When it is an animal, the peaks
+correspond to front and back leg of animal.\\
+\item Let P$_1$(X$_1$, Y$_1$), P$_2$(X$_2$, Y$_2$) and C(C$_x$, C$_y$)
 are two peaks nearest to bottom right and bottom left corner and
-centroid respectively. Let $\theta$ is the angle between P$_1$C and
-P$_2$C, then $\theta$ can be calculated as follows.\\
+centroid respectively. Let $\theta$ is the angle between the line
+segments P$_1$C and P$_2$C, then $\theta$ can be calculated as
+follows.\\
 %
 	\begin{equation}
 	\theta = tan^{-1}[(Y_2 - C_y) / (X_2 - C_x)] \\ - tan^{-1}[(Y_1 - C_y) / (X_1 - C_x)]
 	\end{equation}
 %
-\indent If variation of this $\theta$ is plotted in respective frames
-for human and vehicle then the resultant plot is as shown in
-Fig.~\ref{angle_plot}. The observations from this plot is that for
-human, angle variation pattern is repeatable, and it is zero for almost
-at regular intervals. For vehicle, it is constant. The experiment with
-images containing animal is to be carried out. For images with animal in
-it, there would be variation with repeatable pattern but would never
-touch to zero. These criterion can be the basis to identify about an
-object, whether it is a human, vehicle or animal.
+\indent If variation of $\theta$ is plotted in respective frames for
+human and vehicle then the resultant plot is as shown in
+Fig.\ref{angle_plot}.  The observations from this plot is that for a
+human subject, angle variation pattern is repeatable, and it is zero for
+almost at regular intervals.  For vehicle, it is constant. The
+experiment with images containing animal is yet to be done. For images
+with animals in it, there are variations with repeatable patterns but
+which never touch zero.  These criterion can be the basis to identify an
+object, and to decide whether it is a human,vehicle or animal.
 
-\begin{figure}[!b]
+\begin{figure}[!t]
 \centering
 \includegraphics[height=300pt]{Figures/angle_plot}
-\caption{Variation of angle between legs with frame number for human and
+\caption{Plot of variation of angle $\theta$ with frame number for human and
 vehicle.}
 \label{angle_plot}
 \end{figure}
-
-\indent We create a linked list of objects. When a new object comes in
-the view of camera, a structure is created and added to the list. This
-new object is tracked and value of (C$_x$, C$_y$), $\theta$ in each
-frame is stored.
+\item Every new object which comes into the field of view is tracked and
+	value of (C$_x$, C$_y$), $\theta$ in each frame is stored. 
 \begin{enumerate} 
 \item We track value of $\theta$ until it goes to zero three times.
-\item Now consider $\theta$ values between first and second zero as
+\item Now we consider $\theta$ values between first and second zero as
 vector T$_1$ and $\theta$ values between second and third zero as vector
 T$_2$.
-\item Find mean m$_1$ and m$_2$ of vector T$_1$ and T$_2$ respectively.
-\item If n is the length of vector T$_1$ then calculate correlation value
-between these two vectors to find similarities as follows.
+\item We find mean m$_1$ and m$_2$ of vector T$_1$ and T$_2$ respectively.
+\item If n is the length of vector T$_1$ then, we calculate correlation
+value (r) between these two vectors to find similarities as follows.
 	\begin{equation}
-	corel = {{\Sigma ^n _{i = 1}(T_{1i} - m_1) * (T_{2i} - m_2)}
-\over {\sqrt {\Sigma ^n _{i = 1} (T_{1i} - m_1)^2 * \Sigma ^n _{i = 1} (T_{2i}
+	r = {{\Sigma ^n _{i = 1}(T_{1i} - m_1) . (T_{2i} - m_2)}
+\over {\sqrt {\Sigma ^n _{i = 1} (T_{1i} - m_1)^2 . \Sigma ^n _{i = 1} (T_{2i}
 - m_2)^2}}}
 	\end{equation}
-\item If correlation value is greater than a threshold value TH$_1$, then we say
-that it is a human.
+\item If correlation value is greater than a threshold value TH$_1$,
+then we conclude that it is a human.
 \end{enumerate} 
-
 \end{enumerate} 
-
-
 \section {Platforms used for evaluation}
-
 \indent We have developed all our code and used other code taken from
-public domain at a x86 based platform (A Linux virtual box on HP
+public domain on a x86 based platform (A Linux virtual box on HP
 EliteBook 8440P). We have coded in C and on Linux platform. We did it so
-because, C and Linux are widely used with embedded platform. Since
-latest Linux version such as 3.0 onwards works well with mmuless
-platforms too, so it would be very easy to use same code across wide
-range of micro-controllers and SOCs.
-
+because, C and Linux are widely used with embedded platform. Latest
+Linux kernel version also works well for mmuless ARM core. Therefore, it
+would be very easy to use same code across wide range of
+micro-controllers and SOCs.\\
 \indent It is also very important to benchmark the system which we are
 using for test evaluation. However, none of the benchmark code provides
 accurate figure for interpolation of results for any test, but still
 they can be considered as approximate reference. We benchmarked our x86
-system with dhrystone code.
-
-\indent We have further evaluated performance of different pipeline on
-an ARM11 based system. We have used Raspberry Pi , which has a Broadcom
-BCM2835 system on a chip (SoC), that includes an ARM1176JZF-S 700 MHz
-processor. We have also benchmarked this system with dhrystone code.
+system with Dhrystone code.\\
+\indent We have further evaluated performance of different
+implementations on an ARM11 based system. We have used Raspberry Pi ,
+which has a Broadcom BCM2835 system on a chip (SoC), that includes an
+ARM1176JZF-S 700 MHz processor. We have also benchmarked this system
+with Dhrystone code.
