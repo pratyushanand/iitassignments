@@ -41,6 +41,7 @@
 
 \pagestyle{plain}  % Return the page headers back to the "fancy" style
 
+\setlength\parindent{20pt}
 
 %% ----------------------------------------------------------------
 
@@ -112,6 +113,23 @@ motion analysis. Analysis of leg motion allows us to detect human from
 human, vehicle and animal. Since we have used \textbf{S}keleton
 \textbf{M}otion \textbf{A}nalyzer for object detection, therefore we
 name our implementation as SMA.\\
+\indent We have developed all our code and used other code taken from
+public domain on a x86 based platform (A Linux virtual box on HP
+EliteBook 8440P). We have coded in C and on Linux platform. We did it so
+because, C and Linux are widely used with embedded platform. Latest
+Linux kernel version also works well for mmuless ARM core. Therefore, it
+would be very easy to use same code across wide range of
+micro-controllers and SOCs.\\
+\indent It is also very important to benchmark the system which we are
+using for test evaluation. However, none of the benchmark code provides
+accurate figure for interpolation of results for any test, but still
+they can be considered as approximate reference. We benchmarked our x86
+system with Dhrystone code.\\
+\indent We have further evaluated performance of different
+implementations on an ARM11 based system. We have used Raspberry Pi ,
+which has a Broadcom BCM2835 system on a chip (SoC), that includes an
+ARM1176JZF-S 700 MHz processor. We have also benchmarked this system
+with Dhrystone code.
 \section {Result Summary}
 \indent We observe that with SMA, we are able to detect a moving person
 after a movement of 3 steps. Fig.  \ref{pipeline_images} shows output
