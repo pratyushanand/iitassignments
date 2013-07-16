@@ -89,7 +89,8 @@
 %\newtheorem{definition}[theorem]{Definition}
 %\theoremstyle{remark}
 %\newtheorem{remark}[theorem]{Remark}
-\usepackage[centerlast,small,sc]{missing_packages/caption}
+\usepackage{caption}
+\captionsetup{justification=justified}
 \setlength{\captionmargin}{20pt}
 \newcommand{\fref}[1]{Figure~\ref{#1}}
 \newcommand{\tref}[1]{Table~\ref{#1}}
@@ -192,42 +193,90 @@
     \setcounter{footnote}{0}
 \begin{center}
       \setlength{\parskip}{0pt}
-      {\LARGE \textbf{Synopsis}\\}
-      {\large of\\ }
+      {\LARGE Synopsis of\\ }
       {\LARGE \bf \@title \par}
        \smallskip
        \bigskip
       \bigskip
       \bigskip
-     {\large Proposed to be submitted in partial fulfilment of the requirement of the degree of\\}
-     {\large \textbf{Master of Science (Research)\\}}
- 		 {\large {of the\\}}
-      {\large \univname, \par}
-   \vfill
-\bigskip
-      \vfill
-      \vfill  
       \bigskip
-      {\large By:\\ }
+      \bigskip
+      \bigskip
+      \bigskip
+      \bigskip
+     {\large A Thesis\\}
+      \bigskip
+     {\large To be submitted by\\}
+      \bigskip
       {\large \textbf{\authornames} \par}
-       {\large \textbf{\deptname} \par}
-      \smallskip
-      {\large Supervisor:Prof. Subrat Kar\\ }
-
       \bigskip
-      {
+      \bigskip
+     {\large For the award of the degree of\\}
+     {\large \textbf{Master of Science (Research)\\}}
+      \bigskip
+      \bigskip
+      \bigskip
+      \bigskip
+      \bigskip
+{
 					\begin{figure}[htbp]
 					\centering
-					\includegraphics[width=2in]{./Figures/logo.png}
+					\includegraphics[width=1in]{./Figures/logo.png}
 					\end{figure}
       }
-        \bigskip
-      %{\large \textbf{\deptname} \par}
+
+       {\large \textbf{\deptname} \par}
+      {\large \univname \par}
+      {\Large \@date \par}
+    \end{center}
+
+    \par
+    \@thanks
+    \vfil\null
+  \clearpage
+     \thispagestyle{empty}
+      \vskip 60\p@
+
+
+
+	\begin{center}
+      \setlength{\parskip}{0pt}
+      {\LARGE \bf \@title \par}
+       \smallskip
+       \bigskip
+      \bigskip
+      \bigskip
+      \bigskip
+      \bigskip
+      \bigskip
+      \bigskip
+      \bigskip
       {\large \textbf{\univname} \par}
       \bigskip
+     {\large \textbf{M.S. (Research) Synopsis\\}}
+     {\large (EED895)\\}
       \bigskip
-      {\Large \@date \par}
+     {\large (2013)\\}
       \bigskip
+     {\large By\\}
+      \bigskip
+      {\large \textbf{\authornames} \par}
+      \bigskip
+      {\large \textbf{2010EEY7515} \par}
+      \bigskip
+      \bigskip
+      \bigskip
+      \bigskip
+      \bigskip
+      \bigskip
+      \bigskip
+      {\large \textbf{Under The Guidance Of} \par}
+      \bigskip
+      {\large \textbf{Prof. Subrat Kar} \par}
+      \bigskip
+       {\large \textbf{\deptname} \par}
+      \bigskip
+       {\large \textbf{IIT Delhi, Hauz Khas New Delhi 110016} \par}
     \end{center}
   \end{titlepage}
   \setcounter{footnote}{0}%

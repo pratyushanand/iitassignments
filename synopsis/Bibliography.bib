@@ -7,7 +7,7 @@
   booktitle = {European Conference on Computer Vision, workshop on Visual Surveillance
 	(ECCV-VS)},
   year = {2008},
-  month = {10},
+  month = {Oct},
   abstract = {In this paper, we present a fast method to detect humans from videos
 	captured in surveillance applications. It is based on a cascade of
 	LogitBoost classifiers relying on features mapped from the Riemanian
@@ -27,7 +27,6 @@
 	
 	and can process from 5 to 20 frames/sec (for a 384x288 video) while
 	achieving similar or better performance than existing methods.},
-  crossref = {11},
   location = {Marseille},
   pdf = {http://publications.idiap.ch/downloads/papers/2008/Yao_ECCV-VS_2008.pdf},
   projects = {Idiap, CARETAKER}
@@ -382,25 +381,29 @@
   url = {http://dx.doi.org/10.1145/863955.863960}
 }
 
-@MISC{32,
-  author = {Fujiyoshi, H. and Lipton, A.},
+@INPROCEEDINGS{32,
+  author = {Fujiyoshi, H. and Lipton, A.J.},
   title = {Real-time human motion analysis by image skeletonization},
+  booktitle = {Applications of Computer Vision, 1998. WACV '98. Proceedings., Fourth
+	IEEE Workshop on},
   year = {1998},
-  abstract = {{In this paper, a process is described for analysing the motion of
-	a human target in a video stream. Moving targets are detected and
-	their boundaries extracted. From these, a \&quot;star\&quot; skeleton
-	is produced. Two motion cues are determined from this skeletonization:
-	body posture, and cyclic motion of skeleton segments. These cues
-	are used to determine human activities such as walking or running,
-	and even potentially, the target's gait. Unlike other methods, this
-	does not require an a priori human...}},
-  citeulike-article-id = {1996845},
-  citeulike-linkout-0 = {http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.40.4400},
-  keywords = {action\_recognition, background\_subtraction, monocular, no\_full\_body\_model,
-	only\_2d, tracking, uses\_silhouette},
-  posted-at = {2009-03-29 11:15:47},
-  priority = {0},
-  url = {http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.40.4400}
+  pages = {15-21},
+  abstract = {In this paper a process is described for analysing the motion of a
+	human target in a video stream. Moving targets are detected and their
+	boundaries extracted. From these, a “star” skeleton is produced.
+	Two motion cues are determined from this skeletonization: body posture,
+	and cyclic motion of skeleton segments. These cues are used to determine
+	human activities such as walking or running, and even potentially,
+	the target's gait. Unlike other methods, this does not require an
+	a priori human model, or a large number of “pixels on target”. Furthermore,
+	it is computationally inexpensive, and thus ideal for real-world
+	video applications such as outdoor video surveillance},
+  doi = {10.1109/ACV.1998.732852},
+  keywords = {image thinning;video signal processing;body posture;cyclic motion;human
+	motion analysis;human target;image skeletonization;motion cues;running;video
+	surveillance;walking;Algorithm design and analysis;Data mining;Humans;Image
+	motion analysis;Motion analysis;Motion detection;Optical computing;Optical
+	sensors;Skeleton;Streaming media}
 }
 
 @INPROCEEDINGS{29,
@@ -437,7 +440,7 @@
   title = {A Smart Camera Mote Architecture for Distributed Intelligent Surveillance},
   booktitle = {In ACM SenSys Workshop on Distributed Smart Cameras (DSC)},
   year = {2006},
-  month = {Oct},
+  month = oct,
   abstract = {Surveillance is one of the promising applications to which smart camera
 	motes forming a vision-enabled network can add increasing levels
 	of intelligence. We see a high degree of in-node processing in combination
@@ -687,32 +690,42 @@
 	Object Segmentation}
 }
 
-@MISC{17,
+@INPROCEEDINGS{17,
   author = {Viola, P. and Jones, M.},
   title = {Rapid object detection using a boosted cascade of simple features},
+  booktitle = {Computer Vision and Pattern Recognition, 2001. CVPR 2001. Proceedings
+	of the 2001 IEEE Computer Society Conference on},
   year = {2001},
-  abstract = {{This paper describes a machine learning approach for visual object
-	detection which is capable
-	
-	of processing images extremely rapidly and achieving high detection
-	rates. This work is distinguished
-	
-	by three key contributions. The first is the introduction of a new
-	image representation
-	
-	called the Integral Image which allows the features used by our detector
-	to be computed very
-	
-	quickly. The second is a learning algorithm, based on AdaBoost, which
-	selects a small number
-	
-	of critical visual...}},
-  citeulike-article-id = {820130},
-  citeulike-linkout-0 = {http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.6.2036},
-  keywords = {2004, vision},
-  posted-at = {2012-11-21 18:26:48},
-  priority = {2},
-  url = {http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.6.2036}
+  volume = {1},
+  pages = {I-511-I-518},
+  abstract = {This paper describes a machine learning approach for visual object
+	detection which is capable of processing images extremely rapidly
+	and achieving high detection rates. This work is distinguished by
+	three key contributions. The first is the introduction of a new image
+	representation called the "integral image" which allows the features
+	used by our detector to be computed very quickly. The second is a
+	learning algorithm, based on AdaBoost, which selects a small number
+	of critical visual features from a larger set and yields extremely
+	efficient classifiers. The third contribution is a method for combining
+	increasingly more complex classifiers in a "cascade" which allows
+	background regions of the image to be quickly discarded while spending
+	more computation on promising object-like regions. The cascade can
+	be viewed as an object specific focus-of-attention mechanism which
+	unlike previous approaches provides statistical guarantees that discarded
+	regions are unlikely to contain the object of interest. In the domain
+	of face detection the system yields detection rates comparable to
+	the best previous systems. Used in real-time applications, the detector
+	runs at 15 frames per second without resorting to image differencing
+	or skin color detection.},
+  doi = {10.1109/CVPR.2001.990517},
+  issn = {1063-6919},
+  keywords = {feature extraction;image classification;image representation;learning
+	(artificial intelligence);object detection;AdaBoost;background regions;boosted
+	simple feature cascade;classifiers;face detection;image processing;image
+	representation;integral image;machine learning;object specific focus-of-attention
+	mechanism;rapid object detection;real-time applications;statistical
+	guarantees;visual object detection;Detectors;Face detection;Filters;Focusing;Image
+	representation;Machine learning;Object detection;Pixel;Robustness;Skin}
 }
 
 @INPROCEEDINGS{16,

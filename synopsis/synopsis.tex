@@ -53,11 +53,11 @@ video data is transported from the point of acquisition to the point of
 observation. Moreover, an increasing number of video sources rely on
 resource constrained (bandwidth-limited, delay-tolerant) networks such
 as Zigbee, DASH7 specially in smart home applications for the video
-transport. With such networks at layer 1 and 2, there is tremendous need
-to conserve/preserve the bandwidth needed by each video stream / all
+transport. With such networks at layer 1 and 2, there is a tremendous need
+to conserve / preserve the bandwidth needed by each video stream / all
 video streams collectively. We propose a method by which a few
 pre-processing operations allow us to still carry out the primary
-objective – surveillance – while achieving large and impressive savings
+objective of surveillance while achieving large and impressive savings
 on the required bandwidth.\\
 \indent Video surveillance system can be integrated with existing home
 network, but it is very important to achieve reduction in amount of
@@ -73,57 +73,53 @@ end. By extracting semantic information from deduced features, we reduce
 the data rate even further. \\
 \indent Automatic scene analysis, followed by extraction of desired
 information can be complex, especially when application is targeted for
-outdoor monitoring.  Sometime background of the scene can be fast
+outdoor monitoring.  Sometimes background of the scene can be fast
 changing, while in some other scene ambient light can be different.
 Similarly, there can be many other hurdles in the process of automation.
 But if an efficient background detection algorithm is chosen then, these
 issues can be addressed. Further, the selected algorithm must allow
 information extraction almost in real time. With latest research in
-computer vision ~\cite{3} ~\cite{5}, it seems that such a task could be
-viable with low cost embedded system.\\
-\indent Surveillance camera is normally kept at some distance from the
-object. Therefore motion based descriptor is a good candidate for true
-object detection.\\
+computer vision~\cite{9, 11}, it seems that such a task could be
+viable with a low cost embedded system.\\
 \section{Objective}
 \indent	In this work we propose a solution for efficiently transforming
 video data   over   a delay   tolerant   network.  We have addressed
-following problem in this work.\\
+the following problems in this work.\\
 \begin{enumerate}
 \item Evaluation of background subtraction algorithms (with reasonably
 good result for surveillance applications) in terms of computational
-complexities. 
-\item Evaluation of different techniques of moving object
+complexity 
+\item Evaluation of different techniques for moving object
 skeletonization in terms of its suitability to calculate motion
-descriptor feature. 
+descriptor feature 
 \item Development of low computation algorithm to detect objects using
-motion descriptor.
+motion descriptor
 \item Integration of proposed algorithm with low cost COTS embedded
-environment.
+hardware environment
 \end{enumerate}
 \section{Implementation}
-\indent We have selected Vibe ~\cite{5} algorithm by Barnich and Van
-Droogenbroeck for background subtraction, as it comes out to be
-computationally most efficient. Since authors have not provided C code,
-so we have developed our own C code for this algorithm.\\
-\indent Since surveillance object might be distant, so We have selected
+\indent We have selected the Vibe~\cite{9} algorithm by Barnich et al.
+for background subtraction, as it is computationally very efficient.
+Since authors have not provided C code, we have developed our own C code
+for this algorithm.\\
+\indent Since surveillance object might be distant, so we have selected
 skeleton motion approach for human detection. We have evaluated
-different skeletonization method and finally star skeletonization method
-has been used. Star skeletonization approach provides a easy way for leg
-motion analysis. Analysis of leg motion allows us to detect human from
-human, vehicle and animal. Since we have used \textbf{S}keleton
-\textbf{M}otion \textbf{A}nalyzer for object detection, therefore we
-name our implementation as SMA.\\
-\indent We have developed all our code and used other code taken from
-public domain on a x86 based platform (A Linux virtual box on HP
-EliteBook 8440P). We have coded in C and on Linux platform. We did it so
-because, C and Linux are widely used with embedded platform. Latest
-Linux kernel version also works well for mmuless ARM core. Therefore, it
-would be very easy to use same code across wide range of
-micro-controllers and SOCs.\\
+different skeletonization methods and finally, the star skeletonization
+method has been used~\cite{32}. Star skeletonization approach provides
+an easy way for leg motion analysis. Analysis of leg motion allows us to
+detect human from human, vehicle and animal. Since we have used
+\textbf{Skel}etonized \textbf{M}otion \textbf{A}nalysis for object
+detection, therefore we name our implementation as SKELMOT.\\
+\indent All our code is either written from scratch or consists of other
+code taken from public domain on a x86 based platform. We have coded in
+C and on Linux platform. We did it so because C and Linux are widely
+used with embedded platform.  Latest Linux kernel version also works
+well for mmuless ARM core.  Therefore, it would be very easy to use same
+code across wide range of micro-controllers and SOCs.\\
 \indent It is also very important to benchmark the system which we are
 using for test evaluation. However, none of the benchmark code provides
-accurate figure for interpolation of results for any test, but still
-they can be considered as approximate reference. We benchmarked our x86
+accurate figure for interpolation of results for any test. They are
+considered for getting approximate benchmark. We benchmarked our x86
 system with Dhrystone code.\\
 \indent We have further evaluated performance of different
 implementations on an ARM11 based system. We have used Raspberry Pi ,
@@ -131,63 +127,66 @@ which has a Broadcom BCM2835 system on a chip (SoC), that includes an
 ARM1176JZF-S 700 MHz processor. We have also benchmarked this system
 with Dhrystone code.
 \section {Result Summary}
-\indent We observe that with SMA, we are able to detect a moving person
-after a movement of 3 steps. Fig.  \ref{pipeline_images} shows output
+\indent We observe that with SKELMOT, we are able to detect a moving person
+after a movement of three steps. Fig.  \ref{pipeline_images} shows output
 images at different stages of the implementation.\\
 \indent We have also done experiments with negative images like a person
-moving on bicycle, or a vehicle moving on road. SMA is successfully able
+moving on bicycle, or a vehicle moving on road. SKELMOT is successfully able
 to discriminate between these objects. Fig. \ref{negative_inputs} shows
 how it rejects moving vehicle and bicycle and  does not detect them as
 human.\\
-\begin{figure}[!h]
+\begin{figure}[!t]
 \centering
-\includegraphics[scale=0.30]{Figures/pipeline_images}
+\includegraphics[scale=0.50]{Figures/pipeline_images}
 \caption{Images at different stages of processing. (From top left in
-clockwise order) \textbf{(a.)} Gray Scale input frame
-\textbf({b.)}Foreground extracted image using Vibe \textbf{(c.)} Cleaned
-image \textbf{(d.)} Contour of moving object \textbf{(e.)} Plot of three points
-of interest, centroid and two distance peaks nearer to bottom left and
-bottom right corner of bounding box \textbf{(f.)} Virtual representation
-of scene} 
+	clockwise order)\\
+	\textbf{(a)} Gray Scale input frame\\
+	\textbf{(b)} Foreground extracted image using Vibe\\
+	\textbf{(c)} Cleaned image\\
+	\textbf{(d)} Contour of moving object\\
+	\textbf{(e)} Plot of three points of interest, centroid and two distance
+peaks nearer to bottom left and bottom right corner of bounding box\\
+\textbf{(f)} Virtual representation of scene} 
 \label{pipeline_images}
 \end{figure}
-\begin{figure}[!h]
+\begin{figure}[!b]
 \centering
-\includegraphics[scale=0.30]{Figures/negative_inputs}
+\includegraphics[scale=0.50]{Figures/negative_inputs}
 \caption{Input and output in case of negative images}
 \label{negative_inputs}
 \end{figure}
-\indent We have implemented and executed SMA, HAAR ~\cite{2} and
-covariance ~\cite{14} feature based detection algorithm on both x86
+\indent We have implemented and executed SKELMOT, Haar-like~\cite{17} and
+covariance~\cite{19} feature based detection algorithm on both x86
 desktop computer and embedded ARM platform. Comparison of execution time
 has been shown in Fig.  \ref{pipeline_execution_time}. It shows a
-definite improvement in execution speed of SMA over HAAR and covariance
-feature based approach.  SMA takes just 3.6 ms on the average, while
-HAAR and covariance feature based algorithm take around 20 ms and 248 ms
-respectively per frame at x86 platform having DMIPS = 800. Comparison of
-timing at ARM platform with DMIPS = 44 shows that SMA takes 182 ms
-on the average, while HAAR and covariance feature based algorithm take
-around 942 ms and 4.65 s respectively per frame.  \\
-\begin{figure}[!h]
+definite improvement in execution speed of SKELMOT over Haar-like and
+covariance feature based approach.  SKELMOT takes just 3.6 ms on the
+average, while Haar-like and covariance feature based algorithm take
+around 20 ms and 248 ms respectively per frame at x86 platform having
+DMIPS = 800. Comparison of timing at ARM platform with DMIPS = 44 shows
+that SKELMOT takes 182 ms on the average, while Haar-like and covariance
+feature based algorithm take around 942 ms and 4.65 s respectively per
+frame.  \\
+\begin{figure}[!t]
 \centering
-\includegraphics[scale=0.30]{Figures/pipeline_execution_time}
+\includegraphics[scale=0.50]{Figures/pipeline_execution_time}
 \caption{Execution time of evaluated algorithms with a ARM and x86
 platform}
 \label{pipeline_execution_time}
 \end{figure}
 \section {Publications}
 \indent A paper titled ``Image Analysis for Ultra Low Bandwidth Video
-Surveillance System`` is under communication.\\
+Surveillance System`` has been communicated to the conference "CERA
+2013, IIT Roorkee" scheduled to be held between Oct. 3$^{rd}$ and
+Oct. 5$^{th}$ 2013.\\
 %% ----------------------------------------------------------------
+  \clearpage
 
 \label{Bibliography}
 \addtotoc{Bibliography}
 \lhead{\emph{Bibliography}}  % Change the left side page header to "Bibliography"
-%\bibliographystyle{ieeetr}  % Use the "unsrtnat" BibTeX style for formatting the Bibliography
-\bibliographystyle{apalike}
+\bibliographystyle{ieeetr}  % Use the "unsrtnat" BibTeX style for formatting the Bibliography
+%\bibliographystyle{apalike}
 \bibliography{Bibliography}  % The references (bibliography) information are stored in the file named "Bibliography.bib"
-\cleardoublepage
-
-
 \end{document}  % The End
 %% ----------------------------------------------------------------
