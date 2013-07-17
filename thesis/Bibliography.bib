@@ -1,48 +1,15 @@
 % This file was created with JabRef 2.7b.
 % Encoding: UTF-8
 
-@INPROCEEDINGS{19,
-  author = {Yao, Jian and Odobez, Jean-Marc},
-  title = {Fast human detection from videos using covariance features},
-  booktitle = {European Conference on Computer Vision, workshop on Visual Surveillance
-	(ECCV-VS)},
-  year = {2008},
-  month = {10},
-  abstract = {In this paper, we present a fast method to detect humans from videos
-	captured in surveillance applications. It is based on a cascade of
-	LogitBoost classifiers relying on features mapped from the Riemanian
-	manifold of region covariance matrices computed from input image
-	features. The method was extended in several ways. First, as the
-	mapping process is slow for high dimensional feature space, we propose
-	to select weak classifiers based on subsets of the complete image
-	feature space. In addition, we propose to combine these sub-matrix
-	covariance features with the means of the image features computed
-	within the same subwindow, which are readily available from the covariance
-	extraction process. Finally, in the context of video acquired with
-	stationary cameras, we propose to fuse image features from the spatial
-	and temporal domains in order to jointly learn the correlation between
-	appearance and foreground information based on background subtraction.
-	Our method evaluated on a large set of videos coming from several
-	databases (CAVIAR, PETS, ...,',','),
-	
-	and can process from 5 to 20 frames/sec (for a 384x288 video) while
-	achieving similar or better performance than existing methods.},
-  crossref = {11},
-  location = {Marseille},
-  pdf = {http://publications.idiap.ch/downloads/papers/2008/Yao_ECCV-VS_2008.pdf},
-  projects = {Idiap, CARETAKER}
-}
-
 @ARTICLE{9,
   author = {Barnich, O. and Van Droogenbroeck, M.},
   title = {ViBe: A Universal Background Subtraction Algorithm for Video Sequences},
   journal = {Image Processing, IEEE Transactions on},
   year = {2011},
   volume = {20},
-  pages = {1709--1724},
+  pages = {1709-1724},
   number = {6},
-  month = jun,
-  abstract = {{This paper presents a technique for motion detection that incorporates
+  abstract = {This paper presents a technique for motion detection that incorporates
 	several innovative mechanisms. For example, our proposed technique
 	stores, for each pixel, a set of values taken in the past at the
 	same location or in the neighborhood. It then compares this set to
@@ -60,18 +27,21 @@
 	also analyze the performance of a downscaled version of our algorithm
 	to the absolute minimum of one comparison and one byte of memory
 	per pixel. It appears that even such a simplified version of our
-	algorithm performs better than mainstream techniques.}},
-  citeulike-article-id = {10548921},
-  citeulike-linkout-0 = {http://dx.doi.org/10.1109/tip.2010.2101613},
-  citeulike-linkout-1 = {http://ieeexplore.ieee.org/xpls/abs\_all.jsp?arnumber=5672785},
-  doi = {10.1109/tip.2010.2101613},
-  institution = {EVS Broadcast Equip., Seraing, Belgium},
+	algorithm performs better than mainstream techniques.},
+  doi = {10.1109/TIP.2010.2101613},
   issn = {1057-7149},
-  keywords = {catt},
-  posted-at = {2012-09-11 18:10:17},
-  priority = {2},
-  publisher = {IEEE},
-  url = {http://dx.doi.org/10.1109/tip.2010.2101613}
+  keywords = {image motion analysis;image sequences;computation speed;detection
+	rate;downscaled version performance;motion detection;neighboring
+	pixel background model;universal background subtraction algorithm;video
+	sequences;Adaptation model;Computational modeling;Estimation;Image
+	color analysis;Lighting;Pixel;Subtraction techniques;Background subtraction;computer
+	vision;image motion analysis;image segmentation;learning (artificial
+	intelligence);pixel classification;real-time systems;surveillance;video
+	signal processing;vision and scene understanding;Algorithms;Artificial
+	Intelligence;Image Enhancement;Image Interpretation, Computer-Assisted;Pattern
+	Recognition, Automated;Reproducibility of Results;Sensitivity and
+	Specificity;Signal Processing, Computer-Assisted;Subtraction Technique;Video
+	Recording}
 }
 
 @ARTICLE{34,
@@ -118,13 +88,12 @@
 @ARTICLE{10,
   author = {Cucchiara, R. and Grana, C. and Piccardi, M. and Prati, A.},
   title = {Detecting moving objects, ghosts, and shadows in video streams},
-  journal = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  journal = {Pattern Analysis and Machine Intelligence, IEEE Transactions on},
   year = {2003},
   volume = {25},
-  pages = {1337--1342},
+  pages = {1337-1342},
   number = {10},
-  month = sep,
-  abstract = {{Background subtraction methods are widely exploited for moving object
+  abstract = {Background subtraction methods are widely exploited for moving object
 	detection in videos in many applications, such as traffic monitoring,
 	human motion capture, and video surveillance. How to correctly and
 	efficiently model and update the background model and how to deal
@@ -138,29 +107,31 @@
 	color information for both background subtraction and shadow detection
 	to improve object segmentation and background update. The approach
 	proves fast, flexible, and precise in terms of both pixel accuracy
-	and reactivity to background changes.}},
-  citeulike-article-id = {6033056},
-  citeulike-linkout-0 = {http://dx.doi.org/10.1109/tpami.2003.1233909},
-  citeulike-linkout-1 = {http://ieeexplore.ieee.org/xpls/abs\_all.jsp?arnumber=1233909},
-  day = {29},
-  doi = {10.1109/tpami.2003.1233909},
-  keywords = {background\_image, background\_model, background\_removal, background\_subtraction,
-	moving\_objects},
-  posted-at = {2009-10-29 18:37:22},
-  priority = {2},
-  url = {http://dx.doi.org/10.1109/tpami.2003.1233909}
+	and reactivity to background changes.},
+  doi = {10.1109/TPAMI.2003.1233909},
+  issn = {0162-8828},
+  keywords = {image motion analysis;image segmentation;object detection;apparent
+	objects;background modeling;background subtraction methods;background
+	update;color information;color segmentation;ghosts;human motion capture;moving
+	object detection;object segmentation;object-based selective update;object-level
+	knowledge;pixel processing;shadow detection;statistical assumptions;traffic
+	monitoring;video streams;video surveillance;Application software;Layout;Monitoring;Object
+	detection;Object segmentation;Shape;Streaming media;Traffic control;US
+	Department of Transportation;Video surveillance}
 }
 
 @INPROCEEDINGS{21,
   author = {Dalal, N. and Triggs, B.},
-  title = {Histograms of Oriented Gradients for Human Detection},
+  title = {Histograms of oriented gradients for human detection},
+  booktitle = {Computer Vision and Pattern Recognition, 2005. CVPR 2005. IEEE Computer
+	Society Conference on},
   year = {2005},
   volume = {1},
-  pages = {886--893},
-  abstract = {{We study the question of feature sets for robust visual object recognition,
+  pages = {886-893 vol. 1},
+  abstract = {We study the question of feature sets for robust visual object recognition;
 	adopting linear SVM based human detection as a test case. After reviewing
 	existing edge and gradient based descriptors, we show experimentally
-	that grids of Histograms of Oriented Gradient (HOG) descriptors significantly
+	that grids of histograms of oriented gradient (HOG) descriptors significantly
 	outperform existing feature sets for human detection. We study the
 	influence of each stage of the computation on performance, concluding
 	that fine-scale gradients, fine orientation binning, relatively coarse
@@ -169,15 +140,17 @@
 	The new approach gives near-perfect separation on the original MIT
 	pedestrian database, so we introduce a more challenging dataset containing
 	over 1800 annotated human images with a large range of pose variations
-	and backgrounds.}},
-  citeulike-article-id = {335784},
-  citeulike-linkout-0 = {http://ieeexplore.ieee.org/xpls/abs\_all.jsp?arnumber=1467360},
-  journal = {Computer Vision and Pattern Recognition, 2005. CVPR 2005. IEEE Computer
-	Society Conference on},
-  keywords = {detection, vision},
-  posted-at = {2007-03-13 17:24:40},
-  priority = {2},
-  url = {http://ieeexplore.ieee.org/xpls/abs\_all.jsp?arnumber=1467360}
+	and backgrounds.},
+  doi = {10.1109/CVPR.2005.177},
+  issn = {1063-6919},
+  keywords = {feature extraction;gradient methods;object detection;object recognition;support
+	vector machines;coarse spatial binning;contrast normalization;edge
+	based descriptors;fine orientation binning;fine-scale gradients;gradient
+	based descriptors;histograms of oriented gradients;human detection;linear
+	SVM;overlapping descriptor;pedestrian database;robust visual object
+	recognition;High performance computing;Histograms;Humans;Image databases;Image
+	edge detection;Object detection;Object recognition;Robustness;Support
+	vector machines;Testing}
 }
 
 @INPROCEEDINGS{30,
@@ -298,52 +271,15 @@
 }
 
 @INPROCEEDINGS{22,
-  author = {Murat EKINCI},
+  author = {Ekinci, M. and Aykut, M.},
   title = {Human Identification Using Gait},
-  booktitle = {Turk J Elec Engin},
+  booktitle = {Signal Processing and Communications Applications, 2006 IEEE 14th},
   year = {2006},
-  volume = {14},
-  number = {2},
-  abstract = {Gait refers to the style of walking of an individual. This paper presents
-	a view-invariant approach
-	
-	for human identication at a distance, using gait recognition. Recognition
-	of a person from their gait is
-	
-	a biometric of increasing interest. Based on principal component analysis
-	(PCA), this paper describes a
-	
-	simple, but ecient approach to gait recognition. Binarized silhouettes
-	of a motion object are represented
-	
-	by 1-D signals, which are the basic image features called distance
-	vectors. The distance vectors are
-	
-	dierences between the bounding box and silhouette, and are extracted
-	using 4 projections of the silhouette.
-	
-	Based on normalized correlation of the distance vectors, gait cycle
-	estimation is rst performed to extract
-	
-	the gait cycle. Second, eigenspace transformation, based on PCA, is
-	applied to time-varying distance
-	
-	vectors and Mahalanobis distances-based supervised pattern classication
-	are then performed in the lower-dimensional eigenspace for human
-	identication. A fusion strategy is nally executed to produce anal
-	
-	decision. Experimental results on 3 main databases demonstrate that
-	the right person in the top 2 matches
-	
-	100% of the time for the cases where training and testing sets corresponds
-	to the same walking styles,
-	
-	and in the top 3-4 matches 100% of the time when training and testing
-	sets do not correspond to the
-	
-	same walking styles.},
-  owner = {pratyush},
-  timestamp = {2013.05.16}
+  pages = {1-4},
+  abstract = {Not Available},
+  doi = {10.1109/SIU.2006.1659688},
+  keywords = {gait analysis;image recognition;gait;human identification;Humans;Principal
+	component analysis;Testing}
 }
 
 @INPROCEEDINGS{1,
@@ -382,25 +318,29 @@
   url = {http://dx.doi.org/10.1145/863955.863960}
 }
 
-@MISC{32,
-  author = {Fujiyoshi, H. and Lipton, A.},
+@INPROCEEDINGS{32,
+  author = {Fujiyoshi, H. and Lipton, A.J.},
   title = {Real-time human motion analysis by image skeletonization},
+  booktitle = {Applications of Computer Vision, 1998. WACV '98. Proceedings., Fourth
+	IEEE Workshop on},
   year = {1998},
-  abstract = {{In this paper, a process is described for analysing the motion of
-	a human target in a video stream. Moving targets are detected and
-	their boundaries extracted. From these, a \&quot;star\&quot; skeleton
-	is produced. Two motion cues are determined from this skeletonization:
-	body posture, and cyclic motion of skeleton segments. These cues
-	are used to determine human activities such as walking or running,
-	and even potentially, the target's gait. Unlike other methods, this
-	does not require an a priori human...}},
-  citeulike-article-id = {1996845},
-  citeulike-linkout-0 = {http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.40.4400},
-  keywords = {action\_recognition, background\_subtraction, monocular, no\_full\_body\_model,
-	only\_2d, tracking, uses\_silhouette},
-  posted-at = {2009-03-29 11:15:47},
-  priority = {0},
-  url = {http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.40.4400}
+  pages = {15-21},
+  abstract = {In this paper a process is described for analysing the motion of a
+	human target in a video stream. Moving targets are detected and their
+	boundaries extracted. From these, a “star” skeleton is produced.
+	Two motion cues are determined from this skeletonization: body posture,
+	and cyclic motion of skeleton segments. These cues are used to determine
+	human activities such as walking or running, and even potentially,
+	the target's gait. Unlike other methods, this does not require an
+	a priori human model, or a large number of “pixels on target”. Furthermore,
+	it is computationally inexpensive, and thus ideal for real-world
+	video applications such as outdoor video surveillance},
+  doi = {10.1109/ACV.1998.732852},
+  keywords = {image thinning;video signal processing;body posture;cyclic motion;human
+	motion analysis;human target;image skeletonization;motion cues;running;video
+	surveillance;walking;Algorithm design and analysis;Data mining;Humans;Image
+	motion analysis;Motion analysis;Motion detection;Optical computing;Optical
+	sensors;Skeleton;Streaming media}
 }
 
 @INPROCEEDINGS{29,
@@ -419,7 +359,7 @@
 }
 
 @BOOK{35,
-  title = {{Digital Image Processing (2nd Edition)}},
+  title = {Digital Image Processing (2nd Edition)},
   publisher = {{Prentice Hall}},
   year = {2002},
   author = {Gonzalez, Rafael C. and Woods, Richard E.},
@@ -901,6 +841,37 @@
 	techniques}
 }
 
+@INPROCEEDINGS{19,
+  author = {Yao, Jian and Odobez, Jean-Marc},
+  title = {Fast human detection from videos using covariance features},
+  booktitle = {European Conference on Computer Vision, workshop on Visual Surveillance
+	(ECCV-VS)},
+  year = {2008},
+  month = {Oct},
+  abstract = {In this paper, we present a fast method to detect humans from videos
+	captured in surveillance applications. It is based on a cascade of
+	LogitBoost classifiers relying on features mapped from the Riemanian
+	manifold of region covariance matrices computed from input image
+	features. The method was extended in several ways. First, as the
+	mapping process is slow for high dimensional feature space, we propose
+	to select weak classifiers based on subsets of the complete image
+	feature space. In addition, we propose to combine these sub-matrix
+	covariance features with the means of the image features computed
+	within the same subwindow, which are readily available from the covariance
+	extraction process. Finally, in the context of video acquired with
+	stationary cameras, we propose to fuse image features from the spatial
+	and temporal domains in order to jointly learn the correlation between
+	appearance and foreground information based on background subtraction.
+	Our method evaluated on a large set of videos coming from several
+	databases (CAVIAR, PETS, ...,',','),
+	
+	and can process from 5 to 20 frames/sec (for a 384x288 video) while
+	achieving similar or better performance than existing methods.},
+  location = {Marseille},
+  pdf = {http://publications.idiap.ch/downloads/papers/2008/Yao_ECCV-VS_2008.pdf},
+  projects = {Idiap, CARETAKER}
+}
+
 @INPROCEEDINGS{31,
   author = {Zarka, N. and Alhalah, Z. and Deeb, R.},
   title = {Real-Time Human Motion Detection and Tracking},
@@ -954,13 +925,14 @@
 }
 
 @INPROCEEDINGS{20,
-  author = {Zhu, Qiang and Avidan, Shai and Yeh, Mei-chen and Cheng, Kwang-ting},
-  title = {Fast human detection using a cascade of histograms of oriented gradients},
-  booktitle = {In CVPR06},
+  author = {Qiang Zhu and Yeh, M.-C. and Kwang-Ting Cheng and Avidan, S.},
+  title = {Fast Human Detection Using a Cascade of Histograms of Oriented Gradients},
+  booktitle = {Computer Vision and Pattern Recognition, 2006 IEEE Computer Society
+	Conference on},
   year = {2006},
-  volume = {2006},
-  pages = {1491--1498},
-  abstract = {{We integrate the cascade-of-rejectors approach with the Histograms
+  volume = {2},
+  pages = {1491-1498},
+  abstract = {We integrate the cascade-of-rejectors approach with the Histograms
 	of Oriented Gradients (HoG) features to achieve a fast and accurate
 	human detection system. The features used in our system are HoGs
 	of variable-size blocks that capture salient features of humans automatically.
@@ -970,12 +942,10 @@
 	which significantly speed up the computation. For a 320 × 280 image,
 	the system can process 5 to 30 frames per second depending on the
 	density in which we scan the image, while maintaining an accuracy
-	level similar to existing methods. 1}},
-  citeulike-article-id = {7071454},
-  citeulike-linkout-0 = {http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.110.1995},
-  keywords = {adaboost, hog, pedestrian\_detection},
-  posted-at = {2011-03-22 00:14:51},
-  priority = {2},
-  url = {http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.110.1995}
+	level similar to existing methods.},
+  doi = {10.1109/CVPR.2006.119},
+  issn = {1063-6919},
+  keywords = {Assembly;Clothing;Face detection;Histograms;Humans;Image representation;Laboratories;Object
+	detection;Support vector machine classification;Support vector machines}
 }
 

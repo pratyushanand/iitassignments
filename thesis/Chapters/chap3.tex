@@ -11,17 +11,78 @@ the basis of following:
 		movement and is necessary for a greener world.
 		Technically also it is very important for a prolonged
 		battery life.
+	\item \textbf{Computational power:} Selected platform must
+		provide sufficient computational power to perform
+		needed software operations.
 	\item \textbf{Rapid software development:} Today lot of software
 		is available in every domain of science by open source
 		community. Platform must be developed by considering
 		re-usability of available software in public domain.
 \end{itemize}
 \section {Hardware Evaluation}
-discuss different embedded architecture and justify why ARM is best
-choice. Memory and other component requirements etc.
+\indent Most of the commercial embedded systems uses following CPUs.
+\begin{itemize}
+	\item \textbf{MIPS:} The microprocessor without interlocked
+		pipeline stages(MIPS) is based on reduced instruction
+		set computer(RISC) architecture. It has been used in
+		embedded products mainly for gaming and networking. Many
+		operating system like Windows CE, QNX and Linux etc
+		supports this architecture.
+	\item \textbf{AVR32:} AVR is also a 32 bit RISC architecture CPU
+		designed by Atmel. It is suited for low power and high
+		code density applications.  It is also supported by
+		Linux. Further, it supports hardware accelerator for
+		JAVA byte code.
+	\item \textbf{PPC:} Power performance PC, known as PowerPC is
+		also a RISC architecture CPU. It is very popular in
+		automotive, defence, networking market. However, it not
+		suitable for low power applications. It is also
+		supported by Linux.
+	\item \textbf{Atom:} Atom is a ultra low voltage x86
+		architecture from Intel. It is also very power
+		efficient. It has been used in many notebook and mobile
+		phone applications. Further, well supported by many
+		operating system including Linux.
+	\item \textbf{ARM:} Advance RISC machine (ARM) is again a RISC
+		architecture based CPU. As of now, it is the most
+		popular CPU having embedded CPU market share of more
+		than two third. It is available in both 32 bit and 64
+		bit versions. It has been used in product ranging from
+		notebook, mobile phones, gaming devices, networking
+		devices, low power storage server to almost all the
+		domain of embedded applications. It is also supported by
+		various operating systems including Linux.
+\end{itemize}
+
+We decided to use ARM based SOC by looking its advantages of low power
+and strong support base. There are various evaluation boards available
+in the market by different vendors having ARM CPUs. Few examples, BCM
+family from Broadcom, SPEAr13xx family from STMicroelectronics, OMAP,
+AM335x, Davinci families from Texas instruments, Tegra family from
+Nvidia, Exynos family from samsung, Kirkwood, Orion5x families from
+Marvel etc. Out of all these, BeagleBoard and BeagleBone based on TI
+OMAP and AM335x SOCs respectively and Raspberry pi based on Broadcom
+BCM2835 SOC are very popular among educational hobbyist. Both of these
+boards are available with ARM ubuntu support. Raspberry pi has ARM11
+core which is ARMv6 and Beagle has Cortex A8 which is ARMv7. Since we
+wanted to evaluate performance of selected algorithms at a low end CPU,
+therefore we carried our experiments with Raspberry pi.
+
 \section {Software Evaluation}
-discuss about different options like bare code without any OS, other
-open source OS and finally Linux. Justify uses of Linux.
+\indent Developing a complete code from scratch and without using any OS
+or with a very light weight kernel will have advantage in terms of boot
+and execution time. However, development will be very slow. Further,
+all evaluated applications including our own developed use
+OpenCV library, therefore we looked for the operating systems which
+supports OpenCV. There are only two options for embedded platforms,
+Windows CE and Linux. Both windows CE and Linux supports ARM
+architecture, but windows CE is not free while Linux is open source.
+Development over Linux has several other advantages:
+\begin{itemize}
+	\item Applications are portable from one architecture to
+		another. Which means an applications developed on x86
+		platform must also work on ARM platform.
+\end{itemize}
 \section {Component of embedded Linux software}
 \subsection {Toolchain}
 cross toolchain, why and how
