@@ -53,7 +53,6 @@ the basis of following:
 		domain of embedded applications. It is also supported by
 		various operating systems including Linux.
 \end{itemize}
-
 We decided to use ARM based SOC by looking its advantages of low power
 and strong support base. There are various evaluation boards available
 in the market by different vendors having ARM CPUs. Few examples, BCM
@@ -67,11 +66,10 @@ boards are available with ARM ubuntu support. Raspberry pi has ARM11
 core which is ARMv6 and Beagle has Cortex A8 which is ARMv7. Since we
 wanted to evaluate performance of selected algorithms at a low end CPU,
 therefore we carried our experiments with Raspberry pi.
-
 \section {Software Evaluation}
 \indent Developing a complete code from scratch and without using any OS
-or with a very light weight kernel will have advantage in terms of boot
-and execution time. However, development will be very slow. Further,
+or with a very light weight kernel will have advantages in terms of boot
+and execution time. However, code development would be very slow. Further,
 all evaluated applications including our own developed use
 OpenCV library, therefore we looked for the operating systems which
 supports OpenCV. There are only two options for embedded platforms,
@@ -82,21 +80,166 @@ Development over Linux has several other advantages:
 	\item Applications are portable from one architecture to
 		another. Which means an applications developed on x86
 		platform must also work on ARM platform.
+	\item Lot of other people are working with it, so a strong
+		support.
+	\item Code can easily be reused by next developer.
+	\item Code debugging is easier.
 \end{itemize}
 \section {Component of embedded Linux software}
-\subsection {Toolchain}
-cross toolchain, why and how
+In this section we describe about the necessary tools and software
+component that we need to use / develop for complete application.
+\subsection {Compiler}
+\indent We use native GNU C Compiler (GCC) when code has to be executed
+on x86 platform. However, we can not use the same GCC compiler at x86 if
+code has to be executed on another architecture say ARM. In such case we
+need a cross compiler. This cross compiler is an executable binary which
+executes itself at native platform (x86) but, produces another executable
+binary which is executed at target platform (ARM).\\
+\indent Preparing a cross compiler from scratch is a tedious job. One
+will need source of Linux kernel, binutils, glibc and GCC. Further,
+these different sources are released independently and finding a
+compatible version is another challenge. However, in most of the cases
+we do not need to go through these steps. A ready to use cross toolchain
+for ARM and other target is already available in the public domain.\\
+\indent If we already have target ready with Linux bootable binaries,
+then we can even avoid using cross compiler at all. Now a native GCC is
+also available for ARM which can be used to compile Linux Kernel as well
+as applications. However, compilation time of Linux kernel with the
+native compiler is quite huge and therefore, its use is not preferred.
 \subsection {BootROM}
-why and how, if not then other alternatives.
+\indent An ARM architecture system boots either from 0x00000000 or from
+0xFFFF0000 depending on default vector mode of SOC as low vectored or
+high vectored respectively. It is necessary to have a valid code at
+default boot location. Normally, most of the SOCs provide hard fixed
+code lying in ROM at reset boot location. This piece of software is
+known as BootROM. However, there are SOCs which allows to connect
+external ROM/Flash memories at reset boot address. \\
+\indent This minimal software allows the system to load bigger binaries
+from different sources. SOCs are available with boot from USB device, SD
+card, NOR / NAND Flash, PCIe device etc. A particular boot mode is
+selected using combination of user GPIO pins. In all the boot mode,
+common practice is used as follows. BootROM gets first and second level
+boot code from external host / device and executes it in SOC's internal
+SRAM and external DRAM respectively. Depending on the boot mode ,
+bootROM code behaves either as master or slave.\\
+\indent For example, bootROM works as slave in USB device mode. USB
+device port of SOC is connected to the USB host port of PC. A custom
+driver at PC enumerates this bootROM device. BootROM USB device normally
+waits for an executable binary from host PC in a loop. New Binary is
+executed as soon as it is received.\\
+\indent BootROM works as master in SD boot mode. It initializes SD
+controller and then looks for predefined executables in SD device. If
+a valid executable is found, then it is executed.
 \subsection {First level boot loader}
-ddr initialization code, why and how
+\indent RAM is an important part of embedded system which is needed as
+run time memory. Normally SOC is designed with some amount of internal
+SRAM. SRAM memory is directly accessible and no software initialization
+is needed. However, it is very costly. Therefore, connecting even
+external SRAM for extra needed RAM is not advised. When an embedded
+software executable needs bigger amount of main memory such as in Mega
+Bytes, then use of DRAM is preferred. However, DRAM is not directly
+accessible by the CPU. First level boot loader has a role to
+initialize DRAM controller, so that memory is transparently visible to
+CPU. In some cases, first level boot loader itself loads second level
+boot loader, while in some other control is passed back to bootROM which
+loads second level boot loader. There can be few light weight system
+where, second level boot loader is avoided and kernel is directly
+loaded.
 \subsection {Second level boot loader}
-preparation of OS booting, why and how
-\subsection {Second level boot }
-preparation of OS booting, why and how
+\indent Second level boot loader has following responsibilities:
+\begin{itemize}
+	\item Provides a debug console till kernel initializes
+		console driver. Normally UART is used as initial debug
+		console in an embedded environment.
+	\item Initializes few more hardware needed for kernel booting.
+	\item Provides boot arguments to the kernel. These arguments
+		allow kernel and file system to load in a particular
+		specification.
+	\item Brings kernel to the main memory.
+	\item Transfers control to kernel for further execution.
+\end{itemize}
 \subsection {Operation System}
-preparation of Linux booting. Minimal Linux component needed
-(menuconfig) for our implementation. Also discuss about V4L2 camera
-framework.
+\indent Kernel is the core of software system. It has following primary
+responsibilities:
+\begin{itemize}
+	\item It initializes all the needed hardware resources like
+		cpu, camera, USB, DMA, memory, network controller,
+		console and other various input and output devices.
+		Linux has huge advantage here. It supports most of the
+		hardware available in the market.
+	\item It manages cache sync when main memory is used by more
+		than one master such as DMA and CPU.
+	\item Kernel controls the execution of different task. It
+		schedules them on the basis or priorities of the task
+		and chosen scheduling algorithm.
+	\item Kernel program as well as user space application needs
+		huge amount of dynamic memory. These memories are
+		allocated and freed at run time. Kernel does memory
+		management and allocation.
+	\item It supports various user space file system.
+	\item Finally it calls first user space function called init.
+\end{itemize}
 \subsection {Root filesystem}
-RFS, what, why and how
+\indent	File system defines the way a file can be stored in the memory.
+Root file system is the primary file system where root directory is
+located. All other file system can be mounted within a sub-directly of
+this root file system. Linux kernel supports file system like etx2,
+ext3, ext4, ntfs , fat32 etc. However, embedded Linxu uses cramfs,
+jffs2, yaffs2 which are more suitable for flash. Network File System
+(NFS) is also supported by Linux which is very useful during kernel
+debug phase.
+\section {Application execution at Raspberry pi}
+BootROM of Raspberry pi provides boot from SD card. Its boot process can
+be summarized as under:
+\begin{itemize}
+	\item It initializes SD controller and looks for any connected
+		SD device.
+	\item If a device is found, it looks for a valid FAT32 file
+		system.
+	\item Then it searches for $bootcode.bin$, which is the first
+		level boot loader. This binary file is copied to L2
+		cache. L2 cache is treated here as SRAM. Execution of
+		this binary does the job of SDRAM initialization.
+	\item Once SDRAM is available, start.elf is copied from SD
+		disk to SDRAM and is executed from there. $start.elf$
+		functions as second level boot code. It reads
+		$cmdline.txt$ and $config.txt$ and passes boot arguments to
+		kernel accordingly.
+	\item Second level boot loader copies $kernel.img$ at 0x8000.
+	\item Till this point everything was executed at GPU of BCM2837.
+	\item $kernel.img$, is the first binary that runs on the ARM
+		processor.
+	\item When kernel is booted, it looks for ext4 root file system at
+		the second partition of SD card. If a valid root file
+		system is found, it executes $/sbin/init$ , the first user
+		process.
+\end{itemize}
+\subsection {Raspberry pi kernel compilation}
+\begin{itemize}
+	\item Clone RPI kernel git repository.\\
+		\framebox[1.1\width]{git clone https://github.com/raspberrypi/linux.git} \par
+	\item Checkout a working branch.\\
+		\framebox[1.1\width]{git checkout -b rpi\_working origin/rpi-3.6.y} \par
+	\item Following default configurations are available in
+		$arch/arm/configs$ directory for RPI platform. 
+		\begin{itemize}
+			\item bcmrpi\_cutdown\_defconfig
+			\item bcmrpi\_defconfig
+			\item bcmrpi\_emergency\_defconfig
+			\item bcmrpi\_quick\_defconfig
+		\end{itemize}
+		Cut down configuration is selected for a lighter kernel.\\
+		\framebox[1.1\width]{make ARCH=arm CROSS\_COMPILE=arm-linux-gnueabi- bcmrpi\_cutdown\_defconfig} \par
+		$arm-linux-gnueabi-$ is ARM cross compiler provided by Ubuntu Linux package.  
+	\item Above make prepares a $./config$ for kernel configuration.
+		This default configuration can be modified further by
+		$menuconfig$ operation, if needed.
+		\framebox[1.1\width]{make ARCH=arm CROSS\_COMPILE=arm-linux-gnueabi- menuconfig } \par
+	\item Then the kernel image is prepared.
+		\framebox[1.1\width]{make ARCH=arm CROSS\_COMPILE=arm-linux-gnueabi- } \par
+		Two kernel images are prepared in $arch/arm/boot$ directory by
+		above command. Kernel image with name $Image$ is
+		uncompressed and with name $zImage$ is compressed. RPI
+		boot loader $start.elf$ expects a uncompressed kernel
+		image.
+\end{itemize}
