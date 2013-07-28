@@ -216,9 +216,9 @@ be summarized as under:
 \end{itemize}
 \subsection {Raspberry pi kernel compilation}
 \begin{itemize}
-	\item Clone RPI kernel git repository.\\
+	\item Clone RPI kernel git repository.\par
 		\framebox[1.1\width]{git clone https://github.com/raspberrypi/linux.git} \par
-	\item Checkout a working branch.\\
+	\item Checkout a working branch.\par
 		\framebox[1.1\width]{git checkout -b rpi\_working origin/rpi-3.6.y} \par
 	\item Following default configurations are available in
 		$arch/arm/configs$ directory for RPI platform. 
@@ -228,18 +228,34 @@ be summarized as under:
 			\item bcmrpi\_emergency\_defconfig
 			\item bcmrpi\_quick\_defconfig
 		\end{itemize}
-		Cut down configuration is selected for a lighter kernel.\\
+		Cut down configuration is selected for a lighter
+		kernel.\par
 		\framebox[1.1\width]{make ARCH=arm CROSS\_COMPILE=arm-linux-gnueabi- bcmrpi\_cutdown\_defconfig} \par
 		$arm-linux-gnueabi-$ is ARM cross compiler provided by Ubuntu Linux package.  
-	\item Above make prepares a $./config$ for kernel configuration.
+	\item Above $make$ prepares a $./config$ for kernel configuration.
 		This default configuration can be modified further by
-		$menuconfig$ operation, if needed.
+		$menuconfig$ operation, if needed.\par
 		\framebox[1.1\width]{make ARCH=arm CROSS\_COMPILE=arm-linux-gnueabi- menuconfig } \par
-	\item Then the kernel image is prepared.
+	\item Then the kernel image is prepared.\par
 		\framebox[1.1\width]{make ARCH=arm CROSS\_COMPILE=arm-linux-gnueabi- } \par
 		Two kernel images are prepared in $arch/arm/boot$ directory by
 		above command. Kernel image with name $Image$ is
 		uncompressed and with name $zImage$ is compressed. RPI
 		boot loader $start.elf$ expects a uncompressed kernel
-		image.
+		image. Therefore copy $arch/arm/boot/Image$ to SD card.
+		If host PC has multiple CPU then -j option can be used
+		for faster compilation. Following command will use four
+		CPUs in parallel for compilation.\par
+		\framebox[1.1\width]{make ARCH=arm CROSS\_COMPILE=arm-linux-gnueabi- j4 } \par
+	\item If a driver is selected to be loaded as module at run time
+		then, modules can be prepared as follows:\par
+		\framebox[1.1\width]{make ARCH=arm CROSS\_COMPILE=arm-linux-gnueabi- modules} \par
+		Install all modules to $/lib/modlues/$ directory of ext4
+		partition of SD card.\par
+		\fbox{\parbox{\textwidth}{%
+				make ARCH=arm CROSS\_COMPILE=arm-linux-gnueabi- \\
+				\hspace*{40 mm}INSTALL\_MOD\_PATH=/tmp/ modules\_install\\
+				cp -r /tmp/lib/modules/* /mnt/lib/modules/
+		}} \par
+		Here, ext4 partition of SD card has been mounted to $/mnt$.
 \end{itemize}

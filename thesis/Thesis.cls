@@ -207,7 +207,7 @@
       {
 					\begin{figure}[htbp]
 					\centering
-					\includegraphics[width=2in]{./Figures/logo.png}
+					\includegraphics[width=1in]{./Figures/logo.png}
 					\end{figure}
       }
   %    {\large A thesis submitted in partial fulfillment for the \par}
@@ -266,7 +266,7 @@
       {
 					\begin{figure}[htbp]
 					\centering
-					\includegraphics[width=2in]{./Figures/logo.png}
+					\includegraphics[width=1in]{./Figures/logo.png}
 					\end{figure}
       }
         \bigskip

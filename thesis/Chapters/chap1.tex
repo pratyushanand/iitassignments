@@ -56,6 +56,20 @@ light can be different. Detection of foreground objects becomes a
 non-trivial task.  Once we have foreground objects, we can save a lot of
 bandwidth if we can detect if object has any significance of our
 interest or not.\\
+\indent A typical network of such system has been shown in
+Fig.~\ref{KE}.Each Node can have a camera, a wireless transmission
+module and a processing engine. Captured Image is processed to extract
+semantic information (represented as text tags). Textual semantic
+information is transmitted over the wireless media to the knowledge
+engine. Knowledge engine uses ontology language to represent this
+information from different nodes.
+\begin{figure}[!b]
+\centering
+\includegraphics[height=200pt]{Figures/KE}
+\caption{Surveillance camera network}
+\label{KE}
+\end{figure}
+
 \indent \textbf{Problem statement:} We intend to detect moving person
 and then to send only it's feature information such as location, time of
 detection etc to the monitoring station. Only sending such event
@@ -84,13 +98,13 @@ resolution cameras have been used for stereo matching and to identify
 any moving object in the camera's field of view (FOV). If a moving
 object is found then only high resolution camera is triggered. Such a
 system is power efficient in  comparison to the camera mote continuously
-transmitting JPEG frames. Wu et al.~\cite{4} have used xetal parallel
-processors for image processing.  Philips research laboratory had
-conceived idea of xetal by putting CMOS image sensors and image
-processing logic on a single integrated circuit.  After subtracting the
-background, ellipse fitting has been done on the foreground object. This
-elliptical information is collected from different camera and the 3D
-view is reconstructed from it.
+transmitting JPEG frames. Philips research laboratory had conceived idea
+of xetal by putting CMOS image sensors and image processing logic on a
+single integrated circuit. Wu et al.~\cite{4} have used xetal parallel
+processors for image processing. After subtracting the background,
+ellipse fitting has been done on the foreground object. This elliptical
+information is collected from different camera and the 3D view is
+reconstructed from it.
 
 \begin{figure}[!b]
 \centering
@@ -123,7 +137,7 @@ would reduce a lot of bandwidth on network.\\
 \indent Most of the video coding methods are based on transform coding
 followed by predictive coding based on motion estimation. Such methods
 are called block based method, where prediction is implemented on a
-complete block such as  MPEG-1,2. However,algorithm based
+complete block such as  MPEG-1,2. However, algorithas based
 on object based coding techniques~\cite{7, 8} including MPEG-4 provides
 substantially better compression. Chaudhury et al.~\cite{7} have used
 principal component analysis (PCA) method for object
