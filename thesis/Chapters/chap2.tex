@@ -6,8 +6,8 @@
 \section{Image analysis tools}
 \indent Matlab and OpenCV~\cite{34} are two highly used image
 processing tools.  Matlab comes with rich image processing and analysis
-libraries. It supports most of the work discussed in introduction
-chapter. Matlab also provides interface to convert the code into a C
+libraries. It supports most of the work discussed in chapter
+~\ref{Chapter1}. Matlab also provides interface to convert the code into a C
 code. However, generated C code is normally very bulky and takes higher
 execution time. OpenCV is an open source computer vision library
 initiated by Intel. It is available at
@@ -16,7 +16,7 @@ research or even commercial purposes. Unlike GNU Public License (GPL),
 it's licensing does not force that modifications to the library be made
 public. \\
 \indent OpenCV has been mainly developed in C and C++ on Linux platform.
-However, interfaces for other scripting / programming language such as
+However, interfaces for other scripting / programming languages such as
 Python, Ruby, Java etc have also been developed. Libraries are also
 available for windows, Android and Mac OS platform. OpenCV libraries
 have been used in many applications since its first release in 1999.
@@ -65,21 +65,21 @@ primary objective while making any decision.
 	C code, however Barnich et al.  have only provided an object
 	library for x86 platform. Therefore we need to first code vibe
 	in C and then to compare above two algorithms.
-\item \textbf{Detection and Tracking:} Method based on skeleton motion
-	features~\cite{32, 22, 31} seems to be computationally
+\item \textbf{Detection and Tracking:} Methods based on skeleton motion
+	features~\cite{32, 22, 31} seem to be computationally
 	efficient. So we need to evaluate different method of
 	skeletonization, suitable for motion calculation. Performance of
 	detector based on such method need to be compared with other
 	methods based on covariance feature with cascade of logitboost
-	classifier~\cite{19}  and Haar-like like features~\cite{17} for
+	classifier~\cite{19}  and Haar-like features~\cite{17} for
 	which C codes are already available in public domain.
 \item \textbf{Embedded implementation:} It is very important to see
-	performance of pipeline based on different algorithm on real
-	embedded platform. ARM controller is used in most of the
-	embedded multimedia applications. So, it will be nice to observe
-	their performance with ARM controller.
+	performance of surveillance application based on different
+	algorithm on real embedded platform. ARM controller is used in
+	most of the embedded multimedia applications. So, it will be
+	nice to observe their performance with ARM controller.
 \end{enumerate}
-\section {Evaluation of different techniques for pipeline stages}
+\section {Evaluation of surveillance application techniques}
 \subsection{Frame acquisition}
 \indent OpenCV provides a way to grab frames either from a camera or
 from a file. cvCaptureFromFile or cvCaptureFromCAM returns CvCapture *
@@ -99,22 +99,22 @@ Binary Pattern (LBP).  LBP works well with local illumination changes,
 however there can be issues in case of global illumination change. They
 have carried out several improvements by using photometric invariant
 color measurement and flexible weight updating for background
-modes.However, our experiments says that, computationally it is very
+modes. However, our experiments says that, computationally it is very
 less efficient compared to method proposed by Barnich et al.~\cite{9},
 which is based on unique way of replacing background pixel value over
 the time. It replaces background values for last N frames randomly.
 Furthermore, it diffuses updated values to neighbouring pixels, and
 again that too on random basis. We have selected method by Barnich et
-al.~\cite{9} in our final pipeline, because of its computational
+al.~\cite{9} in our final application, because of its computational
 efficiency while maintaining quality.  Fig.~\ref{bg_compare} shows the
 comparison of execution time of these two algorithm.
 
 \begin{figure}[!t]
 \centering
 \includegraphics[height=300pt]{Figures/bg_compare}
-\caption{Variation of background subtraction execution time of~\cite{11}
-and~\cite{9} with frame number. This timing was observed with a system
-having having DMIPS = 800.}
+\caption{Background subtraction average execution time of~\cite{11}
+and~\cite{9}. This timing was observed with a x86 system having DMIPS =
+800.}
 \label{bg_compare}
 \end{figure}
 \subsection{Noise removal}
@@ -126,30 +126,43 @@ contours are separated out by using OpenCV library function
 cvFindContours. This function provides us boundary point of individual
 moving object.
 \subsection{Skeletonization techniques}
-\indent Image skeletons are nice way to represent shape of an object.
-This method can be used to identify type of object. We have evaluated
-different skeletonization techniques, with their merits and demerits for
-suitability to our requirement.
+\indent Image skeletons are points on the image, which are equidistant
+to their boundaries.  Skeleton is a very effective way to represent
+shape of an object.  Shape analysis of an object further leads to
+identification of object.  Skeletonization is a process of thinning
+object image by maintaining its topology. There are several mathematical
+definitions to do this job. We have evaluated different skeletonization
+techniques, with their merits and demerits for the suitability to our
+requirement.
 \begin{enumerate}
-\item \textbf{Contour skeleton:} It is obtained by finding outer
-	boundary points of an object. It gives idea about global shape
-	of an object. Boundary points obtained by function
-	cvFindContours can further be converted into polygon by
-	cvApproxPoly. Vertices of this polygon connected together gives
-	an idea about outer shape of the object. An example of such
+\item \textbf{Contour skeleton:} When image of an object is represented by
+	a single color say black, it is called silhouette. Outer boundary
+	points of silhouette connected together is called contour of
+	that object. Contour gives idea about global shape of an object.
+	cvFindContours gives us all boundary points of a silhouette.
+	However, we can analyze the shape even with lower number of
+	points. cvApproxPoly can further be used to approximate it into
+	polygon. Vertices of this polygon connected together gives an
+	idea about outer shape of the object. An example of such
 	skeleton has been shown in Fig.~\ref{skeletons}.A.
 
 \begin{figure}[!t]
 \centering
 \includegraphics[height=220pt]{Figures/skeletons}
-\caption{Skeleton obtained by different methods. \textbf{A.} Contour
-skeleton \textbf{B.} Morphological skeleton \textbf{C.} Distance
-transform skeleton \textbf{D.} Star skeleton}
+\caption{Skeleton obtained by different methods.\\
+	\textbf{A.} Contour skeleton\\
+	\textbf{B.} Morphological skeleton\\
+	\textbf{C.} Distance transform skeleton\\
+	\textbf{D.} Star skeleton}
 \label{skeletons}
 \end{figure}
-\item \textbf{Morphological skeleton:} Gonzalez and Woods have provided
+\item \textbf{Morphological skeleton:} Morphology is a mathematical
+	technique for analysis of structure of any geometry. It was
+	mainly defined for the analysis of binary images. Basically, an
+	image is probed with a pre-defined shape which is called
+	structuring element. Gonzalez and Woods have provided
 	a set of morphological operations in their book Digital image
-	processing~\cite{35}, which has defined morphological
+	processing~\cite{35}, where they have defined morphological
 	skeletonization as follows:
 	\begin{equation}
 	\begin{aligned}
@@ -158,20 +171,18 @@ transform skeleton \textbf{D.} Star skeleton}
 			  k &= max \{ K | (A \ominus kB) \neq \phi\}
 	\end{aligned}
 	\end{equation}
-Translating Eqn~\ref{morph_skel} into C code:
-\begin{lstlisting}
-
-	do
-	{
-		cvErode(img, eroded, element, 1);
-		cvDilate(eroded, temp, element, 1);
-		cvSub(img, temp, temp, NULL);
-		cvOr(skel, temp, skel, NULL);
-		cvCopy(eroded, img);
-		done = (cvCountNonZero(img) == 0);
-	} while (!done);
-
-\end{lstlisting}
+Translating Eqn~\ref{morph_skel} into C code: \par
+\fbox{\parbox{\textwidth}{%
+	do \\
+	\{\\
+	\hspace*{1 in}cvErode(img, eroded, element, 1);\\
+	\hspace*{1 in}cvDilate(eroded, temp, element, 1);\\
+	\hspace*{1 in}cvSub(img, temp, temp, NULL);\\
+	\hspace*{1 in}cvOr(skel, temp, skel, NULL);\\
+	\hspace*{1 in}cvCopy(eroded, img);\\
+	\hspace*{1 in}done = (cvCountNonZero(img) == 0);\\
+	\} while (!done);
+}} \par
 \indent An example of skeleton obtained by morphological method has been
 shown in Fig.~\ref{skeletons}.B.
 \item \textbf{Skeleton by distance transform:} Distance transform of an
@@ -198,7 +209,7 @@ shown in Fig.~\ref{skeletons}.B.
 Here X$_i$ and Y$_i$ are (X,Y) co-ordinates of i$_{th}$ point on the contour
 boundary.
 \item Distance d$_i$ is calculated between centroid and each boundary
-	point as follows.This calculated distance vector are stored in a
+	point as follows. This calculated distance vector are stored in a
 	CvMat array.
 	\begin{equation}
 	d_i = \sqrt{(C_x - X_i)^2 + (C_y - Y_i)^2} \label{dist_calc}
@@ -226,9 +237,9 @@ basis of their computation efficiency.
 \item \textbf{Detection using covariance features:} We have used method
 	implemented by Yao et al. ~\cite{19}. We have selected this
 	method, because it has been widely referenced and also the
-	source(C code) is available in public domain.\\
+	source(C code) is available in public domain.
 \item \textbf{Detection using Haar-like features:} We have evaluated
-	work by Viola et al.~\cite{16, 17} which uses Haar-like like
+	work by Viola et al.~\cite{16, 17} which uses Haar-like
 	features for human detection. Again, reason to evaluate this
 	algorithm was same, that it has been widely discussed and
 	referenced.
@@ -240,10 +251,10 @@ basis of their computation efficiency.
 	seems best suitable for human leg motion analysis. We have seen
 	that star skeletonization gives us skeleton points in form of peak
 	distance from centroid. However, some of these peak points are
-	not of our interest. In our algorithm, we are using 2 most relevant
+	not of our interest. In our algorithm, we are using two most relevant
 	peaks which are nearest to each bottom corner of bounding box of
 	contour respectively. Only these two peaks along with centroid
-	will give us sufficient information to distinguish human among
+	give us sufficient information to distinguish human from
 	human, vehicle or animal etc.\\
 \indent For human subjects, the two peaks correspond to the two legs of
 human. For vehicles, the peaks correspond to the two extrema points of

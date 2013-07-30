@@ -137,7 +137,7 @@ would reduce a lot of bandwidth on network.\\
 \indent Most of the video coding methods are based on transform coding
 followed by predictive coding based on motion estimation. Such methods
 are called block based method, where prediction is implemented on a
-complete block such as  MPEG-1,2. However, algorithas based
+complete block such as  MPEG-1,2. However, algorithms based
 on object based coding techniques~\cite{7, 8} including MPEG-4 provides
 substantially better compression. Chaudhury et al.~\cite{7} have used
 principal component analysis (PCA) method for object
@@ -191,7 +191,7 @@ if it is less, then decremented by one.\\
 \indent  Stauffer et al.~\cite{15} proposed to use Gaussian mixture
 model (GMM) to create a background model. In this method, BG is
 represented by Gaussian mixtures which is actually a probability that a
-pixel value m is observed at time t. GMM model works fine in removing BG
+pixel value m is observed at time t. GMM works fine in removing BG
 noise in multi-modal situations such as wavering tree. Since, it assumes
 that BG is more frequently visible than the FG and , variance of BG is
 significantly low, so it fails to adapt with sudden illumination
@@ -229,8 +229,8 @@ Vibe has a unique way to overcome these issues. It decides about
 background pixel value after comparison with closest samples selected
 randomly. Say, $N$ is the number of samples corresponding to each
 background pixel. One out of $N$ samples is selected
-randomly and is replaced by current pixel value. Furthermore, this
-updated values of sample is diffused to its randomly selected
+randomly and is replaced by current pixel value. Furthermore,
+updated values of sample are diffused to their randomly selected
 neighbouring pixel. Thus sample data base is created. Euclidean distance
 is calculated between current pixel value and samples corresponding to
 current pixel. If at least $m$ samples have euclidean distance less than
@@ -334,7 +334,7 @@ further research is needed to optimize these methods to fit into viable
 embedded applications. Skeletonization followed by motion pattern
 analysis is not a generic method for all types of object detection.
 However, it can be successfully used for moving human. It seems that
-they have lower computational cost, which need to be evaluated. These
+it has lower computational cost, which need to be evaluated. These
 algorithm need to be tested with multiple frames having multiple human.
 They also need to be tested with false moving objects. Complete
 implementation need to be tested with a low cost embedded solution.
@@ -362,7 +362,7 @@ address with our work.\\
 have done similar job. We also talk about our approach and
 framework for a low bandwidth augmented surveillance system.\\
 \indent In chapter 3, we provide details of embedded implementation of
-our approach discussed in chapter 2.
+our approach discussed in chapter 2.\\
 \indent In chapter 4, we have analyzed the results obtained in our
 approach. At the end we address remaining issues and direction for the
 future work.

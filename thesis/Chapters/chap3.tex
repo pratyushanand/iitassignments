@@ -15,7 +15,7 @@ the basis of following:
 		provide sufficient computational power to perform
 		needed software operations.
 	\item \textbf{Rapid software development:} Today lot of software
-		is available in every domain of science by open source
+		is available in every domain of technology by open source
 		community. Platform must be developed by considering
 		re-usability of available software in public domain.
 \end{itemize}
@@ -35,10 +35,10 @@ the basis of following:
 		JAVA byte code.
 	\item \textbf{PPC:} Power performance PC, known as PowerPC is
 		also a RISC architecture CPU. It is very popular in
-		automotive, defence, networking market. However, it not
+		automotive, defence, networking market. However, it is not
 		suitable for low power applications. It is also
 		supported by Linux.
-	\item \textbf{Atom:} Atom is a ultra low voltage x86
+	\item \textbf{Atom:} Atom is ann ultra low voltage x86
 		architecture from Intel. It is also very power
 		efficient. It has been used in many notebook and mobile
 		phone applications. Further, well supported by many
@@ -87,14 +87,14 @@ Development over Linux has several other advantages:
 \end{itemize}
 \section {Component of embedded Linux software}
 In this section we describe about the necessary tools and software
-component that we need to use / develop for complete application.
+components that we need to use / develop for complete application.
 \subsection {Compiler}
 \indent We use native GNU C Compiler (GCC) when code has to be executed
 on x86 platform. However, we can not use the same GCC compiler at x86 if
 code has to be executed on another architecture say ARM. In such case we
 need a cross compiler. This cross compiler is an executable binary which
-executes itself at native platform (x86) but, produces another executable
-binary which is executed at target platform (ARM).\\
+executes itself at native platform (x86) but, produces another
+binary which is executable at target platform (ARM).\\
 \indent Preparing a cross compiler from scratch is a tedious job. One
 will need source of Linux kernel, binutils, glibc and GCC. Further,
 these different sources are released independently and finding a
@@ -125,7 +125,7 @@ bootROM code behaves either as master or slave.\\
 \indent For example, bootROM works as slave in USB device mode. USB
 device port of SOC is connected to the USB host port of PC. A custom
 driver at PC enumerates this bootROM device. BootROM USB device normally
-waits for an executable binary from host PC in a loop. New Binary is
+waits for an executable binary from host PC in a loop. New binary is
 executed as soon as it is received.\\
 \indent BootROM works as master in SD boot mode. It initializes SD
 controller and then looks for predefined executables in SD device. If
@@ -158,7 +158,7 @@ loaded.
 	\item Brings kernel to the main memory.
 	\item Transfers control to kernel for further execution.
 \end{itemize}
-\subsection {Operation System}
+\subsection {Kernel}
 \indent Kernel is the core of software system. It has following primary
 responsibilities:
 \begin{itemize}
@@ -170,12 +170,15 @@ responsibilities:
 	\item It manages cache sync when main memory is used by more
 		than one master such as DMA and CPU.
 	\item Kernel controls the execution of different task. It
-		schedules them on the basis or priorities of the task
+		schedules them on the basis of priorities of the task
 		and chosen scheduling algorithm.
-	\item Kernel program as well as user space application needs
-		huge amount of dynamic memory. These memories are
-		allocated and freed at run time. Kernel does memory
-		management and allocation.
+	\item Kernel program as well as user space application need huge
+		amount of dynamic memory. These memories are allocated
+		and freed at run time. It is also very important that
+		they are well protected and any illegal access is
+		appropriately reported. Kernel takes care of all these
+		by proper memory management, allocation and
+		deallocation.
 	\item It supports various user space file system.
 	\item Finally it calls first user space function called init.
 \end{itemize}
@@ -200,7 +203,7 @@ be summarized as under:
 		level boot loader. This binary file is copied to L2
 		cache. L2 cache is treated here as SRAM. Execution of
 		this binary does the job of SDRAM initialization.
-	\item Once SDRAM is available, start.elf is copied from SD
+	\item Once SDRAM is available, $start.elf$ is copied from SD
 		disk to SDRAM and is executed from there. $start.elf$
 		functions as second level boot code. It reads
 		$cmdline.txt$ and $config.txt$ and passes boot arguments to
@@ -216,9 +219,9 @@ be summarized as under:
 \end{itemize}
 \subsection {Raspberry pi kernel compilation}
 \begin{itemize}
-	\item Clone RPI kernel git repository.\par
+	\item RPI kernel git repository is cloned.\par
 		\framebox[1.1\width]{git clone https://github.com/raspberrypi/linux.git} \par
-	\item Checkout a working branch.\par
+	\item Working tag / branch checked out.\par
 		\framebox[1.1\width]{git checkout -b rpi\_working origin/rpi-3.6.y} \par
 	\item Following default configurations are available in
 		$arch/arm/configs$ directory for RPI platform. 
