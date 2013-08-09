@@ -1,13 +1,19 @@
 % Chapter 4
 \chapter{Results and conclusion} % Write in your own chapter title
 \label{Chapter4}
-\indent In this section we discuss results of different evaluations and
-also how does our implementation compares with others. We also draw
-conclusions and future works to be done.
+\indent We have discussed different background subtraction and human
+detection techniques in chapter ~\ref{Chapter2}. We have also discussed
+about SKELMOT, technique used for human detection in our work. In this
+section we discuss results of different evaluations and also how does
+SKELMOT compares with others. We also draw conclusions from our results
+and future works to be done.
 \section{Results}
-\indent From Fig.~\ref{bg_compare}, we infer that Vibe is
-computationally very efficient compared to other.  We target human
-detection based on its skeleton motion. We have seen different skeleton
+\indent We did comparison of execution time of background subtraction
+algorithm in Fig.~\ref{bg_compare}. Graph shows that Vibe is far more
+computationally efficient compared to other. Therefore we used Vibe
+algorithm in SKELMOT, where we target human detection based on its
+skeleton motion.\\
+We have seen different skeleton
 output in Fig.~\ref{skeletons}. We have also seen that star skeleton
 provides a simple way for leg motion analysis. Therefore we have used
 Vibe~\cite{9} as background subtracter and \textbf{Skel}etonized
