@@ -1,24 +1,47 @@
 % Chapter 4
 \chapter{Results and conclusion} % Write in your own chapter title
 \label{Chapter4}
-\indent We have discussed different background subtraction and human
-detection techniques in chapter ~\ref{Chapter2}. We have also discussed
-about SKELMOT, technique used for human detection in our work. In this
-section we discuss results of different evaluations and also how does
-SKELMOT compares with others. We also draw conclusions from our results
-and future works to be done.
+\indent In chapter ~\ref{Chapter1} we have surveyed previous work done
+in similar domain. We have discussed different background subtraction
+and human detection techniques in chapter ~\ref{Chapter2}. We have also
+discussed about technique used for human detection in our work.  Since
+we have used \textbf{Skel}etonized \textbf{Mot}ion analysis for human
+detection, therefore we name our technique as SKELMOT. We have talked
+about embedded implementation of our work in chapter~\ref{Chapter3}. In
+this section we discuss results of different evaluations and also how
+does SKELMOT compares with others. We also draw conclusions from our
+results and future works to be done.
 \section{Results}
 \indent We did comparison of execution time of background subtraction
 algorithm in Fig.~\ref{bg_compare}. Graph shows that Vibe is far more
-computationally efficient compared to other. Therefore we used Vibe
-algorithm in SKELMOT, where we target human detection based on its
-skeleton motion.\\
-We have seen different skeleton
-output in Fig.~\ref{skeletons}. We have also seen that star skeleton
-provides a simple way for leg motion analysis. Therefore we have used
-Vibe~\cite{9} as background subtracter and \textbf{Skel}etonized
-\textbf{M}otion \textbf{A}nalysis (SKELMOT) based on star skeleton for
-object detection in our final implementation.\\
+computationally efficient compared to other.Therefore we used Vibe
+algorithm in our implementation, where we target human detection based
+on its skeleton motion. Vibe has lower computation requirement even with
+maintaining excellent results because of following reasons:
+\begin{itemize}
+	\item It does not save complete frame as background sample,
+		rather it chooses random samples for replacement. But it
+		insures that sample lifespan decays exponentially.
+	\item Samples corresponding to neighbouring pixel is updated
+		again on random basis.
+	\item Model is initialized with first frame itself, therefore first
+		background subtracted object is obtained as early as
+		second frame.
+\end{itemize}
+\indent We have seen different skeleton output in Fig.~\ref{skeletons}.
+Skeleton obtained by morphological method is discontinuous. Hough
+transform can further be used to connect discontinuous skeleton points.
+ 
+Skeleton obtained by contour method is providing outer boundary of the
+moving object. If a detection method is based on shape then using a
+contour will give good result. i
+However, it would We need to find leg endpoints for motion analysis.
+
+We have also seen that star skeleton provides a simple way for leg
+motion analysis. Therefore we have used Vibe~\cite{9} as background
+subtracter and \textbf{Skel}etonized \textbf{M}otion \textbf{A}nalysis
+(SKELMOT) based on star skeleton for object detection in our final
+implementation.\\
 \indent We conclude that with our implementation, system is able to
 detect a moving person after it's 3 steps move.
 Fig.~\ref{pipeline_images} shows output images at different stages of
@@ -81,7 +104,7 @@ hardware. This dedicated hardware can further be used with low end
 micro-controller to achieve end result.
 \section{Future work}
 Future work may be carried in following directions:
-\begin{enumerate}
+\begin{itemize}
 \item Test of this algorithm with real camera connected and Zigbee
 network will provide good confidence to use it.
 \item A research work may be initiated to see actual power saving using
@@ -94,5 +117,5 @@ high performance CPU, or GPU. A work can be initiated to implement such
 algorithms in hardware and then to use this hardware with low end
 micro-controller. It would be interesting to see difference between power
 consumption of two systems.
-\end{enumerate}
+\end{itemize}
 

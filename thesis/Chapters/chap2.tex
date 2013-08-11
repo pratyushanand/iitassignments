@@ -55,7 +55,7 @@ primary objective while making any decision.
 \caption{Low BW surveillance image application flow}
 \label{image_pipeline}
 \end{figure}
-\begin{enumerate}
+\begin{itemize}
 \item \textbf{Background Subtraction:} Methods based on LBP by Yao et
 	al.~\cite{11} have striking nice result. It works superbly with
 	varied background situation like wavering tree, moving escalator
@@ -78,7 +78,7 @@ primary objective while making any decision.
 	algorithm on real embedded platform. ARM controller is used in
 	most of the embedded multimedia applications. So, it will be
 	nice to observe their performance with ARM controller.
-\end{enumerate}
+\end{itemize}
 \section {Evaluation of surveillance application techniques}
 \subsection{Frame acquisition}
 \indent OpenCV provides a way to grab frames either from a camera or
@@ -134,7 +134,7 @@ object image by maintaining its topology. There are several mathematical
 definitions to do this job. We have evaluated different skeletonization
 techniques, with their merits and demerits for the suitability to our
 requirement.
-\begin{enumerate}
+\begin{itemize}
 \item \textbf{Contour skeleton:} When image of an object is represented by
 	a single color say black, it is called silhouette. Outer boundary
 	points of silhouette connected together is called contour of
@@ -198,7 +198,7 @@ shown in Fig.~\ref{skeletons}.B.
 \item \textbf{Star Skeleton:} In this method we plot distance of each
 	boundary point from the centroid and then use peaks of the curve
 	as skeleton point.
-\begin{enumerate}
+\begin{itemize}
 \item Centroid of each object is found out using following
 	Eqn~\ref{centroid_calc}.
 	\begin{eqnarray}
@@ -228,12 +228,12 @@ boundary.
 	local maxima provides a star form of skeleton centered at
 	centroid of the object. A typical star skeleton has been shown
 	in Fig.~\ref{skeletons}.C.
-\end{enumerate}
-\end{enumerate}
+\end{itemize}
+\end{itemize}
 \subsection{Human detection methods}
 \indent We have evaluated three methods of human detection technique mainly on the
 basis of their computation efficiency.
-\begin{enumerate}
+\begin{itemize}
 \item \textbf{Detection using covariance features:} We have used method
 	implemented by Yao et al. ~\cite{19}. We have selected this
 	method, because it has been widely referenced and also the
@@ -289,7 +289,7 @@ vehicle.}
 \end{figure}
 \item Every new object which comes into the field of view is tracked and
 	value of (C$_x$, C$_y$), $\theta$ in each frame is stored. 
-\begin{enumerate} 
+\begin{itemize} 
 \item We track value of $\theta$ until it goes to zero three times.
 \item Now we consider $\theta$ values between first and second zero as
 vector T$_1$ and $\theta$ values between second and third zero as vector
@@ -304,5 +304,5 @@ value (r) between these two vectors to find similarities as follows.
 	\end{equation}
 \item If correlation value is greater than a threshold value TH$_1$,
 then we conclude that it is a human.
-\end{enumerate} 
-\end{enumerate} 
+\end{itemize} 
+\end{itemize} 
