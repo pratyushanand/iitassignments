@@ -233,7 +233,7 @@
     \par
     \@thanks
     \vfil\null
-  \clearpage
+  \cleardoublepage
      \thispagestyle{empty}
       \vskip 60\p@
 
