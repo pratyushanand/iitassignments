@@ -57,7 +57,7 @@ non-trivial task.  Once we have foreground objects, we can save a lot of
 bandwidth if we can detect if object has any significance of our
 interest or not.\\
 \indent A typical network of such system has been shown in
-Fig.~\ref{KE}.Each Node can have a camera, a wireless transmission
+Fig.~\ref{KE}. Each Node can have a camera, a wireless transmission
 module and a processing engine. Captured Image is processed to extract
 semantic information (represented as text tags). Textual semantic
 information is transmitted over the wireless media to the knowledge
@@ -71,12 +71,12 @@ information from different nodes.
 \end{figure}
 
 \indent \textbf{Problem statement:} We intend to detect moving person
-and then to send only it's feature information such as location, time of
+and then to send only its feature information such as location, time of
 detection etc to the monitoring station. Only sending such event
 information would lead to design a ultra low bandwidth surveillance
 system.  We want to keep our computation cost very low, at the same time
 with high genuine detection rate and low false detection rate. We also
-want to run this application on low power cpu like ARM and to evaluate
+want to run this application on low power CPU like ARM and to evaluate
 the performance.
 \section{Past Work and Literature Survey}
 \subsection{Image transfer over delay tolerant / Low bandwidth networks}
@@ -85,11 +85,11 @@ terrestrial DTNs, however there has been several attempts~\cite{2, 3,
 4, 5} to transfer image over low bandwidth wireless sensor networks
 (WSN). Zigbee is the most commonly used WSN protocol. It is based on
 IEEE 802.15.4 standard which is mainly suited for low power home
-network. It's power requirement is in range of 125-400 $\mu$W and data
+network. Its power requirement is in range of 125-400 $\mu$W and data
 rate is 250 Kbps.\\
 \indent Pekhteryev et al.~\cite{2} have tried to transfer different
 versions of JPEG images over Zigbee network and compared their
-performance. This works shows that there is an effect of compression
+performance. This work shows that there is an effect of compression
 coding algorithm on peak signal to noise ratio(PSNR). It has been
 observed that compression technique with scalable coding is more error
 tolerant in WSN environment. Hengstler et al.~\cite{3, 5} have used 3
@@ -122,9 +122,9 @@ the cost of increased computational power required at the mote node.
 by human eye, so it is not relevant. Normally, neighbouring pixels of
 the image are co-related to each other, so they are redundant. Such
 redundancy is called spatial redundancy. Video may be thought of as a
-large number of still images , which have been taken at very short
+large number of still images, which have been taken at very short
 intervals of time. So, it is expected that there would be lot of
-temporal redundancy between two neighbouring frames.  Therefore an image
+temporal redundancy between two neighbouring frames. Therefore an image
 compression technique is developed around basic principal of reducing
 irrelevancy and redundancy. Broadly, compression techniques are
 categorised in lossless and lossy as explained by Shi et al. in his
@@ -273,17 +273,17 @@ above and left of that pixel.  These can be computed with very few
 operations per pixel.  Integral image representation helps in
 computation of Haar-like like features in constant time.\\
 \indent Work by Viola et al. in~\cite{17} was primarily used for
-face detection.  Above work of VJ with motion information was further
+face detection.  Above work of $[VJ]$ with motion information was further
 used for human detection in~\cite{16}.  AdaBoost has been used to
 select a small set of features out of all Haar-like like features and to
 train the classifier. They have used rectangular features which are
 sensitive to edges, bars but are quite coarse. However, these features
 in association with integral image provides sufficient compensation for
 the above limitations. Jones et al.~\cite{26} have further improved
-the performance of above method by using 10 frames instead of 2 frames
-for motion analysis. They divide detector into 8 direction specific
+the performance of above method by using ten frames instead of two frames
+for motion analysis. They divide detector into eight direction specific
 detectors.\\
-\indent In~\cite{20, 21} it is shown that histogram of oriented
+\indent In~\cite{20, 21}, it is shown that histogram of oriented
 gradient (HOG) descriptor has better performance than Haar-like based
 descriptors. Edge or gradient are very specific property of local shape.
 An image is divided into small cells and histogram of edge / gradient
@@ -296,17 +296,17 @@ detection.\\
 modifications for performance improvements. Instead of fixed size
 blocks, they have used variable sized block and then AdaBoost has been
 used to detect the best block suited for detection. They have used
-integral image (a concept provided by $VJ$ in~\cite{17})for faster
+integral image (a concept provided by $[VJ]$ in~\cite{17})for faster
 computation of HOG features.\\
 \indent Some work~\cite{30} have also been done for human motion
 detection using multiple cameras. Multiple cameras allow depth view
 calculation of different body parts, which assist further in
 detection.\\
-\indent Yao et al.~\cite{25} have used covariance feature with cascade of
-logitboost classifier as human descriptor. Covariance matrix
-encodes information about variance of features, their correlation with
-each other, and special layout. Integral image concept is used here too
-for faster computation. The covariance matrix $C_R$ of the features are
+\indent Yao et al.~\cite{25} have used covariance feature with cascade
+of logitboost classifier as human descriptor. Covariance matrix encodes
+information about variance of features, their correlation with each
+other, and special layout. Integral image concept is used here too for
+faster computation. The covariance matrix $C_R$ of the features are
 computed as follows:
 \begin{equation}
 \begin{aligned}
@@ -315,12 +315,12 @@ computed as follows:
 \end{aligned}
 \end{equation}
 Where, $m_R$ is the mean vector in region R.\\
-\indent Image skeletonization followed by motion pattern analysis~\cite{32, 22, 31}
-is computationally very fast way to detect a human .
-The authors have used this method for human motion analysis. Change in angle
-between legs is periodic. So an autocorrelation tells about cyclic
-nature of angle between legs.  However, autocorrelation induces noise
-due to the bias of this angle signal.  To overcome this issue, high
+\indent Image skeletonization followed by motion pattern analysis is
+computationally very fast way to detect a human. These authors~\cite{32,
+22, 31} have used this method for human motion analysis. Change in
+angle between legs is periodic. So an autocorrelation tells about cyclic
+nature of angle between legs. However, autocorrelation induces noise due
+to the DC bias of this angle signal. To overcome this issue, high
 frequency pre-emphasis filter to the angle signal is applied before
 autocorrelation operation. We have used similar method for human
 detection in our approach with the slight variation at autocorrelation
@@ -328,15 +328,15 @@ steps, which allowed us to not go for pre-emphasis step and save
 computation time.
 \subsection{Outstanding issues}
 \indent Methods based on Haar-like, HOG or covariance feature descriptor
-works with even single image frame , however they are computationally
-very slow and still not viable for low cost embedded applications. So
-further research is needed to optimize these methods to fit into viable
-embedded applications. Skeletonization followed by motion pattern
-analysis is not a generic method for all types of object detection.
-However, it can be successfully used for moving human. It seems that
-it has lower computational cost, which need to be evaluated. These
-algorithm need to be tested with multiple frames having multiple human.
-They also need to be tested with false moving objects. Complete
+works with even single image frame, however they are computationally
+very slow and still not viable for low cost embedded applications.
+Therefore further research is needed to optimize these methods to fit
+into viable embedded applications. Skeletonization followed by motion
+pattern analysis is not a generic method for all types of object
+detection. However, it can be successfully used for moving human. It
+seems that it has lower computational cost, which need to be evaluated.
+These algorithm need to be tested with multiple frames having multiple
+human. They also need to be tested with false moving objects. Complete
 implementation need to be tested with a low cost embedded solution.
 \section{Motivation}
 \indent Low bandwidth along with low power augmented surveillance system
@@ -350,7 +350,7 @@ selecting final one for the proposed framework. We need to find
 computationally efficient BGS algorithm. We also need to see that which
 algorithm is suitable for pedestrian detection in embedded environment.
 In our work, we will first evaluate few important BGS and human
-detection algorithm.  Wherever possible, we will try to optimize
+detection algorithms. Wherever possible, we will try to optimize
 the finally selected algorithm and will try to see if combined execution
 time of all stages is suitable for an embedded application or not.
 \section{Organisation of thesis}

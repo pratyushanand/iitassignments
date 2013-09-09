@@ -4,16 +4,16 @@
 \label{Chapter2}
 
 \section{Image analysis tools}
-\indent Matlab and OpenCV~\cite{34} are two highly used image
-processing tools.  Matlab comes with rich image processing and analysis
-libraries. It supports most of the work discussed in chapter
-~\ref{Chapter1}. Matlab also provides interface to convert the code into a C
-code. However, generated C code is normally very bulky and takes higher
+\indent Matlab and OpenCV~\cite{34} are two highly used image processing
+tools.  Matlab comes with rich image processing and analysis libraries.
+It supports most of the work discussed in chapter ~\ref{Chapter1}.
+Matlab also provides interface to convert the code into a C code.
+However, generated C code is normally very bulky and takes higher
 execution time. OpenCV is an open source computer vision library
 initiated by Intel. It is available at
 http://SourceForge.net/projects/opencvlibrary. It can be used for
 research or even commercial purposes. Unlike GNU Public License (GPL),
-it's licensing does not force that modifications to the library be made
+its licensing does not force that modifications to the library be made
 public. \\
 \indent OpenCV has been mainly developed in C and C++ on Linux platform.
 However, interfaces for other scripting / programming languages such as
@@ -41,20 +41,19 @@ algorithms in C and on Linux platform, so that it can easily be ported
 from a PC to embedded environment. Wherever possible, we have used
 OpenCV library.
 \section{Surveillance image processing flow}
-\indent Top level surveillance image processing flow for a low bandwidth
-network is as shown in Fig.~\ref{image_pipeline}. End goal of low
-bandwidth implementation would be to generate information such as human
-detected, their position and the time of detection. So, for above
-implementation we have to decide on following items, computational
-efficiency and true detection for considered object has to be kept as
-primary objective while making any decision.
-
 \begin{figure}[!b]
 \centering
-\includegraphics[height=100pt]{Figures/image_pipeline}
+\includegraphics[height=120pt]{Figures/image_pipeline}
 \caption{Low BW surveillance image application flow}
 \label{image_pipeline}
 \end{figure}
+\indent Top level surveillance image processing flow for a low bandwidth
+network is as shown in Fig.~\ref{image_pipeline}. End goal of low
+bandwidth implementation would be to generate information such as human
+detected, their position and the time of detection. Therefore, for above
+implementation we have to decide on following items, keeping
+computational efficiency and true detection for considered object as
+primary objective while making any decision.\\
 \begin{itemize}
 \item \textbf{Background Subtraction:} Methods based on LBP by Yao et
 	al.~\cite{11} have striking nice result. It works superbly with
@@ -62,9 +61,12 @@ primary objective while making any decision.
 	etc. Barnich et al.~\cite{9} claim that Vibe which uses random
 	sample selection also performs well in all situation and have
 	extremely low computational cost. Yao et al. have provided their
-	C code, however Barnich et al.  have only provided an object
+	C code, however Barnich et al. have only provided an object
 	library for x86 platform. Therefore we need to first code vibe
-	in C and then to compare above two algorithms.
+	in C and then to compare above two algorithms. We did not
+	compare other algorithms like GMM, median filter etc with Vibe,
+	as authors of Vibe have already done it and concluded that Vibe
+	outperforms them.
 \item \textbf{Detection and Tracking:} Methods based on skeleton motion
 	features~\cite{32, 22, 31} seem to be computationally
 	efficient. So we need to evaluate different method of
@@ -72,12 +74,12 @@ primary objective while making any decision.
 	detector based on such method need to be compared with other
 	methods based on covariance feature with cascade of logitboost
 	classifier~\cite{19}  and Haar-like features~\cite{17} for
-	which C codes are already available in public domain.
+	which C code are already available in public domain.
 \item \textbf{Embedded implementation:} It is very important to see
 	performance of surveillance application based on different
 	algorithm on real embedded platform. ARM controller is used in
-	most of the embedded multimedia applications. So, it will be
-	nice to observe their performance with ARM controller.
+	most of the embedded multimedia applications. Therefore, it will be
+	good to observe their performance with ARM controller.
 \end{itemize}
 \section {Evaluation of surveillance application techniques}
 \subsection{Frame acquisition}
