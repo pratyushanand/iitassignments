@@ -5,7 +5,7 @@
 ~\ref{Chapter1}. We have discussed different background subtraction and
 human detection techniques in chapter ~\ref{Chapter2}. We have also
 discussed about technique used for human detection in our work in the
-same chapter.  Since we have used \textbf{Skel}etonized \textbf{Mot}ion
+same chapter. Since we have used \textbf{Skel}etonized \textbf{Mot}ion
 analysis for human detection, therefore we name our technique as
 SKELMOT. We have talked about embedded implementation of our work in
 chapter~\ref{Chapter3}. In this section we discuss results of different
@@ -19,14 +19,14 @@ algorithm in our implementation, where we target human detection based
 on its skeleton motion. Vibe has lower computation requirement even
 while maintaining excellent results because of following reasons:
 \begin{itemize}
-	\item It does not save complete frame as background sample,
-		rather it chooses random samples for replacement. But it
-		insures that the sample lifespan decays exponentially.
-	\item Samples corresponding to neighbouring pixel is updated
-		again on random basis.
-	\item Model is initialized with first frame itself, therefore first
-		background subtracted object is obtained as early as
-		second frame.
+ \item It does not save complete frame as background sample,
+ rather it chooses random samples for replacement. But it
+ insures that the sample lifespan decays exponentially.
+ \item Samples corresponding to neighbouring pixel is updated
+ again on random basis.
+ \item Model is initialized with first frame itself, therefore first
+ background subtracted object is obtained as early as
+ second frame.
 \end{itemize}
 \indent We have seen different skeleton output in Fig.~\ref{skeletons}.
 Skeleton obtained by morphological method is discontinuous. Hough
@@ -47,12 +47,12 @@ finding a star skeleton is very simple in nature.
 \centering
 \includegraphics[height=200pt]{Figures/pipeline_images}
 \caption{Images at different stages of processing. (From top left in
-	clockwise order)\\
-	\textbf{(a)} Gray Scale input frame\\
-	\textbf{(b)} Foreground extracted image using Vibe\\
-	\textbf{(c)} Cleaned image\\
-	\textbf{(d)} Contour of moving object\\
-	\textbf{(e)} Plot of three points of interest, centroid and two distance
+ clockwise order)\\
+ \textbf{(a)} Gray Scale input frame\\
+ \textbf{(b)} Foreground extracted image using Vibe\\
+ \textbf{(c)} Cleaned image\\
+ \textbf{(d)} Contour of moving object\\
+ \textbf{(e)} Plot of three points of interest, centroid and two distance
 peaks nearer to bottom left and bottom right corner of bounding box\\
 \textbf{(f)} Virtual representation of scene} 
 \label{pipeline_images}
@@ -83,7 +83,7 @@ bicycle and does not detect them as human.\\
 covariance~\cite{19} feature based detection algorithm on both x86
 desktop computer and embedded ARM platform. We did benchmarking of both
 systems using "BYTE Unix Benchmarks Dhrystone" version 3.6 code. This benchmarking
-provides a index for the comparison of unix like systems. Dhrystone is
+provides a index for the comparison of UNIX like systems. Dhrystone is
 very useful in measurement and comparison of CPU performances. X86 based
 Linux PC was measured as DMIPS = 800, while ARM CPU was measured as
 DMIPS = 44.\\
@@ -109,27 +109,27 @@ even with ARMV6 CPU platform.
 \indent We can draw following conclusion on the basis of result obtained 
 in previous section.
 \begin{itemize}
-	\item 	We have seen that method based on covariance or
-		Haar-like descriptor is very slow in comparison with
-		skeleton motion descriptor. When these algorithms are
-		implemented with low end embedded CPUs then, a
-		pedestrian detector based on Haar-like features detects
-		at the rate of almost one frame per second. A pedestrian
-		detector based on covariance feature detects at the rate
-		of almost one frame per five seconds. Such algorithms
-		are not suitable for low cost embedded CPUs. However, if
-		we still wish to use these algorithms for human
-		detection then, we will need to implement them using
-		dedicated hardware accelerator.
-	\item 	Many surveillance applications like detection of moving
-		person at a traffic light or in an indoor corridor will
-		not need to use complex algorithms. It can work well with
-		simple algorithms like leg motion analysis. In such cases
-		human would be moving with reasonably same speed. Therefore,
-		for such applications we do not need to use complex algorithm
-		to get real time performance with low cost embedded platform.
-		By using proposed algorithm SKELMOT, we can save a lot of
-		computational power.
+ \item We have seen that method based on covariance or
+ Haar-like descriptor is very slow in comparison with
+ skeleton motion descriptor. When these algorithms are
+ implemented with low end embedded CPUs then, a
+ pedestrian detector based on Haar-like features detects
+ at the rate of almost one frame per second. A pedestrian
+ detector based on covariance feature detects at the rate
+ of almost one frame per five seconds. Such algorithms
+ are not suitable for low cost embedded CPUs. However, if
+ we still wish to use these algorithms for human
+ detection then, we will need to implement them using
+ dedicated hardware accelerator.
+ \item Many surveillance applications like detection of moving
+ person at a traffic light or in an indoor corridor will
+ not need to use complex algorithms. It can work well with
+ simple algorithms like leg motion analysis. In such cases
+ human would be moving with reasonably same speed. Therefore,
+ for such applications we do not need to use complex algorithm
+ to get real time performance with low cost embedded platform.
+ By using proposed algorithm SKELMOT, we can save a lot of
+ computational power.
 \end{itemize}
 \section{Future work}
 Future work may be carried in following directions:
