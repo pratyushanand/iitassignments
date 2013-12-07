@@ -1,6 +1,7 @@
 % Chapter 3
 
 \chapter{Embedded Implementation} % Write in your own chapter title
+\section {Evaluation Parameters}
 \label{Chapter3}
 We have done evaluation of embedded solution of our implementation on
 the basis of following:
@@ -16,11 +17,12 @@ the basis of following:
  needed software operations.
  \item \textbf{Rapid software development:} Today lot of software
  is available in every domain of technology by open source
- community. Platform must be developed by considering
+ community. A suitable hardware platform must be developed by considering
  re-usability of available software in public domain.
 \end{itemize}
 \section {Hardware Evaluation}
-\indent Most of the commercial embedded systems uses following CPUs.
+\indent Most of the commercial embedded systems use the following
+popular CPUs:
 \begin{itemize}
  \item \textbf{MIPS:} The microprocessor without interlocked
  pipeline stages(MIPS) is based on reduced instruction
@@ -58,14 +60,14 @@ and strong support base. There are various evaluation boards available
 in the market by different vendors having ARM CPUs. Few examples, BCM
 family from Broadcom, SPEAr13xx family from STMicroelectronics, OMAP,
 AM335x, Davinci families from Texas instruments, Tegra family from
-Nvidia, Exynos family from samsung, Kirkwood, Orion5x families from
+Nvidia, Exynos family from Samsung, Kirkwood, Orion5x families from
 Marvel etc. Out of all these, BeagleBoard and BeagleBone based on TI
-OMAP and AM335x SOCs respectively and Raspberry pi based on Broadcom
+OMAP and AM335x SOCs respectively and Raspberry Pi based on Broadcom
 BCM2835 SOC are very popular among educational hobbyist. Both of these
-boards are available with ARM ubuntu support. Raspberry pi has ARM11
+boards are available with ARM Ubuntu support. Raspberry Pi has ARM11
 core which is ARMv6 and Beagle has Cortex A8 which is ARMv7. Since we
 wanted to evaluate performance of selected algorithms at a low end CPU,
-therefore we carried our experiments with Raspberry pi.
+therefore we carried our experiments with Raspberry Pi.
 \section {Software Evaluation}
 \indent Developing a complete code from scratch and without using any OS
 or with a very light weight kernel will have advantages in terms of boot
@@ -191,8 +193,8 @@ ext3, ext4, ntfs , fat32 etc. However, embedded Linxu uses cramfs,
 jffs2, yaffs2 which are more suitable for flash. Network File System
 (NFS) is also supported by Linux which is very useful during kernel
 debug phase.
-\section {Application execution at Raspberry pi}
-BootROM of Raspberry pi provides boot from SD card. Its boot process can
+\section {Application execution at Raspberry Pi}
+BootROM of Raspberry Pi provides boot from SD card. Its boot process can
 be summarized as under:
 \begin{itemize}
  \item It initializes SD controller and looks for any connected
@@ -217,7 +219,7 @@ be summarized as under:
  system is found, it executes $/sbin/init$ , the first user
  process.
 \end{itemize}
-\subsection {Raspberry pi kernel compilation}
+\subsection {Raspberry Pi kernel compilation}
 \begin{itemize}
  \item RPI kernel git repository is cloned.\par
  \framebox[1.1\width]{git clone https://github.com/raspberrypi/linux.git} \par

@@ -13,5 +13,5 @@ set boxwidth 0.5
 set xtic scale 0
 set key box top left
 
-plot 'exec_time.csv' using 3:xtic(2) lc rgb 'black' notitle,  \
+plot 'exec_time.csv' using 3:xtic(2) lc rgb 'white' notitle,  \
        'exec_time.csv' using 0:($3*1.2):3 with labels notitle

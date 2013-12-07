@@ -6,14 +6,14 @@
 human detection techniques in chapter ~\ref{Chapter2}. We have also
 discussed about technique used for human detection in our work in the
 same chapter. Since we have used \textbf{Skel}etonized \textbf{Mot}ion
-analysis for human detection, therefore we name our technique as
+analysis for human detection, our technique is called (appropriately) as
 SKELMOT. We have talked about embedded implementation of our work in
 chapter~\ref{Chapter3}. In this section we discuss results of different
 evaluations and also how does SKELMOT compares with others. We also draw
-conclusions from our results and future works to be done.
+conclusions from our results and future work to be done.
 \section{Results}
 \indent We did comparison of execution time of background subtraction
-algorithm in Fig.~\ref{bg_compare}. Graph shows that Vibe is far more
+algorithm in Fig.~\ref{bg_compare}, which shows that Vibe is far more
 computationally efficient compared to other. Therefore we used Vibe
 algorithm in our implementation, where we target human detection based
 on its skeleton motion. Vibe has lower computation requirement even
@@ -33,7 +33,7 @@ Skeleton obtained by morphological method is discontinuous. Hough
 transform can be used to connect these unconnected skeleton points.
 Further morphological operations can be used to find skeleton endpoints.
 On top of it, some heuristic need to be used for detection of skeleton
-endpoints corresponding to legs end. These all operations are
+endpoints corresponding to legs. These all operations are
 computationally expensive. Skeleton obtained by distance transform
 method has also similar issues.\\
 \indent Contour method provides outer boundary of the moving object. If
@@ -68,12 +68,12 @@ peaks nearer to bottom left and bottom right corner of bounding box\\
 ~\cite{36}. This website is maintaining benchmarking results for
 algorithms related to change and motion detection. Fig.~\ref{pipeline_images} shows
 output images at different stages of processing.\\
-\indent We have used SKELMOT with two surveillance video from the above
+\indent We have used SKELMOT with two surveillance videos from the above
 website. First test video consists of frames having pedestrian with
 different speed and a person moving on bicycle. We conclude that with
-SKELMOT, system is able to detect all moving pedestrians after its three
-steps move. We have seen that it successfully rejects a person moving on
-bicycle and does not recognize him as true object. We took a highway
+SKELMOT, system is able to detect all moving pedestrians after it moves three
+steps. We have seen that it successfully rejects a person moving on
+bicycle and does not recognize it as true object. We took a highway
 surveillance video having frames of moving vehicles. We used SKELMOT to
 detect and recognize moving objects. We conclude that SKELMOT is
 successfully able to discriminate and does not recognize them as human.

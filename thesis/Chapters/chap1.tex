@@ -7,13 +7,13 @@ Existing video surveillance systems are still largely manual.
 Normally, a surveillance camera sends video to a monitoring base
 station, where it is monitored by a person or a group of people. Such an
 arrangement is not foolproof, because it needs continuous manual
-observation. Any attempt in the direction of its automation can be of
+observation. Any attempt to automate this process can be of
 great use in application areas such as:
 \begin{itemize}
  \item Traffic Monitoring
  \item Elderly care
  \item Security
- \item Monitoring of troops
+ \item Troop movements in the armed forces
 \end{itemize}
 \indent Moreover, an increasing number of video sources rely on resource
 constrained (bandwidth-limited, delay-tolerant) networks. Therefore,
@@ -24,8 +24,8 @@ point of observation.\\
 to end connectivity. It works under some constraints like long delays
 and extreme losses. For example, a military network having large number
 of nodes with high data mobility in extreme environmental terrestrial
-conditions is a DTN network. Such network normally employs their own
-tailored routing algorithm for high throughput based on a individual
+conditions is a typical DTN network. Such network normally employs its
+own tailored routing algorithm for high throughput based on a individual
 environmental conditions~\cite{1}. Smart home applications uses Zigbee,
 DASH7 which are also DTNs.\\
 \indent Zigbee and DASH7 networks have data rate of 200-250Kbits/sec.
@@ -33,7 +33,7 @@ With such networks at layer 1 and 2, there is tremendous need to conserve /
 preserve the bandwidth needed by each video stream / all video streams
 collectively.\\
 \indent Video surveillance system can be integrated with existing home
-network, but it is very important to achieve, reduction in amount of
+network, but it is very important to achieve reduction in amount of
 data to be transmitted due to lack of end to end connectivity. A low
 data rate node also allow the system to remain in sleep mode for longer
 durations and hence prolongs longer battery life. Therefore a method
@@ -41,21 +41,21 @@ will be very useful by which, a few pre-processing operations allow us to
 still carry out the primary objective - surveillance - while achieving
 large and impressive savings on the required bandwidth.\\
 \indent For such implementation, it would be wise to transmit feature
-information only. We need to extract this feature information out of
+information only. We need to extract this feature information from the
 image and then send it over the network. Ideally, we need to send the
 minimum information about the image which allows us to reconstruct the
-scenario or to detect an event. If possible then we need to detect the
-event at the source node itself and then to transmit only this event
+scenario or to detect an event. If possible we should detect the
+event at the source node itself and then transmit only this event
 information over the DTN network.\\
 \indent The end goal of such an intelligent system would be to offer an
 automatic analysis of scene and then to infer desired information out of
 it. These systems can be complex because of the complexity of the scene,
 specially when application is targeted for outdoor monitoring. Sometime
-background of the scene can move, while in some other scene ambient
-light can be different. Detection of foreground objects becomes a
-non-trivial task. Once we have foreground objects, we can save a lot of
-bandwidth if we can detect if object has any significance of our
-interest or not.\\
+background of the scene can move for example wavering tree, or a moving
+escalator. While in some other scene ambient light can be different.
+Detection of foreground objects becomes a non-trivial task. Once we have
+foreground objects, we can save a lot of bandwidth if we can detect if
+object has any significance of our interest or not.\\
 \indent A typical network of such system has been shown in
 Fig.~\ref{KE}. Each Node can have a camera, a wireless transmission
 module and a processing engine. Captured Image is processed to extract
@@ -70,7 +70,7 @@ information from different nodes.
 \label{KE}
 \end{figure}
 
-\indent \textbf{Problem statement:} We intend to detect moving person
+\indent \textbf{Problem statement:} We intend to detect a moving person
 and then to send only its feature information such as location, time of
 detection etc to the monitoring station. Only sending such event
 information would lead to design a ultra low bandwidth surveillance
@@ -81,9 +81,14 @@ the performance.
 \section{Past Work and Literature Survey}
 \subsection{Image transfer over delay tolerant / Low bandwidth networks}
 \indent There has been no data available for the image transfer over
-terrestrial DTNs, however there has been several attempts~\cite{2, 3,
+terrestrial DTNs, however there has been several reported attempts~\cite{2, 3,
 4, 5} to transfer image over low bandwidth wireless sensor networks
-(WSN). Zigbee is the most commonly used WSN protocol. It is based on
+(WSN). Any WSN network consists of several low cost wireless sensor
+nodes. These nodes normally senses temperature, humidity, light,
+vibration etc and transmits this low bandwidth data to a central
+monitoring node. If image can also be reduced to the information then
+same existing network can be employed for video surveillance.
+Zigbee is the most commonly used WSN protocol. It is based on
 IEEE 802.15.4 standard which is mainly suited for low power home
 network. Its power requirement is in range of 125-400 $\mu$W and data
 rate is 250 Kbps.\\
@@ -100,16 +105,18 @@ object is found then only high resolution camera is triggered. Such a
 system is power efficient in comparison to the camera mote continuously
 transmitting JPEG frames. Philips research laboratory had conceived idea
 of xetal by putting CMOS image sensors and image processing logic on a
-single integrated circuit. Wu et al.~\cite{4} have used xetal parallel
-processors for image processing. After subtracting the background,
-ellipse fitting has been done on the foreground object. This elliptical
-information is collected from different camera and the 3D view is
-reconstructed from it.
+single integrated circuit. CMOS image sensors and processors can be
+produced using same manufacturing process. Therefore they can be
+combined in a single integrated circuit. Wu et al.~\cite{4} have used
+xetal parallel processors for image processing. After subtracting the
+background, ellipse fitting has been done on the foreground object. This
+elliptical information is collected from different camera and the 3D
+view is reconstructed from it.
 
 \begin{figure}[!b]
 \centering
 \includegraphics[height=300pt]{Figures/image_tr_level}
-\caption{Surveillance image transfer level, reproduced from~\cite{3}}
+\caption{Surveillance image transfer level, from~\cite{3}}
 \label{image_tr_level}
 \end{figure}
 \indent Fig.~\ref{image_tr_level} shows different level of
@@ -255,7 +262,7 @@ objects are called negative objects. For example, if we target detection
 of a moving human then, all moving human in scene will be labeled as
 positive object and other moving objects such as vehicle, animal etc
 will be labeled as negative object.\\
-\indent Person Finder(PFinder) developed by Wren et.al~\cite{12} seems
+\indent Person Finder(PFinder) developed by Wren et al.~\cite{12} seems
 first attempt to recognize human and its behavior in a practical
 scenario. It works with Maximum A Posteriori Probability (MAP) method
 for human detection and tracking. It uses color and shape based

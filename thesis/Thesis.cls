@@ -242,7 +242,7 @@
       \vfill  
       \bigskip
       \bigskip
-      {\large By:\\ }
+      {\large By\\ }
       \smallskip
       {\large \textbf{\authornames} \par}
        {\large \textbf{\deptname} \par}
