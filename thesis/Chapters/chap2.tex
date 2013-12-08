@@ -61,12 +61,12 @@ primary objective while making any decision.\\
  varied background situation like wavering tree, moving escalator
  etc. Barnich et al.~\cite{9} claim that Vibe which uses random
  sample selection also performs well in all situation and have
- extremely low computational cost. Yao et al. have provided their
- C code, however Barnich et al. have only provided an object
+ extremely low computational cost. Yao et al.~\cite{11} have provided their
+ C code, however Barnich et al.~\cite{9} have only provided an object
  library for x86 platform. Therefore we need to first code vibe
  in C and then to compare above two algorithms. We did not
  compare other algorithms like GMM, median filter etc with Vibe,
- as authors of Vibe have already done it and concluded that Vibe
+ as authors of Vibe~\cite{9} have already done it and concluded that Vibe
  outperforms them.
 \item \textbf{Detection and Tracking:} Methods based on skeleton motion
  features~\cite{32, 22, 31} seem to be computationally
@@ -185,7 +185,7 @@ shown in Fig.~\ref{skeletons}.B.
 \begin{figure}[!b]
 \centering
 \includegraphics[height=170pt]{Figures/skeletons}
-\caption{Skeleton obtained by different methods.\\
+\caption{Skeleton obtained by different methods:\\
  \textbf{A.} Original gray scale image\\
  \textbf{B.} Contour skeleton\\
  \textbf{C.} Morphological skeleton\\
