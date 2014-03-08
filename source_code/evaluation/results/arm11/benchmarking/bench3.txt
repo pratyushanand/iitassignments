@@ -1,0 +1,14 @@
+  BYTE UNIX Benchmarks (Version 3.11)
+  System -- Linux raspberrypi 3.2.27+ #250 PREEMPT Thu Oct 18 19:03:02 BST 2012 armv6l GNU/Linux
+  Start Benchmark Run: Sat Jun  1 11:25:55 UTC 2013
+   2 interactive users.
+Dhrystone 2 without register variables   1002981.1 lps   (10 secs, 6 samples)
+
+
+                     INDEX VALUES            
+TEST                                        BASELINE     RESULT      INDEX
+
+Dhrystone 2 without register variables       22366.3  1002981.1       44.8
+                                                                 =========
+     SUM of  1 items                                                  44.8
+     AVERAGE                                                          44.8

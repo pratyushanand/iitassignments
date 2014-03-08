@@ -1,0 +1,12 @@
+rm -rf build results
+mkdir build results results/demo
+cd build
+cmake ../src
+make
+cd ..
+build/bin/bgsub_learn ../../../../../test_video/pedestrian.avi models/bgmodel.yml -sfn 4
+build/bin/bgsub_detect ../../../../../test_video/pedestrian.avi models/bgmodel.yml -nolearn -od results/demo -ofpi
+build/bin/human_detect models/human.yml ../../../../../test_video/pedestrian.avi -bgm models/bgmodel.yml -ddet -sfn 4
+#build/bin/bgsub_learn ../../../../../test_video/OneStopNoEnter1cor.mpeg models/bgmodel.yml -sfn 4
+#build/bin/bgsub_detect ../../../../../test_video/OneStopNoEnter1cor.mpeg models/bgmodel.yml -nolearn -od results/demo -ofpi
+#build/bin/human_detect models/human.yml ../../../../../test_video/OneStopNoEnter1cor.mpeg -bgm models/bgmodel.yml -ddet -sfn 4

@@ -1,0 +1,2967 @@
+pratyush@DLH10014:~/MS/project/imagetransfer/evaluation/BG/c/human-detection_1.0_src_2013-02-19_Idiap_shared
+[127]> build/bin/bgsub_learn
+../../../../../test_video/OneStopNoEnter1cor.mpeg models/bgmodel.yml
+-sfn 4
+[mpegvideo @ 0xd1a6f0] max_analyze_duration reached
+[mpegvideo @ 0xd1a6f0] Estimating duration from bitrate, this may be
+inaccurate
+0.536631 seconds
+0.669969 seconds
+0.407017 seconds
+0.411088 seconds
+0.395231 seconds
+0.422798 seconds
+0.405937 seconds
+0.420224 seconds
+0.398298 seconds
+0.422404 seconds
+0.401145 seconds
+0.437804 seconds
+0.408757 seconds
+0.411778 seconds
+0.413500 seconds
+0.575637 seconds
+0.403276 seconds
+0.414523 seconds
+0.421825 seconds
+0.406325 seconds
+0.405779 seconds
+0.417562 seconds
+0.403117 seconds
+0.408497 seconds
+0.411862 seconds
+0.417390 seconds
+0.408033 seconds
+0.409715 seconds
+0.428671 seconds
+0.410790 seconds
+0.416961 seconds
+0.413576 seconds
+0.394410 seconds
+0.409312 seconds
+0.398548 seconds
+0.413121 seconds
+0.407262 seconds
+0.401948 seconds
+0.411179 seconds
+0.416705 seconds
+0.403991 seconds
+0.411070 seconds
+0.422289 seconds
+0.412775 seconds
+0.411834 seconds
+0.452518 seconds
+0.462702 seconds
+0.461108 seconds
+0.479693 seconds
+0.493621 seconds
+0.471434 seconds
+0.488519 seconds
+0.481759 seconds
+0.475865 seconds
+0.483961 seconds
+0.429088 seconds
+0.416919 seconds
+0.409468 seconds
+0.409859 seconds
+0.410882 seconds
+0.415015 seconds
+0.450847 seconds
+0.427102 seconds
+0.442389 seconds
+0.430378 seconds
+0.426947 seconds
+0.419141 seconds
+0.441557 seconds
+0.422395 seconds
+0.408450 seconds
+0.402540 seconds
+0.428808 seconds
+0.411145 seconds
+0.410276 seconds
+0.405900 seconds
+0.418113 seconds
+0.422524 seconds
+0.424402 seconds
+0.413143 seconds
+0.426976 seconds
+0.448423 seconds
+0.427790 seconds
+0.437218 seconds
+0.447585 seconds
+0.439046 seconds
+0.429116 seconds
+0.435772 seconds
+0.422643 seconds
+0.440532 seconds
+0.534349 seconds
+0.432212 seconds
+0.447430 seconds
+0.445075 seconds
+0.429548 seconds
+0.432757 seconds
+0.415248 seconds
+0.384225 seconds
+0.393769 seconds
+0.398230 seconds
+0.400991 seconds
+0.395047 seconds
+0.400960 seconds
+0.388233 seconds
+0.390835 seconds
+0.405430 seconds
+0.396886 seconds
+0.391078 seconds
+0.405728 seconds
+0.392497 seconds
+0.396059 seconds
+0.402482 seconds
+0.407306 seconds
+0.405154 seconds
+0.399134 seconds
+0.417810 seconds
+0.396370 seconds
+0.412811 seconds
+0.414285 seconds
+0.401458 seconds
+0.402504 seconds
+0.399537 seconds
+0.407526 seconds
+0.409935 seconds
+0.408736 seconds
+0.405882 seconds
+0.401243 seconds
+0.401701 seconds
+0.399328 seconds
+0.406454 seconds
+0.409394 seconds
+0.408700 seconds
+0.413814 seconds
+0.404972 seconds
+0.405865 seconds
+0.410441 seconds
+0.408554 seconds
+0.404514 seconds
+0.413139 seconds
+0.413764 seconds
+0.414633 seconds
+0.412105 seconds
+0.416288 seconds
+0.406406 seconds
+0.407260 seconds
+0.412467 seconds
+
+Saving the background model: models/bgmodel.yml
+pratyush@DLH10014:~/MS/project/imagetransfer/evaluation/BG/c/human-detection_1.0_src_2013-02-19_Idiap_shared
+[128]> cat steps
+rm -rf build results
+mkdir build results results/demo
+cd build
+cmake ../src
+make
+cd ..
+build/bin/bgsub_learn ../../../../../test_video/OneStopNoEnter1cor.mpeg
+models/bgmodel.yml -sfn 4
+build/bin/bgsub_detect ../../../../../test_video/OneStopNoEnter1cor.mpeg
+models/bgmodel.yml -nolearn -od results/demo -ofpi
+build/bin/human_detect models/human.yml
+../../../../../test_video/OneStopNoEnter1cor.mpeg -bgm
+models/bgmodel.yml -ddet -sfn 4
+pratyush@DLH10014:~/MS/project/imagetransfer/evaluation/BG/c/human-detection_1.0_src_2013-02-19_Idiap_shared
+[129]> build/bin/bgsub_detect
+../../../../../test_video/OneStopNoEnter1cor.mpeg models/bgmodel.yml
+-nolearn -od results/demo -ofpi
+[mpegvideo @ 0xc931a0] max_analyze_duration reached
+[mpegvideo @ 0xc931a0] Estimating duration from bitrate, this may be
+inaccurate
+0.359114 seconds
+0.373579 seconds
+0.371865 seconds
+0.377560 seconds
+0.370538 seconds
+0.374613 seconds
+0.376910 seconds
+0.370775 seconds
+0.419389 seconds
+0.371575 seconds
+0.368887 seconds
+0.373113 seconds
+0.364187 seconds
+0.386608 seconds
+0.445937 seconds
+0.359385 seconds
+0.371722 seconds
+0.376857 seconds
+0.382218 seconds
+0.383723 seconds
+0.374289 seconds
+0.370933 seconds
+0.372014 seconds
+0.363450 seconds
+0.368024 seconds
+0.371515 secondss
+0.370323 seconds
+0.370987 seconds
+0.373501 seconds
+0.378354 seconds
+0.371600 seconds
+0.374338 seconds
+0.369969 seconds
+0.365017 seconds
+0.357537 seconds
+0.375611 seconds
+0.358805 seconds
+0.374175 seconds
+0.370938 seconds
+0.382181 seconds
+0.372150 seconds
+0.384858 seconds
+0.376711 seconds
+0.379077 seconds
+0.370638 seconds
+0.370402 seconds
+0.377086 seconds
+0.383811 seconds
+0.371306 seconds
+0.386143 seconds
+0.368105 seconds
+0.373135 seconds
+0.371395 seconds
+0.378851 seconds
+0.360557 seconds
+0.382887 seconds
+0.375939 seconds
+0.376244 seconds
+0.414074 seconds
+0.381008 seconds
+0.386496 seconds
+0.376883 seconds
+0.387888 seconds
+0.394071 seconds
+0.381778 seconds
+0.378540 seconds
+0.382817 seconds
+0.374591 seconds
+0.387491 seconds
+0.379459 seconds
+0.388310 seconds
+0.391786 seconds
+0.381213 seconds
+0.391602 seconds
+0.379609 seconds
+0.393817 seconds
+0.390266 seconds
+0.380656 seconds
+0.374555 seconds
+0.385199 seconds
+0.379648 seconds
+0.376483 seconds
+0.412256 seconds
+0.375011 seconds
+0.359501 seconds
+0.373221 seconds
+0.393550 seconds
+0.375026 seconds
+0.366995 seconds
+0.391830 seconds
+0.376219 seconds
+0.388928 seconds
+0.377613 seconds
+0.379504 seconds
+0.378889 seconds
+0.398548 seconds
+0.393903 seconds
+0.437444 seconds
+0.430933 seconds
+0.437249 seconds
+0.426199 seconds
+0.448647 seconds
+0.435531 seconds
+0.434807 seconds
+0.453267 seconds
+0.430146 seconds
+0.454064 seconds
+0.389293 seconds
+0.388453 seconds
+0.395530 seconds
+0.384547 seconds
+0.388281 seconds
+0.375456 seconds
+0.367265 seconds
+0.375070 seconds
+0.376989 seconds
+0.386711 seconds
+0.420490 seconds
+0.383977 seconds
+0.380087 seconds
+0.387568 seconds
+0.395463 seconds
+0.365863 seconds
+0.387398 seconds
+0.367762 seconds
+0.370979 seconds
+0.360440 seconds
+0.364147 seconds
+0.372320 seconds
+0.375371 seconds
+0.389283 seconds
+0.386032 seconds
+0.365222 seconds
+0.375041 seconds
+0.470935 seconds
+0.383513 seconds
+0.376074 seconds
+0.383634 seconds
+0.324625 seconds
+0.362162 seconds
+0.372219 seconds
+0.411178 seconds
+0.373006 seconds
+0.367892 seconds
+0.367455 seconds
+0.379365 seconds
+0.398277 seconds
+0.394769 seconds
+0.395456 seconds
+0.390919 seconds
+0.379355 seconds
+0.385540 seconds
+0.372319 seconds
+0.369235 seconds
+0.368831 seconds
+0.395378 seconds
+0.381758 seconds
+0.392271 seconds
+0.446817 seconds
+0.423087 seconds
+0.408539 seconds
+0.377227 seconds
+0.377702 seconds
+0.389184 seconds
+0.387348 seconds
+0.378236 seconds
+0.385667 seconds
+0.371661 seconds
+0.372749 seconds
+0.376869 seconds
+0.388738 seconds
+0.373855 seconds
+0.394517 seconds
+0.376900 seconds
+0.383250 seconds
+0.383844 seconds
+0.401485 seconds
+0.374403 seconds
+0.356594 seconds
+0.358307 seconds
+0.397147 seconds
+0.382254 seconds
+0.370876 seconds
+0.396147 seconds
+0.376764 seconds
+0.367573 seconds
+0.369708 seconds
+0.379911 seconds
+0.393969 seconds
+0.361704 seconds
+0.365594 seconds
+0.361541 seconds
+0.366179 seconds
+0.435168 seconds
+0.373773 seconds
+0.369750  seconds
+0.346888 seconds
+0.399158 seconds
+0.365757 seconds
+0.370369 seconds
+0.399163 seconds
+0.420684 seconds
+0.421680 seconds
+0.425271 seconds
+0.437286 seconds
+0.425985 seconds
+0.433537 seconds
+0.435136 seconds
+0.420869 seconds
+0.429151 seconds
+0.419006 seconds
+0.371174 seconds
+0.354317 seconds
+0.373855 seconds
+0.362135 seconds
+0.371975 seconds
+0.361689 seconds
+0.367848 seconds
+0.358374 seconds
+0.379545 seconds
+0.374183 seconds
+0.376844 seconds
+0.363980 seconds
+0.381715 seconds
+0.367041 seconds
+0.369175 seconds
+0.373722 seconds
+0.374606 seconds
+0.363598 seconutputs 
+
+Detecting people on the 70-th video frame image 
+Bg subtraction time : 0.401538 seconds 
+Detection time : 0.581356 seconds - 3387 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 75-th video frame image 
+Bg subtraction time : 0.415032 seconds 
+Detection time : 0.605464 seconds - 3387 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 80-th video frame image 
+Bg subtraction time : 0.408954 seconds 
+Detection time : 0.595472 seconds - 3387 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 85-th video frame image 
+Bg subtraction time : 0.419117 seconds 
+Detection time : 0.647201 seconds - 3387 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 90-th video frame image 
+Bg subtraction time : 0.412476 seconds 
+Detection time : 0.536758 seconds - 3387 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 95-th video frame image 
+Bg subtraction time : 0.429003 seconds 
+Detection time : 0.521165 seconds - 3387 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 100-th video frame image 
+Bg subtraction time : 0.408644 seconds 
+Detection time : 0.468386 seconds - 3387 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 105-th video frame image 
+Bg subtraction time : 0.441228 seconds 
+Detection time : 0.448687 seconds - 3387 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 110-th video frame image 
+Bg subtraction time : 0.409918 seconds 
+Detection time : 0.492620 seconds - 3387 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 115-th video frame image 
+Bg subtraction time : 0.419905 seconds 
+Detection time : 0.525144 seconds - 3387 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 120-th video frame image 
+Bg subtraction time : 0.423733 seconds 
+Detection time : 0.483995 seconds - 3387 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 125-th video frame image 
+Bg subtraction time : 0.418182 seconds 
+Detection time : 0.488948 seconds - 3387 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 130-th video frame image 
+Bg subtraction time : 0.420486 seconds 
+Detection time : 0.472003 seconds - 3387 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 135-th video frame image 
+Bg subtraction time : 0.441796 seconds 
+Detection time : 0.494848 seconds - 3387 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 140-th video frame image 
+Bg subtraction time : 0.434711 seconds 
+Detection time : 0.490411 seconds - 3387 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 145-th video frame image 
+Bg subtraction time : 0.433495 seconds 
+Detection time : 0.636126 seconds - 3387 test windows - 1 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 150-th video frame image 
+Bg subtraction time : 0.419636 seconds 
+Detection time : 0.501321 seconds - 3387 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 155-th video frame image 
+Bg subtraction time : 0.401560 seconds 
+Detection time : 0.473522 seconds - 3387 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 160-th video frame image 
+Bg subtraction time : 0.421819 seconds 
+Detection time : 0.469692 seconds - 3387 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 165-th video frame image 
+Bg subtraction time : 0.472587 seconds 
+Detection time : 0.536320 seconds - 3387 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 170-th video frame image 
+Bg subtraction time : 0.428912 seconds 
+Detection time : 0.504359 seconds - 3387 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 175-th video frame image 
+Bg subtraction time : 0.411756 seconds 
+Detection time : 0.557870 seconds - 3387 test windows - 1 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 180-th video frame image 
+Bg subtraction time : 0.410664 seconds 
+Detection time : 0.537582 seconds - 3387 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 185-th video frame image 
+Bg subtraction time : 0.473582 seconds 
+Detection time : 0.791057 seconds - 3387 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 190-th video frame image 
+Bg subtraction time : 0.431263 seconds 
+Detection time : 0.695487 seconds - 3387 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 195-th video frame image 
+Bg subtraction time : 0.421964 seconds 
+Detection time : 0.814626 seconds - 3387 test windows - 1 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 200-th video frame image 
+Bg subtraction time : 0.423159 seconds 
+Detection time : 1.030921 seconds - 3387 test windows - 5 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 205-th video frame image 
+Bg subtraction time : 0.426256 seconds 
+Detection time : 0.961027 seconds - 3387 test windows - 7 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 210-th video frame image 
+Bg subtraction time : 0.430522 seconds 
+Detection time : 1.040675 seconds - 3387 test windows - 9 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 215-th video frame image 
+Bg subtraction time : 0.416491 seconds 
+Detection time : 1.394867 seconds - 3387 test windows - 9 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 220-th video frame image 
+Bg subtraction time : 0.448508 seconds 
+Detection time : 1.254622 seconds - 3387 test windows - 9 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 225-th video frame image 
+Bg subtraction time : 0.434169 seconds 
+Detection time : 1.227816 seconds - 3387 test windows - 11 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 230-th video frame image 
+Bg subtraction time : 0.430418 seconds 
+Detection time : 1.198266 seconds - 3387 test windows - 10 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 235-th video frame image 
+Bg subtraction time : 0.410675 seconds 
+Detection time : 1.414637 seconds - 3387 test windows - 11 detection
+candidates - 2 merged detection outputs 
+
+Detecting people on the 240-th video frame image 
+Bg subtraction time : 0.488255 seconds 
+Detection time : 1.410980 seconds - 3387 test windows - 14 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 245-th video frame image 
+Bg subtraction time : 0.491133 seconds 
+Detection time : 1.244107 seconds - 3387 test windows - 12 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 250-th video frame image 
+Bg subtraction time : 0.425437 seconds 
+Detection time : 1.022708 seconds - 3387 test windows - 9 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 255-th video frame image 
+Bg subtraction time : 0.401943 seconds 
+Detection time : 0.934668 seconds - 3387 test windows - 10 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 260-th video frame image 
+Bg subtraction time : 0.395061 seconds 
+Detection time : 1.059720 seconds - 3387 test windows - 12 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 265-th video frame image 
+Bg subtraction time : 0.403272 seconds 
+Detection time : 0.971909 seconds - 3387 test windows - 8 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 270-th video frame image 
+Bg subtraction time : 0.405693 seconds 
+Detection time : 1.007766 seconds - 3387 test windows - 9 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 275-th video frame image 
+Bg subtraction time : 0.412552 seconds 
+Detection time : 1.196286 seconds - 3387 test windows - 17 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 280-th video frame image 
+Bg subtraction time : 0.406741 seconds 
+Detection time : 1.093817 seconds - 3387 test windows - 9 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 285-th video frame image 
+Bg subtraction time : 0.417206 seconds 
+Detection time : 0.956961 seconds - 3387 test windows - 6 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 290-th video frame image 
+Bg subtraction time : 0.416960 seconds 
+Detection time : 1.119219 seconds - 3387 test windows - 12 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 295-th video frame image 
+Bg subtraction time : 0.427431 seconds 
+Detection time : 1.178296 seconds - 3387 test windows - 10 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 300-th video frame image 
+Bg subtraction time : 0.425955 seconds 
+Detection time : 1.044714 seconds - 3387 test windows - 7 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 305-th video frame image 
+Bg subtraction time : 0.436820 seconds 
+Detection time : 1.244574 seconds - 3387 test windows - 16 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 310-th video frame image 
+Bg subtraction time : 0.402343 seconds 
+Detection time : 0.984711 seconds - 3387 test windows - 11 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 315-th video frame image 
+Bg subtraction time : 0.413024 seconds 
+Detection time : 0.937317 seconds - 3387 test windows - 10 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 320-th video frame image 
+Bg subtraction time : 0.413444 seconds 
+Detection time : 0.962996 seconds - 3387 test windows - 12 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 325-th video frame image 
+Bg subtraction time : 0.408396 seconds 
+Detection time : 1.013891 seconds - 3387 test windows - 11 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 330-th video frame image 
+Bg subtraction time : 0.414336 seconds 
+Detection time : 0.857195 seconds - 3387 test windows - 8 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 335-th video frame image 
+Bg subtraction time : 0.411358 seconds 
+Detection time : 0.884715 seconds - 3387 test windows - 6 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 340-th video frame image 
+Bg subtraction time : 0.417968 seconds 
+Detection time : 0.667195 seconds - 3387 test windows - 1 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 345-th video frame image 
+Bg subtraction time : 0.421876 seconds 
+Detection time : 0.701213 seconds - 3387 test windows - 2 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 350-th video frame image 
+Bg subtraction time : 0.417212 seconds 
+Detection time : 0.697680 seconds - 3387 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 355-th video frame image 
+Bg subtraction time : 0.432594 seconds 
+Detection time : 0.697290 seconds - 3387 test windows - 1 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 360-th video frame image 
+Bg subtraction time : 0.421934 seconds 
+Detection time : 0.704890 seconds - 3387 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 365-th video frame image 
+Bg subtraction time : 0.400449 seconds 
+Detection time : 0.768920 seconds - 3387 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 370-th video frame image 
+Bg subtraction time : 0.401357 seconds 
+Detection time : 0.710572 seconds - 3387 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 375-th video frame image 
+Bg subtraction time : 0.411301 seconds 
+Detection time : 0.750098 seconds - 3387 test windows - 2 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 380-th video frame image 
+Bg subtraction time : 0.426567 seconds 
+Detection time : 0.788204 seconds - 3387 test windows - 3 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 385-th video frame image 
+Bg subtraction time : 0.426786 seconds 
+Detection time : 0.837053 seconds - 3387 test windows - 3 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 390-th video frame image 
+Bg subtraction time : 0.404987 seconds 
+Detection time : 0.899629 seconds - 3387 test windows - 1 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 395-th video frame image 
+Bg subtraction time : 0.412976 seconds 
+Detection time : 1.029648 seconds - 3387 test windows - 5 detection
+candidates - 2 merged detection outputs 
+
+Detecting people on the 400-th video frame image 
+Bg subtraction time : 0.408565 seconds 
+Detection time : 0.908642 seconds - 3387 test windows - 7 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 405-th video frame image 
+Bg subtraction time : 0.421823 seconds 
+Detection time : 0.830131 seconds - 3387 test windows - 5 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 410-th video frame image 
+Bg subtraction time : 0.424313 seconds 
+Detection time : 1.013726 seconds - 3387 test windows - 8 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 415-th video frame image 
+Bg subtraction time : 0.418567 seconds 
+Detection time : 0.957876 seconds - 3387 test windows - 8 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 420-th video frame image 
+Bg subtraction time : 0.411997 seconds 
+Detection time : 0.981648 seconds - 3387 test windows - 10 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 425-th video frame image 
+Bg subtraction time : 0.416234 seconds 
+Detection time : 0.883563 seconds - 3387 test windows - 9 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 430-th video frame image 
+Bg subtraction time : 0.409201 seconds 
+Detection time : 0.925774 seconds - 3387 test windows - 10 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 435-th video frame image 
+Bg subtraction time : 0.429598 seconds 
+Detection time : 0.966116 seconds - 3387 test windows - 14 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 440-th video frame image 
+Bg subtraction time : 0.425942 seconds 
+Detection time : 1.010076 seconds - 3387 test windows - 12 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 445-th video frame image 
+Bg subtraction time : 0.423149 seconds 
+Detection time : 1.010709 seconds - 3387 test windows - 13 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 450-th video frame image 
+Bg subtraction time : 0.406490 seconds 
+Detection time : 1.021083 seconds - 3387 test windows - 9 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 455-th video frame image 
+Bg subtraction time : 0.436340 seconds 
+Detection time : 0.962978 seconds - 3387 test windows - 9 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 460-th video frame image 
+Bg subtraction time : 0.434777 seconds 
+Detection time : 1.020903 seconds - 3387 test windows - 9 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 465-th video frame image 
+Bg subtraction time : 0.439822 seconds 
+Detection time : 0.978957 seconds - 3387 test windows - 8 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 470-th video frame image 
+Bg subtraction time : 0.425853 seconds 
+Detection time : 1.205597 seconds - 3387 test windows - 10 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 475-th video frame image 
+Bg subtraction time : 0.510879 seconds 
+Detection time : 1.317756 seconds - 3387 test windows - 10 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 480-th video frame image 
+Bg subtraction time : 0.494103 seconds 
+Detection time : 1.319774 seconds - 3387 test windows - 9 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 485-th video frame image 
+Bg subtraction time : 0.501553 seconds 
+Detection time : 1.043256 seconds - 3387 test windows - 9 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 490-th video frame image 
+Bg subtraction time : 0.427952 seconds 
+Detection time : 0.863321 seconds - 3387 test windows - 7 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 495-th video frame image 
+Bg subtraction time : 0.437552 seconds 
+Detection time : 0.893703 seconds - 3387 test windows - 6 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 500-th video frame image 
+Bg subtraction time : 0.420748 seconds 
+Detection time : 0.879426 seconds - 3387 test windows - 6 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 505-th video frame image 
+Bg subtraction time : 0.420635 seconds 
+Detection time : 0.969235 seconds - 3387 test windows - 7 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 510-th video frame image 
+Bg subtraction time : 0.468944 seconds 
+Detection time : 0.864788 seconds - 3387 test windows - 5 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 515-th video frame image 
+Bg subtraction time : 0.419683 seconds 
+Detection time : 0.918879 seconds - 3387 test windows - 5 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 520-th video frame image 
+Bg subtraction time : 0.444532 seconds 
+Detection time : 0.933096 seconds - 3387 test windows - 6 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 525-th video frame image 
+Bg subtraction time : 0.453649 seconds 
+Detection time : 0.890546 seconds - 3387 test windows - 5 detection
+candidates - 2 merged detection outputs 
+
+Detecting people on the 530-th video frame image 
+Bg subtraction time : 0.452458 seconds 
+Detection time : 0.986345 seconds - 3387 test windows - 6 detection
+candidates - 2 merged detection outputs 
+
+Detecting people on the 535-th video frame image 
+Bg subtraction time : 0.430805 seconds 
+Detection time : 0.936792 seconds - 3387 test windows - 5 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 540-th video frame image 
+Bg subtraction time : 0.436410 seconds 
+Detection time : 0.977004 seconds - 3387 test windows - 6 detection
+candidates - 2 merged detection outputs 
+
+Detecting people on the 545-th video frame image 
+Bg subtraction time : 0.436721 seconds 
+Detection time : 1.166932 seconds - 3387 test windows - 8 detection
+candidates - 2 merged detection outputs 
+
+Detecting people on the 550-th video frame image 
+Bg subtraction time : 0.471654 seconds 
+Detection time : 1.042921 seconds - 3387 test windows - 4 detection
+candidates - 2 merged detection outputs 
+
+Detecting people on the 555-th video frame image 
+Bg subtraction time : 0.455382 seconds 
+Detection time : 0.951169 seconds - 3387 test windows - 7 detection
+candidates - 2 merged detection outputs 
+
+Detecting people on the 560-th video frame image 
+Bg subtraction time : 0.425387 seconds 
+Detection time : 1.258673 seconds - 3387 test windows - 11 detection
+candidates - 3 merged detection outputs 
+
+Detecting people on the 565-th video frame image 
+Bg subtraction time : 0.429204 seconds 
+Detection time : 1.201133 seconds - 3387 test windows - 8 detection
+candidates - 2 merged detection outputs 
+
+Detecting people on the 570-th video frame image 
+Bg subtraction time : 0.446936 seconds 
+Detection time : 1.476575 seconds - 3387 test windows - 17 detection
+candidates - 3 merged detection outputs 
+
+Detecting people on the 575-th video frame image 
+Bg subtraction time : 0.416922 seconds 
+Detection time : 1.748922 seconds - 3387 test windows - 17 detection
+candidates - 3 merged detection outputs 
+
+Detecting people on the 580-th video frame image 
+Bg subtraction time : 0.429375 seconds 
+Detection time : 1.444412 seconds - 3387 test windows - 14 detection
+candidates - 2 merged detection outputs 
+
+Detecting people on the 585-th video frame image 
+Bg subtraction time : 0.426814 seconds 
+Detection time : 1.562506 seconds - 3387 test windows - 16 detection
+candidates - 2 merged detection outputs 
+
+Detecting people on the 590-th video frame image 
+Bg subtraction time : 0.422451 seconds 
+Detection time : 1.580432 seconds - 3387 test windows - 18 detection
+candidates - 2 merged detection outputs 
+
+Detecting people on the 595-th video frame image 
+Bg subtraction time : 0.411421 seconds 
+Detection time : 1.927701 seconds - 3387 test windows - 23 detection
+candidates - 3 merged detection outputs 
+
+Detecting people on the 600-th video frame image 
+Bg subtraction time : 0.422360 seconds 
+Detection time : 1.425627 seconds - 3387 test windows - 16 detection
+candidates - 3 merged detection outputs 
+
+Detecting people on the 605-th video frame image 
+Bg subtraction time : 0.410346 seconds 
+Detection time : 1.994542 seconds - 3387 test windows - 27 detection
+candidates - 3 merged detection outputs 
+
+Detecting people on the 610-th video frame image 
+Bg subtraction time : 0.453724 seconds 
+Detection time : 1.606089 seconds - 3387 test windows - 19 detection
+candidates - 2 merged detection outputs 
+
+Detecting people on the 615-th video frame image 
+Bg subtraction time : 0.404673 seconds 
+Detection time : 1.490487 seconds - 3387 test windows - 19 detection
+candidates - 2 merged detection outputs 
+
+Detecting people on the 620-th video frame image 
+Bg subtraction time : 0.406205 seconds 
+Detection time : 1.836434 seconds - 3387 test windows - 22 detection
+candidates - 3 merged detection outputs 
+
+Detecting people on the 625-th video frame image 
+Bg subtraction time : 0.409216 seconds 
+Detection time : 1.444114 seconds - 3387 test windows - 13 detection
+candidates - 3 merged detection outputs 
+
+Detecting people on the 630-th video frame image 
+Bg subtraction time : 0.420338 seconds 
+Detection time : 1.983252 seconds - 3387 test windows - 20 detection
+candidates - 2 merged detection outputs 
+
+Detecting people on the 635-th video frame image 
+Bg subtraction time : 0.417835 seconds 
+Detection time : 1.575283 seconds - 3387 test windows - 24 detection
+candidates - 2 merged detection outputs 
+
+Detecting people on the 640-th video frame image 
+Bg subtraction time : 0.413451 seconds 
+Detection time : 1.262542 seconds - 3387 test windows - 14 detection
+candidates - 2 merged detection outputs 
+
+Detecting people on the 645-th video frame image 
+Bg subtraction time : 0.409043 seconds 
+Detection time : 1.124531 seconds - 3387 test windows - 10 detection
+candidates - 2 merged detection outputs 
+
+Detecting people on the 650-th video frame image 
+Bg subtraction time : 0.416799 seconds 
+Detection time : 0.936611 seconds - 3387 test windows - 6 detection
+candidates - 2 merged detection outputs 
+
+Detecting people on the 655-th video frame image 
+Bg subtraction time : 0.431670 seconds 
+Detection time : 1.123431 seconds - 3387 test windows - 11 detection
+candidates - 2 merged detection outputs 
+
+Detecting people on the 660-th video frame image 
+Bg subtraction time : 0.473469 seconds 
+Detection time : 1.330216 seconds - 3387 test windows - 14 detection
+candidates - 2 merged detection outputs 
+
+Detecting people on the 665-th video frame image 
+Bg subtraction time : 0.430158 seconds 
+Detection time : 1.136977 seconds - 3387 test windows - 14 detection
+candidates - 3 merged detection outputs 
+
+Detecting people on the 670-th video frame image 
+Bg subtraction time : 0.473819 seconds 
+Detection time : 1.205533 seconds - 3387 test windows - 11 detection
+candidates - 2 merged detection outputs 
+
+Detecting people on the 675-th video frame image 
+Bg subtraction time : 0.483149 seconds 
+Detection time : 0.928035 seconds - 3387 test windows - 7 detection
+candidates - 3 merged detection outputs 
+
+Detecting people on the 680-th video frame image 
+Bg subtraction time : 0.484774 seconds 
+Detection time : 1.066618 seconds - 3387 test windows - 7 detection
+candidates - 2 merged detection outputs 
+
+Detecting people on the 685-th video frame image 
+Bg subtraction time : 0.453408 seconds 
+Detection time : 0.662266 seconds - 3387 test windows - 5 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 690-th video frame image 
+Bg subtraction time : 0.417128 seconds 
+Detection time : 0.629473 seconds - 3387 test windows - 5 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 695-th video frame image 
+Bg subtraction time : 0.483003 seconds 
+Detection time : 0.606382 seconds - 3387 test windows - 3 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 700-th video frame image 
+Bg subtraction time : 0.436000 seconds 
+Detection time : 0.542401 seconds - 3387 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 705-th video frame image 
+Bg subtraction time : 0.414809 seconds 
+Detection time : 0.516886 seconds - 3387 test windows - 1 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 710-th video frame image 
+Bg subtraction time : 0.413725 seconds 
+Detection time : 0.565459 seconds - 3387 test windows - 3 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 715-th video frame image 
+Bg subtraction time : 0.399674 seconds 
+Detection time : 0.511327 seconds - 3387 test windows - 3 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 720-th video frame image 
+Bg subtraction time : 0.403133 seconds 
+Detection time : 0.538753 seconds - 3387 test windows - 2 detection
+candidates - 1 merged detection outputs 
+pratyush@DLH10014:~/MS/project/imagetransfer/evaluation/BG/c/human-detection_1.0_src_2013-02-19_Idiap_shared
+[132]> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pratyush@DLH10014:~/MS/project/imagetransfer/evaluation/BG/c/human-detection_1.0_src_2013-02-19_Idiap_shared
+[140]> build/bin/bgsub_learn ../../../../../test_video/pedestrian.avi
+models/bgmodel.yml -sfn 4
+0.064288 seconds
+0.295819 seconds
+0.295697 seconds
+0.292873 seconds
+0.288206 seconds
+0.286858 seconds
+0.329842 seconds
+0.310518 seconds
+0.293314 seconds
+0.297356 seconds
+0.290137 seconds
+0.285807 seconds
+0.305008 seconds
+0.292416 seconds
+0.285049 seconds
+0.292448 seconds
+0.287784 seconds
+0.293006 seconds
+0.285000 seconds
+0.286977 seconds
+0.289926 seconds
+0.290922 seconds
+0.331722 seconds
+0.343111 seconds
+0.329146 seconds
+0.325634 seconds
+0.332556 seconds
+0.340154 seconds
+0.334521 seconds
+0.345005 seconds
+0.336882 seconds
+0.332273 seconds
+0.333230 seconds
+0.314748 seconds
+0.307691 seconds
+0.336716 seconds
+0.293099 seconds
+0.287456 seconds
+0.305586 seconds
+0.299091 seconds
+0.277395 seconds
+0.311186 seconds
+0.273705 seconds
+0.279202 seconds
+0.286627 seconds
+0.277498 seconds
+0.280875 seconds
+0.298296 seconds
+0.292499 seconds
+0.278600 seconds
+0.282399 seconds
+0.286620 seconds
+0.289647 seconds
+0.276731 seconds
+0.276595 seconds
+0.277968 seconds
+0.278392 seconds
+0.272452 seconds
+0.283005 seconds
+0.270620 seconds
+0.277135 seconds
+0.275423 seconds
+0.307466 seconds
+0.272836 seconds
+0.268725 seconds
+0.271688 seconds
+0.270573 seconds
+0.280509 seconds
+0.288676 seconds
+0.281114 seconds
+0.282065 seconds
+0.275275 seconds
+0.291121 seconds
+0.278919 seconds
+0.285327 seconds
+0.292026 seconds
+0.300202 seconds
+0.288186 seconds
+0.281011 seconds
+0.289397 seconds
+0.304582 seconds
+0.287367 seconds
+0.281947 seconds
+0.281717 seconds
+0.300950 seconds
+0.294846 seconds
+0.296174 seconds
+0.295524 seconds
+0.294629 seconds
+0.301523 seconds
+0.293829 seconds
+0.294807 seconds
+0.296811 seconds
+0.289506 seconds
+0.297460 seconds
+0.291528 seconds
+0.290914 seconds
+0.298860 seconds
+0.299488 seconds
+0.290360 seconds
+0.284223 seconds
+0.284740 seconds
+0.298344 seconds
+0.303037 seconds
+0.303232 seconds
+0.306368 seconds
+0.315129 seconds
+0.311396 seconds
+0.306582 seconds
+0.304949 seconds
+0.311630 seconds
+0.324320 seconds
+0.295446 seconds
+0.312321 seconds
+0.305644 seconds
+0.297796 seconds
+0.307931 seconds
+0.308318 seconds
+0.305734 seconds
+0.309411 seconds
+0.315671 seconds
+0.304218 seconds
+0.311407 seconds
+0.297552 seconds
+0.302229 seconds
+0.307897 seconds
+0.304531 seconds
+0.317048 seconds
+0.299403 seconds
+0.322870 seconds
+0.297455 seconds
+0.310813 seconds
+0.314831 seconds
+0.313016 seconds
+0.305121 seconds
+0.302687 seconds
+0.308106 seconds
+0.312433 seconds
+0.312920 seconds
+0.309429 seconds
+0.320325 seconds
+0.327814 seconds
+0.329708 seconds
+0.311011 seconds
+0.319562 seconds
+0.318928 seconds
+0.348599 seconds
+0.309246 seconds
+0.317490 seconds
+0.319246 seconds
+0.310684 seconds
+0.306403 seconds
+0.304163 seconds
+0.310595 seconds
+0.309130 seconds
+0.310806 seconds
+0.309237 seconds
+0.310420 seconds
+0.339758 seconds
+0.346047 seconds
+0.305400 seconds
+0.315273 seconds
+0.309281 seconds
+0.312158 seconds
+0.314740 seconds
+0.317436 seconds
+0.308605 seconds
+0.314087 seconds
+0.321231 seconds
+0.316079 seconds
+0.313330 seconds
+0.322975 seconds
+0.313646 seconds
+0.316474 seconds
+0.314382 seconds
+0.320820 seconds
+0.320142 seconds
+0.326066 seconds
+0.315096 seconds
+0.310962 seconds
+0.337202 seconds
+0.310402 seconds
+0.310101 seconds
+0.321575 seconds
+0.321899 seconds
+0.314773 seconds
+0.315813 seconds
+0.315323 seconds
+0.334531 seconds
+0.326173 seconds
+0.311914 seconds
+0.326439 seconds
+0.316097 seconds
+0.333975 seconds
+0.319957 seconds
+0.317294 seconds
+0.327056 seconds
+0.315390 seconds
+0.313243 seconds
+0.316212 seconds
+0.321658 seconds
+0.322614 seconds
+0.325678 seconds
+0.329037 seconds
+0.322537 seconds
+0.324184 seconds
+0.342911 seconds
+0.325088 seconds
+0.345594 seconds
+0.332306 seconds
+0.326028 seconds
+0.329887 seconds
+0.312640 seconds
+0.311617 seconds
+0.356077 seconds
+0.321501 seconds
+0.329728 seconds
+0.321675 seconds
+0.337340 seconds
+0.326797 seconds
+
+Saving the background model: models/bgmodel.yml
+pratyush@DLH10014:~/MS/project/imagetransfer/evaluation/BG/c/human-detection_1.0_src_2013-02-19_Idiap_shared
+[141]> cat steps
+rm -rf build results
+mkdir build results results/demo
+cd build
+cmake ../src
+make
+cd ..
+build/bin/bgsub_learn ../../../../../test_video/pedestrian.a9358 seconds
+0.292481 seconds
+0.299777 seconds
+0.293585 seconds
+0.302114 seconds
+0.393714 seconds
+0.291685 seconds
+0.290202 seconds
+0.290951 seconds
+0.341926 seconds
+0.286140 seconds
+0.284787 seconds
+0.276148 seconds
+0.297427 seconds
+0.280972 seconds
+0.292986 seconds
+0.290705 seconds
+0.287214 seconds
+0.287197 seconds
+0.292471 seconds
+0.287571 seconds
+0.289377 seconds
+0.289131 seconds
+0.290505 seconds
+0.286201 seconds
+0.294523 seconds
+0.294749 seconds
+0.295485 seconds
+0.279054 seconds
+0.287881 seconds
+0.284645 seconds
+0.292545 seconds
+0.288120 seconds
+0.287078 seconds
+0.300749 seconds
+0.280773 seconds
+0.281474 seconds
+0.288356 seconds
+0.287961 seconds
+0.279604 seconds
+0.285435 seconds
+0.287986 seconds
+0.284383 seconds
+0.289469 seconds
+0.298665 seconds
+0.291277 seconds
+0.298142 seconds
+0.281923 seconds
+0.292271 seconds
+0.297366 seconds
+0.288145 seconds
+0.291749 seconds
+0.287151 seconds
+0.287049 seconds
+0.320642 seconds
+0.329520 seconds
+0.318449 seconds
+0.321569 seconds
+0.314861 seconds
+0.313689 seconds
+0.318298 seconds
+0.318391 seconds
+0.333558 seconds
+0.322062 seconds
+0.324417 seconds
+0.312082 seconds
+0.325745 seconds
+0.335878 seconds
+0.283638 seconds
+0.284949 seconds
+0.292828 seconds
+0.281858 seconds
+0.279611 seconds
+0.283409 seconds
+0.277359 seconds
+0.283297 seconds
+0.292645 seconds
+0.284369 seconds
+0.287557 seconds
+0.281252 seconds
+0.289324 seconds
+0.283022 seconds
+0.294744 seconds
+0.288088 seconds
+0.279193 seconds
+0.274809 seconds
+0.275023 seconds
+0.282742 seconds
+0.302439 seconds
+0.286128 seconds
+0.292359 seconds
+0.285611 seconds
+0.286330 seconds
+0.282316 seconds
+0.289009 seconds
+0.284189 seconds
+0.285320 seconds
+0.279364 seconds
+0.289097 seconds
+0.292315 seconds
+0.288040 seconds
+0.288586 seconds
+0.294619 seconds
+0.286438 seconds
+0.275212 seconds
+0.287597 seconds
+0.275647 seconds
+0.276810 seconds
+0.279844 seconds
+0.283185 seconds
+0.285464 seconds
+0.282569 seconds
+0.281966 seconds
+0.281337 seconds
+0.285738 seconds
+0.280316 seconds
+0.281255 seconds
+0.283488 seconds
+0.282879 seconds
+0.291688 seconds
+0.281954 seconds
+0.283113 seconds
+0.290912 seconds
+0.280919 seconds
+0.280304 seconds
+0.288627 seconds
+0.290606 seconds
+0.283840 seconds
+0.308178 seconds
+0.278489 seconds
+0.275781 seconds
+0.278383 seconds
+0.255559 seconds
+0.286017 seconds
+0.290219 seconds
+0.291710 seconds
+0.290841 seconds
+0.299993 seconds
+0.304807 seconds
+0.292460 seconds
+0.287100 seconds
+0.287240 seconds
+0.277218 seconds
+0.291900 seconds
+0.297315 seconds
+0.293277 seconds
+0.288296 seconds
+0.293888 seconds
+0.299507 seconds
+0.300117 seconds
+0.314019 seconds
+0.296836 seconds
+0.302474 seconds
+0.289720 seconds
+0.300316 seconds
+0.299780 seconds
+0.291601 seconds
+0.298058 seconds
+0.332853 seconds
+0.358845 seconds
+0.379526 seconds
+0.334381 seconds
+0.281685 seconds
+0.292340 seconds
+0.288560 seconds
+0.299804 seconds
+0.290831 seconds
+0.293044 seconds
+0.314706 seconds
+0.285304 seconds
+0.286638 seconds
+0.283817 seconds
+0.297008 seconds
+0.289151 seconds
+0.298846 seconds
+0.297913 seconds
+0.386758 seconds
+0.383297 seconds
+0.329148 seconds
+0.278399 seconds
+0.287872 seconds
+0.286748 seconds
+0.320800 seconds
+0.292978 seconds
+0.293934 seconds
+0.295187 seconds
+0.313271 seconds
+0.288546 seconds
+0.295694 seconds
+0.297912 seconds
+0.289455 seconds
+0.287055 seconds
+0.293052 seconds
+0.318558 seconds
+0.285035 seconds
+0.291579 seconds
+0.292955 seconds
+0.290238 seconds
+0.307159 seconds
+0.287155 seconds
+0.287376 seconds
+0.300281 seconds
+0.307010 seconds
+0.290722 seconds
+0.299020 seconds
+0.281470 seconds
+0.311295 seconds
+0.305083 seconds
+0.295902 seconds
+0.285329 seconds
+0.289321 seconds
+0.303385 seconds
+0.285667 seconds
+0.303863 seconds
+0.307509 seconds
+0.290909 seconds
+0.284516 seconds
+0.287824 seconds
+0.283728 seconds
+0.288066 seconds
+0.289620 seconds
+0.298768 seconds
+0.285346 seconds
+0.293241 seconds
+0.301504 seconds
+0.283468 seconds
+0.297775 seconds
+0.315408 seconds
+0.301681 seconds
+0.307301 seconds
+0.300386 seconds
+0.303724 seconds
+0.305110 seconds
+0.2910642 seconds
+0.289769 seconds
+0.290072 seconds
+0.286047 seconds
+0.293289 seconds
+0.287740 seconds
+0.290165 seconds
+0.285717 seconds
+0.295196 seconds
+0.289571 seconds
+0.285805 seconds
+0.285367 seconds
+0.286588 seconds
+0.294572 seconds
+0.296048 seconds
+0.282397 seconds
+0.293285 seconds
+0.287437 seconds
+0.281998 seconds
+0.295004 seconds
+0.296525 seconds
+0.297260 seconds
+0.298891 seconds
+0.284113 seconds
+0.315162 seconds
+0.292051 seconds
+0.289785 seconds
+0.290157 seconds
+0.289608 seconds
+0.282657 seconds
+0.294030 seconds
+0.285245 seconds
+0.328289 seconds
+0.350936 seconds
+0.340473 seconds
+0.329471 seconds
+0.325097 seconds
+0.326661 seconds
+0.323502 seconds
+0.305461 seconds
+0.328623 seconds
+0.325775 seconds
+0.324776 seconds
+0.323694 seconds
+0.333667 seconds
+0.315190 seconds
+0.278527 seconds
+0.292744 seconds
+0.286952 seconds
+0.319238 seconds
+0.282839 seconds
+0.287064 seconds
+0.292370 seconds
+0.319609 seconds
+0.286086 seconds
+0.291942 seconds
+0.279563 seconds
+0.290456 seconds
+0.290051 seconds
+0.286619 seconds
+0.286677 seconds
+0.293366 seconds
+0.286083 seconds
+0.288728 seconds
+0.292028 seconds
+0.289593 seconds
+0.284901 seconds
+0.287519 seconds
+0.280664 seconds
+0.288770 seconds
+0.286552 seconds
+0.280392 seconds
+0.284241 seconds
+0.289381 seconds
+0.294653 seconds
+0.295988 seconds
+0.302097 seconds
+0.299744 seconds
+0.307747 seconds
+0.295511 seconds
+0.293877 seconds
+0.295287 seconds
+0.296593 seconds
+0.291795 seconds
+0.310659 seconds
+0.350385 seconds
+0.351781 seconds
+0.306427 seconds
+0.299836 seconds
+0.311444 seconds
+0.291912 seconds
+0.312659 seconds
+0.315924 seconds
+0.289960 seconds
+0.288266 seconds
+0.298242 seconds
+0.285518 seconds
+0.296654 seconds
+0.288125 seconds
+0.289485 seconds
+0.293584 seconds
+0.293797 seconds
+0.302391 seconds
+0.296942 seconds
+0.304196 seconds
+0.294010 seconds
+0.294935 seconds
+0.298501 seconds
+0.297919 seconds
+0.311264 seconds
+0.296712 seconds
+0.298242 seconds
+0.306668 seconds
+0.298403 seconds
+0.304526 seconds
+0.295235 seconds
+0.317277 seconds
+0.302910 seconds
+0.300165 seconds
+0.308852 seconds
+0.282514 seconds
+0.291197 seconds
+0.298221 seconds
+0.295699 seconds
+0.293834 seconds
+0.287368 seconds
+0.305549 seconds
+0.284949 seconds
+0.291965 seconds
+0.287875 seconds
+0.301524 seconds
+0.298524 seconds
+0.290113 seconds
+0.292393 seconds
+0.295905 seconds
+0.294911 seconds
+0.302322 seconds
+0.294947 seconds
+0.304889 seconds
+0.285551 seconds
+0.297222 seconds
+0.294767 seconds
+0.293045 seconds
+0.292452 seconds
+0.316490 seconds
+0.291258 seconds
+0.303041 seconds
+0.295144 seconds
+0.300447 seconds
+0.301687 seconds
+0.297987 seconds
+0.289331 seconds
+0.300301 seconds
+0.298359 seconds
+0.297128 seconds
+0.291523 seconds
+0.277719 seconds
+0.282861 seconds
+0.279513 seconds
+0.275063 seconds
+0.297142 seconds
+0.293819 seconds
+0.283695 seconds
+0.277086 seconds
+0.277792 seconds
+0.289669 seconds
+0.282789 seconds
+0.344115 seconds
+0.287520 seconds
+0.287307 seconds
+0.281611 seconds
+0.286689 seconds
+0.284149 seconds
+0.285903 seconds
+0.283650 seconds
+0.281408 seconds
+0.290689 seconds
+0.282495 seconds
+0.309483 seconds
+0.286485 seconds
+0.283890 seconds
+0.287098 seconds
+0.288027 seconds
+0.284396 seconds
+0.288326 seconds
+0.284591 seconds
+0.286423 seconds
+0.290466 seconds
+0.285175 seconds
+0.298462 seconds
+0.285893 seconds
+0.283406 seconds
+0.281496 seconds
+0.287106 seconds
+0.277884 seconds
+0.287179 seconds
+0.287280 seconds
+0.279154 seconds
+0.282126 seconds
+0.292239 seconds
+0.292318 seconds
+0.284655 seconds
+0.288506 seconds
+0.283106 seconds
+0.291327 seconds
+0.300489 seconds
+0.282194 seconds
+0.284822 seconds
+0.282147 seconds
+0.288271 seconds
+0.286304 seconds
+0.281033 seconds
+0.290347 seconds
+0.290180 seconds
+0.286398 seconds
+0.286537 seconds
+0.289896 seconds
+0.309611 seconds
+0.292876 seconds
+0.281279 seconds
+0.292429 seconds
+0.284001 seconds
+0.282833 seconds
+0.288367 seconds
+0.285330 seconds
+0.316864 seconds
+0.276557 seconds
+0.277146 seconds
+0.280621 seconds
+0.282593 seconds
+0.289167 seconds
+0.292308 seconds
+0.295798 seconds
+0.294596 seconds
+0.302469 seconds
+0.287292 seconds
+0.299664 seconds
+0.290079 seconds
+0.289486 seconds
+0.291609 seconds
+0.286323 seconds
+0.288664 seconds
+0.298076 seconds
+0.285880 seconds
+0.287463 seconds
+0.292989 seconds
+0.293016 seconds
+0.286726 seconds
+0.285408 seconds
+0.295059 seconds
+0.296007 seconds
+0.290059 seconds
+0.294549 seconds
+0.290353 seconds
+0.292677 seconds
+0.295640 seconds
+0.296539 seconds
+0.318866 seconds
+0.332177 seconds
+0.323664 seconds
+0.326074 seconds
+0.314462 seconds
+0.337731 seconds
+0.318862 seconds
+0.341024 seconds
+0.325447 seconds
+0.335679 seconds
+0.326397 seconds
+0.340485 seconds
+0.345385 seconds
+0.303512 seconds
+0.311051 seconds
+0.299333 seconds
+0.293878 seconds
+0.292168 seconds
+0.285484 seconds
+0.274761 seconds
+0.291939 seconds
+0.289706 seconds
+0.284956 seconds
+0.291068 seconds
+0.288171 seconds
+0.289086 seconds
+0.288738 seconds
+0.290421 seconds
+0.283934 seconds
+0.281447 seconds
+0.287703 seconds
+0.285542 seconds
+0.276583 seconds
+0.288760 seconds
+0.277556 seconds
+0.291666 seconds
+0.341468 seconds
+0.286349 seconds
+0.285838 seconds
+0.290791 seconds
+0.298008 seconds
+0.293392 seconds
+0.290717 seconds
+0.301686 seconds
+0.287252 seconds
+0.300179 seconds
+0.280200 seconds
+0.285959 seconds
+0.304559 seconds
+0.278693 seconds
+0.286257 seconds
+0.300550 seconds
+0.284685 seconds
+0.290359 seconds
+0.289822 seconds
+0.296796 seconds
+0.298794 seconds
+0.286655 seconds
+0.292557 seconds
+0.289801 seconds
+0.296597 seconds
+0.331988 seconds
+0.299348 seconds
+0.274004 seconds
+0.286771 seconds
+0.291164 seconds
+0.278764 seconds
+0.282862 seconds
+0.282360 seconds
+0.276435 seconds
+0.281151 seconds
+0.271856 seconds
+0.277378 seconds
+0.276570 seconds
+0.289333 seconds
+0.291137 seconds
+0.290489 seconds
+0.292381 seconds
+0.281943 seconds
+0.287301 seconds
+0.297126 seconds
+0.276562 seconds
+0.289517 seconds
+0.280766 seconds
+0.280974 seconds
+0.297722 seconds
+0.287350 seconds
+0.287525 seconds
+0.286231 seconds
+0.291023 seconds
+0.297735 seconds
+0.284686 seconds
+0.279785 seconds
+0.303174 seconds
+0.305791 seconds
+0.299475 seconds
+0.301838 seconds
+0.293205 seconds
+0.295931 seconds
+0.278344 seconds
+0.277190 seconds
+0.287874 seconds
+0.284763 seconds
+0.287637 seconds
+0.283858 seconds
+0.286848 seconds
+0.282979 seconds
+0.286039 seconds
+0.282334 seconds
+0.284488 seconds
+0.286417 seconds
+0.290946 seconds
+0.286475 seconds
+0.284957 seconds
+0.286796 seconds
+0.296900 seconds
+0.282766 seconds
+0.276271 seconds
+0.293393 seconds
+0.273396 seconds
+0.279097 seconds
+0.291049 seconds
+0.290915 seconds
+0.346723 seconds
+0.289798 seconds
+0.280895 seconds
+0.288568 seconds
+0.299799 seconds
+0.297859 seconds
+0.304615 seconds
+0.296994 seconds
+0.322100 seconds
+0.287142 seconds
+0.293884 seconds
+0.294868 seconds
+0.319250 seconds
+0.298982 seconds
+0.291557 seconds
+0.291967 seconds
+0.299794 seconds
+0.292436 seconds
+0.289878 seconds
+0.300165 seconds
+0.292744 seconds
+0.298901 seconds
+0.314859 seconds
+0.302545 seconds
+0.302579 seconds
+0.310511 seconds
+0.298385 seconds
+0.316599 seconds
+0.293565 seconds
+0.304126 seconds
+0.297918 seconds
+0.309576 seconds
+0.309944 seconds
+0.299246 seconds
+0.319008 seconds
+0.298539 seconds
+0.301867 seconds
+0.294317 seconds
+0.298592 seconds
+0.302783 seconds
+0.294074 seconds
+0.305365 seconds
+0.301268 seconds
+0.280125 seconds
+0.295948 seconds
+0.293674 seconds
+0.285163 seconds
+0.281406 seconds
+0.299404 seconds
+0.278623 seconds
+0.350514 seconds
+0.294274 seconds
+0.290676 seconds
+pratyush@DLH10014:~/MS/project/imagetransfer/evaluation/BG/c/human-detection_1.0_src_2013-02-19_Idiap_shared
+[143]> cat steps
+rm -rf build results
+mkdir build results results/demo
+cd build
+cmake ../src
+make
+cd ..
+build/bin/bgsub_learn ../../../../../test_video/pedestrian.avi
+models/bgmodel.yml -sfn 4
+build/bin/bgsub_detect ../../../../../test_video/pedestrian.avi
+models/bgmodel.yml -nolearn -od results/demo -ofpi
+build/bin/human_detect models/human.yml
+../../../../../test_video/pedestrian.avi -bgm models/bgmodel.yml -ddet
+-sfn 4
+#build/bin/bgsub_learn ../../../../../test_video/OneStopNoEnter1cor.mpeg
+models/bgmodel.yml -sfn 4
+#build/bin/bgsub_detect
+../../../../../test_video/OneStopNoEnter1cor.mpeg models/bgmodel.yml
+-nolearn -od results/demo -ofpi
+#build/bin/human_detect models/human.yml
+../../../../../test_video/OneStopNoEnter1cor.mpeg -bgm
+models/bgmodel.yml -ddet -sfn 4
+pratyush@DLH10014:~/MS/project/imagetransfer/evaluation/BG/c/human-detection_1.0_src_2013-02-19_Idiap_shared
+[144]> build/bin/human_detect models/human.yml
+../../../../../test_video/pedestrian.avi -bgm models/bgmodel.yml -ddet
+-sfn 4
+
+Import 32 logit-boost classifiers from models/human.yml
+
+Detecting people on the 0-th video frame image 
+Bg subtraction time : 0.303939 seconds 
+Detection time : 0.285277 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 5-th video frame image 
+Bg subtraction time : 0.412374 seconds 
+Detection time : 0.291762 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 10-th video frame image 
+Bg subtraction time : 0.339058 seconds 
+Detection time : 0.209516 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 15-th video frame image 
+Bg subtraction time : 0.314401 seconds 
+Detection time : 0.204797 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 20-th video frame image 
+Bg subtraction time : 0.319582 seconds 
+Detection time : 0.211179 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 25-th video frame image 
+Bg subtraction time : 0.327057 seconds 
+Detection time : 0.201733 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 30-th video frame image 
+Bg subtraction time : 0.312613 seconds 
+Detection time : 0.226684 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 35-th video frame image 
+Bg subtraction time : 0.331741 seconds 
+Detection time : 0.213261 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 40-th video frame image 
+Bg subtraction time : 0.331503 seconds 
+Detection time : 0.203808 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 45-th video frame image 
+Bg subtraction time : 0.309908 seconds 
+Detection time : 0.209259 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 50-th video frame image 
+Bg subtraction time : 0.353037 seconds 
+Detection time : 0.214579 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 55-th video frame image 
+Bg subtraction time : 0.312052 seconds 
+Detection time : 0.212835 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 60-th video frame image 
+Bg subtraction time : 0.316844 seconds 
+Detection time : 0.205592 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 65-th video frame image 
+Bg subtraction time : 0.326636 seconds 
+Detection time : 0.219590 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 70-th video frame image 
+Bg subtraction time : 0.329876 seconds 
+Detection time : 0.213935 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 75-th video frame image 
+Bg subtraction time : 0.3rged detection outputs 
+
+Detecting people on the 180-th video frame image 
+Bg subtraction time : 0.386682 seconds 
+Detection time : 0.238425 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 185-th video frame image 
+Bg subtraction time : 0.377362 seconds 
+Detection time : 0.257042 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 190-th video frame image 
+Bg subtraction time : 0.350496 seconds 
+Detection time : 0.197475 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 195-th video frame image 
+Bg subtraction time : 0.356906 seconds 
+Detection time : 0.214758 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 200-th video frame image 
+Bg subttion candidates - 0 merged detection outputs 
+
+Detecting people on the 305-th video frame image 
+Bg subtraction time : 0.312701 seconds 
+Detection time : 0.188644 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 310-th video frame image 
+Bg subtraction time : 0.304760 seconds 
+Detection time : 0.183572 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 315-th video frame image 
+Bg subtraction time : 0.300318 seconds 
+Detection time : 0.228205 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 320-th video frame image 
+Bg subtraction time : 0.295998 seconds 
+Detection time : 0.282939 seconds - 2106 test windows - 2 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 325-th video frame image 
+Bg subtraction time : 0.297659 seconds 
+Detection time : 0.302324 seconds - 2106 test windows - 2 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 330-th video frame image 
+Bg subtraction time : 0.302996 seconds 
+Detection time : 0.325756 seconds - 2106 test windows - 3 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 335-th video frame image 
+Bg subtraction time : 0.295882 seconds 
+Detection time : 0.303526 seconds - 2106 test windows - 2 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 340-th video frame image 
+Bg subtraction time : 0.298600 seconds 
+Detection time : 0.260027 seconds - 2106 test windows - 2 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 345-th video frame image 
+Bg subtraction time : 0.297295 seconds 
+Detection time : 0.334867 seconds - 2106 test windows - 3 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 350-th video frame image 
+Bg subtraction time : 0.296955 seconds 
+Detection time : 0.266407 seconds - 2106 test windows - 1 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 355-th video frame image 
+Bg subtraction time : 0.303452 seconds 
+Detection time : 0.398159 seconds - 2106 test windows - 3 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 360-th video frame image 
+Bg subtraction time : 0.301673 seconds 
+Detection time : 0.353060 seconds - 2106 test windows - 3 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 365-th video frame image 
+Bg subtraction time : 0.299560 seconds 
+Detection time : 0.288665 seconds - 2106 test windows - 2 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 370-th video frame image 
+Bg subtraction time : 0.304112 seconds 
+Detection time : 0.412746 seconds - 2106 test windows - 3 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 375-th video frame image 
+Bg subtraction time : 0.309100 seconds 
+Detection time : 0.366409 seconds - 2106 test windows - 3 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 380-th video frame image 
+Bg subtraction time : 0.301915 seconds 
+Detection time : 0.275505 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 385-th video frame image 
+Bg subtraction time : 0.301785 seconds 
+Detection time : 0.385844 seconds - 2106 test windows - 4 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 390-th video frame image 
+Bg subtraction time : 0.309147 seconds 
+Detection time : 0.365745 seconds - 2106 test windows - 2 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 395-th video frame image 
+Bg subtraction time : 0.302275 seconds 
+Detection time : 0.549803 seconds - 2106 test windows - 1 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 400-th video frame image 
+Bg subtraction time : 0.307919 seconds 
+Detection time : 0.408909 seconds - 2106 test windows - 3 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 405-th video frame image 
+Bg subtraction time : 0.294933 seconds 
+Detection time : 0.314878 seconds - 2106 test windows - 3 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 410-th video frame image 
+Bg subtraction time : 0.297793 seconds 
+Detection time : 0.232286 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 415-th video frame image 
+Bg subtraction time : 0.297854 seconds 
+Detection time : 0.246182 seconds - 2106 test windows - 1 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 420-th video frame image 
+Bg subtraction time : 0.306088 seconds 
+Detection time : 0.299868 seconds - 2106 test windows - 2 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 425-th video frame image 
+Bg subtraction time : 0.304761 seconds 
+Detection time : 0.324543 seconds - 2106 test windows - 1 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 430-th video frame image 
+Bg subtraction time : 0.293235 seconds 
+Detection time : 0.404716 seconds - 2106 test windows - 3 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 435-th video frame image 
+Bg subtraction time : 0.306171 seconds 
+Detection time : 0.309593 seconds - 2106 test windows - 3 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 440-th video frame image 
+Bg subtraction time : 0.306392 seconds 
+Detection time : 0.183143 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 445-th video frame image 
+Bg subtraction time : 0.309216 seconds 
+Detection time : 0.180489 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 450-th video frame image 
+Bg subtraction time : 0.301945 seconds 
+Detection time : 0.180666 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 455-th video frame image 
+Bg subtraction time : 0.296320 seconds 
+Detection time : 0.183506 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 460-th video frame image 
+Bg subtraction time : 0.299532 seconds 
+Detection time : 0.188048 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 465-th video frame image 
+Bg subtraction time : 0.300047 seconds 
+Detection time : 0.192772 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 470-th video frame image 
+Bg subtraction time : 0.298841 seconds 
+Detection time : 0.180687 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 475-th video frame image 
+Bg subtraction time : 0.294397 seconds 
+Detection time : 0.167504 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 480-th video frame image 
+Bg subtraction time : 0.308049 seconds 
+Detection time : 0.228137 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 485-th video frame image 
+Bg subtraction time : 0.326977 seconds 
+Detection time : 0.213521 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 490-th video frame image 
+Bg subtraction time : 0.301280 seconds 
+Detection time : 0.177951 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 495-th video frame image 
+Bg subtraction time : 0.301218 seconds 
+Detection time : 0.181775 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 500-th video frame image 
+Bg subtraction time : 0.287650 seconds 
+Detection time : 0.205251 seconds - 2106 test windows - 1 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 505-th video frame image 
+Bg subtraction time : 0.294816 seconds 
+Detection time : 0.174417 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 510-th video frame image 
+Bg subtraction time : 0.293431 seconds 
+Detection time : 0.179524 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 515-th video frame image 
+Bg subtraction time : 0.300566 seconds 
+Detection time : 0.183174 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 520-th video frame image 
+Bg subtraction time : 0.297649 seconds 
+Detection time : 0.181509 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 525-th video frame image 
+Bg subtraction time : 0.299682 seconds 
+Detection time : 0.176269 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 530-th video frame image 
+Bg subtraction time : 0.304716 seconds 
+Detection time : 0.195067 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 535-th video frame image 
+Bg subtraction time : 0.294808 seconds 
+Detection time : 0.174526 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 540-th video frame image 
+Bg subtraction time : 0.314210 seconds 
+Detection time : 0.180303 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 545-th video frame image 
+Bg subtraction time : 0.299553 seconds 
+Detection time : 0.194918 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 550-th video frame image 
+Bg subtraction time : 0.303516 seconds 
+Detection time : 0.188459 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 555-th video frame image 
+Bg subtraction time : 0.321241 seconds 
+Detection time : 0.193871 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 560-th video frame image 
+Bg subtraction time : 0.291745 seconds 
+Detection time : 0.194273 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 565-th video frame image 
+Bg subtraction time : 0.297086 seconds 
+Detection time : 0.185818 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 570-th video frame image 
+Bg subtraction time : 0.298521 seconds 
+Detection time : 0.182491 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 575-th video frame image 
+Bg subtraction time : 0.301829 seconds 
+Detection time : 0.262085 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 580-th video frame image 
+Bg subtraction time : 0.298622 seconds 
+Detection time : 0.254594 seconds - 2106 test windows - 2 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 585-th video frame image 
+Bg subtraction time : 0.308668 seconds 
+Detection time : 0.235120 seconds - 2106 test windows - 1 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 590-th video frame image 
+Bg subtraction time : 0.295646 seconds 
+Detection time : 0.202506 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 595-th video frame image 
+Bg subtraction time : 0.308002 seconds 
+Detection time : 0.224920 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 600-th video frame image 
+Bg subtraction time : 0.296162 seconds 
+Detection time : 0.260620 seconds - 2106 test windows - 1 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 605-th video frame image 
+Bg subtraction time : 0.294322 seconds 
+Detection time : 0.215807 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 610-th video frame image 
+Bg subtraction time : 0.301423 seconds 
+Detection time : 0.276765 seconds - 2106 test windows - 2 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 615-th video frame image 
+Bg subtraction time : 0.303586 seconds 
+Detection time : 0.326832 seconds - 2106 test windows - 3 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 620-th video frame image 
+Bg subtraction time : 0.311288 seconds 
+Detection time : 0.230653 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 625-th video frame image 
+Bg subtraction time : 0.312389 seconds 
+Detection time : 0.297069 seconds - 2106 test windows - 2 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 630-th video frame image 
+Bg subtraction time : 0.296360 seconds 
+Detection time : 0.339946 seconds - 2106 test windows - 5 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 635-th video frame image 
+Bg subtraction time : 0.305243 seconds 
+Detection time : 0.292928 seconds - 2106 test windows - 2 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 640-th video frame image 
+Bg subtraction time : 0.305871 seconds 
+Detection time : 0.324140 seconds - 2106 test windows - 4 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 645-th video frame image 
+Bg subtraction time : 0.302212 seconds 
+Detection time : 0.354996 seconds - 2106 test windows - 4 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 650-th video frame image 
+Bg subtraction time : 0.301699 seconds 
+Detection time : 0.270026 seconds - 2106 test windows - 1 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 655-th video frame image 
+Bg subtraction time : 0.294598 seconds 
+Detection time : 0.260605 seconds - 2106 test windows - 2 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 660-th video frame image 
+Bg subtraction time : 0.298435 seconds 
+Detection time : 0.292010 seconds - 2106 test windows - 4 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 665-th video frame image 
+Bg subtraction time : 0.296869 seconds 
+Detection time : 0.268007 seconds - 2106 test windows - 3 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 670-th video frame image 
+Bg subtraction time : 0.298126 seconds 
+Detection time : 0.338647 seconds - 2106 test windows - 2 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 675-th video frame image 
+Bg subtraction time : 0.304941 seconds 
+Detection time : 0.276356 seconds - 2106 test windows - 1 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 680-th video frame image 
+Bg subtraction time : 0.302675 seconds 
+Detection time : 0.312655 seconds - 2106 test windows - 1 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 685-th video frame image 
+Bg subtraction time : 0.310944 seconds 
+Detection time : 0.296300 seconds - 2106 test windows - 3 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 690-th video frame image 
+Bg subtraction time : 0.307477 seconds 
+Detection time : 0.211343 seconds - 2106 test windows - 1 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 695-th video frame image 
+Bg subtraction time : 0.304016 seconds 
+Detection time : 0.188634 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 700-th video frame image 
+Bg subtraction time : 0.309494 seconds 
+Detection time : 0.188447 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 705-th video frame image 
+Bg subtraction time : 0.300326 seconds 
+Detection time : 0.186853 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 710-th video frame image 
+Bg subtraction time : 0.304320 seconds 
+Detection time : 0.200682 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 715-th video frame image 
+Bg subtraction time : 0.358368 seconds 
+Detection time : 0.217973 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 720-th video frame image 
+Bg subtraction time : 0.344986 seconds 
+Detection time : 0.214599 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 725-th video frame image 
+Bg subtraction time : 0.357320 seconds 
+Detection time : 0.226782 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 730-th video frame image 
+Bg subtraction time : 0.356524 seconds 
+Detection time : 0.213582 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 735-th video frame image 
+Bg subtraction time : 0.343349 seconds 
+Detection time : 0.220915 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 740-th video frame image 
+Bg subtraction time : 0.338002 seconds 
+Detection time : 0.218775 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 745-th video frame image 
+Bg subtraction time : 0.344174 seconds 
+Detection time : 0.221785 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 750-th video frame image 
+Bg subtraction time : 0.336426 seconds 
+Detection time : 0.176838 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 755-th video frame image 
+Bg subtraction time : 0.305361 seconds 
+Detection time : 0.180438 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 760-th video frame image 
+Bg subtraction time : 0.303996 seconds 
+Detection time : 0.182918 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 765-th video frame image 
+Bg subtraction time : 0.334078 seconds 
+Detection time : 0.186738 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 770-th video frame image 
+Bg subtraction time : 0.348839 seconds 
+Detection time : 0.196397 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 775-th video frame image 
+Bg subtraction time : 0.330532 seconds 
+Detection time : 0.211450 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 780-th video frame image 
+Bg subtraction time : 0.340191 seconds 
+Detection time : 0.201030 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 785-th video frame image 
+Bg subtraction time : 0.328128 seconds 
+Detection time : 0.209656 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 790-th video frame image 
+Bg subtraction time : 0.340179 seconds 
+Detection time : 0.205175 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 795-th video frame image 
+Bg subtraction time : 0.329817 seconds 
+Detection time : 0.201498 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 800-th video frame image 
+Bg subtraction time : 0.329249 seconds 
+Detection time : 0.199706 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 805-th video frame image 
+Bg subtraction time : 0.336893 seconds 
+Detection time : 0.203003 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 810-th video frame image 
+Bg subtraction time : 0.343744 seconds 
+Detection time : 0.200008 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 815-th video frame image 
+Bg subtraction time : 0.310213 seconds 
+Detection time : 0.181751 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 820-th video frame image 
+Bg subtraction time : 0.302593 seconds 
+Detection time : 0.183936 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 825-th video frame image 
+Bg subtraction time : 0.302267 seconds 
+Detection time : 0.179054 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 830-th video frame image 
+Bg subtraction time : 0.302320 seconds 
+Detection time : 0.183887 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 835-th video frame image 
+Bg subtraction time : 0.307990 seconds 
+Detection time : 0.179767 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 840-th video frame image 
+Bg subtraction time : 0.296254 seconds 
+Detection time : 0.176817 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 845-th video frame image 
+Bg subtraction time : 0.302725 seconds 
+Detection time : 0.183687 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 850-th video frame image 
+Bg subtraction time : 0.300595 seconds 
+Detection time : 0.191416 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 855-th video frame image 
+Bg subtraction time : 0.301780 seconds 
+Detection time : 0.206126 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 860-th video frame image 
+Bg subtraction time : 0.298687 seconds 
+Detection time : 0.287670 seconds - 2106 test windows - 1 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 865-th video frame image 
+Bg subtraction time : 0.301919 seconds 
+Detection time : 0.247292 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 870-th video frame image 
+Bg subtraction time : 0.294267 seconds 
+Detection time : 0.231589 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 875-th video frame image 
+Bg subtraction time : 0.300485 seconds 
+Detection time : 0.247564 seconds - 2106 test windows - 2 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 880-th video frame image 
+Bg subtraction time : 0.308379 seconds 
+Detection time : 0.244668 seconds - 2106 test windows - 1 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 885-th video frame image 
+Bg subtraction time : 0.323275 seconds 
+Detection time : 0.233557 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 890-th video frame image 
+Bg subtraction time : 0.310685 seconds 
+Detection time : 0.226967 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 895-th video frame image 
+Bg subtraction time : 0.300427 seconds 
+Detection time : 0.217691 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 900-th video frame image 
+Bg subtraction time : 0.378857 seconds 
+Detection time : 0.270058 seconds - 2106 test windows - 1 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 905-th video frame image 
+Bg subtraction time : 0.306503 seconds 
+Detection time : 0.242608 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 910-th video frame image 
+Bg subtraction time : 0.319097 seconds 
+Detection time : 0.207429 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 915-th video frame image 
+Bg subtraction time : 0.316401 seconds 
+Detection time : 0.311978 seconds - 2106 test windows - 3 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 920-th video frame image 
+Bg subtraction time : 0.347052 seconds 
+Detection time : 0.463013 seconds - 2106 test windows - 7 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 925-th video frame image 
+Bg subtraction time : 0.336025 seconds 
+Detection time : 0.357878 seconds - 2106 test windows - 3 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 930-th video frame image 
+Bg subtraction time : 0.386330 seconds 
+Detection time : 0.266925 seconds - 2106 test windows - 2 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 935-th video frame image 
+Bg subtraction time : 0.309503 seconds 
+Detection time : 0.493183 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 940-th video frame image 
+Bg subtraction time : 0.313642 seconds 
+Detection time : 0.321567 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 945-th video frame image 
+Bg subtraction time : 0.321289 seconds 
+Detection time : 0.357347 seconds - 2106 test windows - 5 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 950-th video frame image 
+Bg subtraction time : 0.298250 seconds 
+Detection time : 0.453414 seconds - 2106 test windows - 4 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 955-th video frame image 
+Bg subtraction time : 0.309734 seconds 
+Detection time : 0.391711 seconds - 2106 test windows - 3 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 960-th video frame image 
+Bg subtraction time : 0.306465 seconds 
+Detection time : 0.333074 seconds - 2106 test windows - 2 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 965-th video frame image 
+Bg subtraction time : 0.324827 seconds 
+Detection time : 0.396277 seconds - 2106 test windows - 3 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 970-th video frame image 
+Bg subtraction time : 0.309072 seconds 
+Detection time : 0.359293 seconds - 2106 test windows - 6 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 975-th video frame image 
+Bg subtraction time : 0.295385 seconds 
+Detection time : 0.378832 seconds - 2106 test windows - 5 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 980-th video frame image 
+Bg subtraction time : 0.295440 seconds 
+Detection time : 0.356484 seconds - 2106 test windows - 3 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 985-th video frame image 
+Bg subtraction time : 0.311978 seconds 
+Detection time : 0.305333 seconds - 2106 test windows - 3 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 990-th video frame image 
+Bg subtraction time : 0.314176 seconds 
+Detection time : 0.294872 seconds - 2106 test windows - 2 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 995-th video frame image 
+Bg subtraction time : 0.312299 seconds 
+Detection time : 0.282227 seconds - 2106 test windows - 2 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 1000-th video frame image 
+Bg subtraction time : 0.385383 seconds 
+Detection time : 0.303905 seconds - 2106 test windows - 1 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 1005-th video frame image 
+Bg subtraction time : 0.312354 seconds 
+Detection time : 0.255795 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 1010-th video frame image 
+Bg subtraction time : 0.304491 seconds 
+Detection time : 0.261495 seconds - 2106 test windows - 2 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 1015-th video frame image 
+Bg subtraction time : 0.350329 seconds 
+Detection time : 0.316316 seconds - 2106 test windows - 1 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 1020-th video frame image 
+Bg subtraction time : 0.311441 seconds 
+Detection time : 0.262676 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 1025-th video frame image 
+Bg subtraction time : 0.306651 seconds 
+Detection time : 0.284828 seconds - 2106 test windows - 2 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 1030-th video frame image 
+Bg subtraction time : 0.363271 seconds 
+Detection time : 0.202887 seconds - 2106 test windows - 1 detection
+candidates - 1 merged detection outputs 
+
+Detecting people on the 1035-th video frame image 
+Bg subtraction time : 0.298959 seconds 
+Detection time : 0.176215 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 1040-th video frame image 
+Bg subtraction time : 0.307941 seconds 
+Detection time : 0.172081 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 1045-th video frame image 
+Bg subtraction time : 0.297014 seconds 
+Detection time : 0.173371 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 1050-th video frame image 
+Bg subtraction time : 0.297289 seconds 
+Detection time : 0.175237 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 1055-th video frame image 
+Bg subtraction time : 0.302185 seconds 
+Detection time : 0.176178 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 1060-th video frame image 
+Bg subtraction time : 0.308971 seconds 
+Detection time : 0.180968 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 1065-th video frame image 
+Bg subtraction time : 0.296093 seconds 
+Detection time : 0.181026 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 1070-th video frame image 
+Bg subtraction time : 0.307960 seconds 
+Detection time : 0.179455 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 1075-th video frame image 
+Bg subtraction time : 0.300293 seconds 
+Detection time : 0.181816 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 1080-th video frame image 
+Bg subtraction time : 0.311718 seconds 
+Detection time : 0.292984 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 1085-th video frame image 
+Bg subtraction time : 0.294914 seconds 
+Detection time : 0.180654 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 1090-th video frame image 
+Bg subtraction time : 0.309855 seconds 
+Detection time : 0.185719 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+
+Detecting people on the 1095-th video frame image 
+Bg subtraction time : 0.305248 seconds 
+Detection time : 0.176137 seconds - 2106 test windows - 0 detection
+candidates - 0 merged detection outputs 
+pratyush@DLH10014:~/MS/project/imagetransfer/evaluation/BG/c/human-detection_1.0_src_2013-02-19_Idiap_shared
+[145]>

@@ -1,0 +1,199 @@
+|  BYTE UNIX Benchmarks (Version 3.11)
+|  System -- Linux isabel 0 0.95a i386
+|  Start Benchmark Run: Sun Apr  5 21:33:45 1992
+|   4 interactive users.
+
+Dhrystone 2 without register variables|10.5|lps|19400.3|19400.3|6
+
+Dhrystone 2 using register variables|10.5|lps|19482.3|19482.3|6
+
+Arithmetic Test (type = arithoh)|10.3|lps|60602.4|60602.4|6
+
+Arithmetic Test (type = register)|10.3|lps|4133.4|4133.4|6
+
+Arithmetic Test (type = short)|10.5|lps|3810.8|3810.8|6
+
+Arithmetic Test (type = int)|10.6|lps|4032.9|4032.9|6
+
+Arithmetic Test (type = long)|10.5|lps|4065.3|4065.3|6
+
+Arithmetic Test (type = float)|10.4|lps|2021.5|2021.5|6
+
+Arithmetic Test (type = double)|10.4|lps|1898.0|1898.0|6
+
+System Call Overhead Test|10.4|lps|20149.6|20149.6|6
+
+Pipe Throughput Test|10.5|lps|1494.7|1494.7|6
+
+Pipe-based Context Switching Test|10.3|lps|3928.4|3928.4|6
+
+Process Creation Test|10.2|lps|145.4|145.4|6
+
+Execl Throughput Test|9.6|lps|85.4|85.4|6
+
+File Read  (10 seconds)|10|KBps|31775|31775
+File Write (10 seconds)|10|KBps|200|200|6
+File Copy  (10 seconds)|10|KBps|78|78
+File Read  (30 seconds)|30|KBps|45874|45874|6
+File Write (30 seconds)|30|30s|133|133|6
+File Copy  (30 seconds)|30|KBps|43|43|6
+
+1.00233
+1.00667
+1.005
+C Compiler Test|60.3|lpm|6109.4|6109.4|3
+
+1.015
+1.01
+1.005
+Shell scripts (1 concurrent)|60.6|lpm|42.9|42.9|3
+1.005
+1.00217
+1.005
+Shell scripts (2 concurrent)|60.2|lpm|22.2|22.2|3
+1.00233
+1.00667
+1.00217
+Shell scripts (4 concurrent)|60.2|lpm|11.0|11.0|3
+1.01333
+1.005
+1.015
+Shell scripts (8 concurrent)|60.7|lpm|4.9|4.9|3
+
+1.005
+1.00667
+1.005
+1.005
+1.00667
+1.005
+Dc: sqrt(2) to 99 decimal places|60.3|lpm|6267.5|6267.5|6
+
+Recursion Test--Tower of Hanoi|10.5|lps|440.4|440.4|6
+
+ Benchmark Run: Sun Apr  5 23:00:28 1992
+  4 interactive users.
+
+|  BYTE UNIX Benchmarks (Version 3.11)
+|  System -- Linux isabel 0 0.95a i386
+|  Start Benchmark Run: Mon Apr  6 23:58:00 1992
+|   3 interactive users.
+
+|  BYTE UNIX Benchmarks (Version 3.11)
+|  System -- Linux isabel 0 0.95a i386
+|  Start Benchmark Run: Tue Apr  7 00:01:21 1992
+|   3 interactive users.
+
+Dhrystone 2 without register variables|10.6|lps|19281.9|19281.7|6
+
+Dhrystone 2 using register variables|10.5|lps|19529.8|19528.0|6
+
+Arithmetic Test (type = arithoh)|10.6|lps|59131.1|59117.0|6
+
+Arithmetic Test (type = register)|10.4|lps|4109.2|4108.7|6
+
+Arithmetic Test (type = short)|10.3|lps|3855.1|3854.1|6
+
+Arithmetic Test (type = int)|10.3|lps|4118.7|4117.6|6
+
+Arithmetic Test (type = long)|10.5|lps|4036.2|4035.9|6
+
+Arithmetic Test (type = float)|10.5|lps|2008.9|2008.7|6
+
+Arithmetic Test (type = double)|10.5|lps|1891.9|1891.6|6
+
+System Call Overhead Test|10.5|lps|19807.2|19804.4|6
+
+Pipe Throughput Test|10.5|lps|1491.2|1491.0|6
+
+Pipe-based Context Switching Test|10.2|lps|3739.2|3738.0|6
+
+Process Creation Test|10.2|lps|154.0|153.9|6
+
+Execl Throughput Test|9.7|lps|89.2|89.2|6
+
+File Read  (10 seconds)|10|KBps|29766|29534|6
+File Write (10 seconds)|10|KBps|200|200|6
+File Copy  (10 seconds)|10|KBps|77|76|6
+File Read  (30 seconds)|30|KBps|48102|48093|6
+File Write (30 seconds)|30|KBps|133|133|6
+File Copy  (30 seconds)|30|KBps|45|44|6
+
+1.0031667
+1.0025
+1.0083333
+C Compiler Test|60.3|lpm|71.7|71.6|3
+
+1.013333
+1.015
+1.011667
+Shell scripts (1 concurrent)|60.8|lpm|43.4|43.4|3
+1.011667
+1.0066667
+1.005
+Shell scripts (2 concurrent)|60.5|lpm|22.8|22.8|3
+1.005
+1.0033333
+1.005
+Shell scripts (4 concurrent)|60.3|lpm|11.0|11.0|3
+1.011667
+1.0083333
+1.005
+Shell scripts (8 concurrent)|60.5|lpm|5.0|5.0|3
+
+1.0066667
+1.0033333
+1.005
+1.0066667
+1.005
+1.005
+Dc: sqrt(2) to 99 decimal places|60.3|lpm|5947.4|5946.0|6
+
+Recursion Test--Tower of Hanoi|10.5|lps|441.9|441.8|6
+
+End Benchmark Run: Tue Apr  7 01:28:26 1992
+  3 interactive users.
+|  BYTE UNIX Benchmarks (Version 3.11)
+|  System -- Linux DLH10014 3.0.0-18-generic #31-Ubuntu SMP Tue Mar 27 17:47:15 UTC 2012 x86_64 x86_64 x86_64 GNU/Linux
+|  Start Benchmark Run: Wed Mar  6 18:57:42 IST 2013
+|   6 interactive users.
+
+Dhrystone 2 without register variables|10.0|lps|17142776.2|17137035.4|6
+
+End Benchmark Run: Wed Mar  6 18:59:42 IST 2013
+  7 interactive users.
+|  BYTE UNIX Benchmarks (Version 3.11)
+|  System -- Linux DLH10014 3.0.0-18-generic #31-Ubuntu SMP Tue Mar 27 17:47:15 UTC 2012 x86_64 x86_64 x86_64 GNU/Linux
+|  Start Benchmark Run: Wed Mar  6 19:01:42 IST 2013
+|   7 interactive users.
+
+Dhrystone 2 without register variables|10.0|lps|17451877.7|17444957.2|6
+
+End Benchmark Run: Wed Mar  6 19:03:43 IST 2013
+  7 interactive users.
+|  BYTE UNIX Benchmarks (Version 3.11)
+|  System -- Linux DLH10014 3.0.0-18-generic #31-Ubuntu SMP Tue Mar 27 17:47:15 UTC 2012 x86_64 x86_64 x86_64 GNU/Linux
+|  Start Benchmark Run: Sat Mar  9 10:57:12 IST 2013
+|   1 interactive users.
+
+Dhrystone 2 without register variables|10.0|lps|17998491.4|17995095.5|6
+
+End Benchmark Run: Sat Mar  9 10:59:12 IST 2013
+  2 interactive users.
+|  BYTE UNIX Benchmarks (Version 3.11)
+|  System -- Linux DLH10014 3.0.0-18-generic #31-Ubuntu SMP Tue Mar 27 17:47:15 UTC 2012 x86_64 x86_64 x86_64 GNU/Linux
+|  Start Benchmark Run: Sat Mar  9 10:59:49 IST 2013
+|   2 interactive users.
+
+Dhrystone 2 without register variables|10.0|lps|15162353.6|15149929.9|6
+
+End Benchmark Run: Sat Mar  9 11:01:50 IST 2013
+  3 interactive users.
+|  BYTE UNIX Benchmarks (Version 3.11)
+|  System -- Linux DLH10014 3.0.0-18-generic #31-Ubuntu SMP Tue Mar 27 17:47:15 UTC 2012 x86_64 x86_64 x86_64 GNU/Linux
+|  Start Benchmark Run: Sat Mar  9 11:03:01 IST 2013
+|   3 interactive users.
+
+Dhrystone 2 without register variables|10.0|lps|16552129.4|16510947.0|6
+
+End Benchmark Run: Sat Mar  9 11:05:02 IST 2013
+  3 interactive users.

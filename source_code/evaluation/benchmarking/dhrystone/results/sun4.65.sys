@@ -1,0 +1,6 @@
+Type:	Sparc1+
+Ram:	12M
+Disk:	2*105S Quantum Pro SCSI, NFS file IO
+Load:	One background simulation FPU intense, X11R5
+kernel:	Sunos4.1.1 
+pgms:	compiled Sun cc -O2

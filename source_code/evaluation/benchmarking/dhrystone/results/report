@@ -1,0 +1,15 @@
+
+  BYTE UNIX Benchmarks (Version 3.11)
+  System -- Linux DLH10014 3.0.0-18-generic #31-Ubuntu SMP Tue Mar 27 17:47:15 UTC 2012 x86_64 x86_64 x86_64 GNU/Linux
+  Start Benchmark Run: Sat Mar  9 11:03:01 IST 2013
+   3 interactive users.
+Dhrystone 2 without register variables   16510947.0 lps   (10 secs, 6 samples)
+
+
+                     INDEX VALUES            
+TEST                                        BASELINE     RESULT      INDEX
+
+Dhrystone 2 without register variables       22366.3 16510947.0      738.2
+                                                                 =========
+     SUM of  1 items                                                 738.2
+     AVERAGE                                                         738.2
